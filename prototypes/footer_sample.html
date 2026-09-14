@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anvaya — Official Aceternity Text Hover Effect Footer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #F9F9FB;
+      --bg-surface: #FFFFFF;
+      --border-subtle: #E3E8EF;
+      --text-primary: #090C15;
+      --text-secondary: #4B5565;
+      --text-tertiary: #697586;
+      --accent-cobalt: #004CE8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .demo-content {
+      padding: 60px 24px;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-cobalt);
+      background: #FFFFFF;
+      border: 1px solid var(--border-subtle);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      display: inline-block;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+
+    /* Footer Container */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      background: #FFFFFF;
+      padding: 48px 24px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Top Links Row */
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .footer-star {
+      width: 20px;
+      height: 20px;
+      fill: var(--text-primary);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .footer-links a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-cobalt);
+    }
+
+    .footer-contact {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    .footer-contact a {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* Exact Aceternity Text Hover Effect Implementation */
+    .aceternity-container {
+      height: 18rem;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+
+    .aceternity-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    /* SVG Text Styling strictly following Aceternity UI spec */
+    .aceternity-text {
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: 800;
+      font-size: 58px;
+      letter-spacing: -0.02em;
+    }
+
+    /* Draw-in animation */
+    @keyframes strokeDraw {
+      0% {
+        stroke-dashoffset: 1000;
+      }
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .animated-stroke {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: strokeDraw 3.5s ease-in-out forwards;
+    }
+
+    /* Bottom Legal Row */
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    .legal-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .legal-links a {
+      color: var(--text-tertiary);
+      text-decoration: none;
+    }
+
+    .legal-links a:hover {
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="demo-content">
+    <span class="tag">Official Aceternity TextHoverEffect</span>
+    <h1>Anvaya Monolithic Wordmark Stamp</h1>
+    <p>Using the official Aceternity component architecture with Helvetica bold letterforms, 0.3 stroke hairline, and cursor gradient tracking.</p>
+  </div>
+
+  <footer>
+    <div class="footer-container">
+      
+      <!-- Top Row -->
+      <div class="footer-top">
+        <div class="footer-brand">
+          <svg class="footer-star" viewBox="0 0 24 24">
+            <path d="M12 0C12 7.5 12 12 4.5 12C12 12 12 16.5 12 24C12 16.5 12 12 19.5 12C12 12 12 7.5 12 0Z"/>
+          </svg>
+          anvaya
+        </div>
+
+        <ul class="footer-links">
+          <li><a href="#">14-Day Sprints</a></li>
+          <li><a href="#">AI Systems</a></li>
+          <li><a href="#">checkDK Engine</a></li>
+          <li><a href="#">Architecture</a></li>
+          <li><a href="#">Why Anvaya</a></li>
+        </ul>
+
+        <div class="footer-contact">
+          Inquiries: <a href="mailto:build@anvaya.dev">build@anvaya.dev</a>
+        </div>
+      </div>
+
+      <!-- Official Aceternity SVG TextHoverEffect -->
+      <div class="aceternity-container" id="textHoverContainer">
+        <svg
+          id="textHoverSvg"
+          width="100%"
+          height="100%"
+          viewBox="0 0 300 100"
+          xmlns="http://www.w3.org/2000/svg"
+          class="aceternity-svg"
+        >
+          <defs>
+            <!-- Aceternity Multi-Color Spectrum Gradient -->
+            <linearGradient id="textGradient" gradientUnits="userSpaceOnUse" x1="20" y1="50" x2="280" y2="50">
+              <stop offset="0%" stop-color="#eab308" />
+              <stop offset="25%" stop-color="#ef4444" />
+              <stop offset="50%" stop-color="#3b82f6" />
+              <stop offset="75%" stop-color="#06b6d4" />
+              <stop offset="100%" stop-color="#8b5cf6" />
+            </linearGradient>
+
+            <!-- Cursor Tracking Radial Mask -->
+            <radialGradient id="revealMask" gradientUnits="userSpaceOnUse" r="20%" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="white" />
+              <stop offset="100%" stop-color="black" />
+            </radialGradient>
+
+            <mask id="textMask">
+              <rect x="0" y="0" width="100%" height="100%" fill="url(#revealMask)" />
+            </mask>
+          </defs>
+
+          <!-- Layer 1: Static stroke (subtle neutral stroke) -->
+          <text
+            x="50%"
+            y="54%"
+            text-anchor="middle"
+            dominant-baseline="middle"
+            stroke-width="0.35"
+            fill="transparent"
+            stroke="#D4D4D8"
+            class="aceternity-text"
+            id="baseText"
+            style="opacity: 0.7; transition: opacity 0.2s;"
+          >
+            ANVAYA
+          </text>
+
+          <!-- Layer 2: Initial Drawing Stroke on Load -->
+          <text
+            x="50%"
+            y="54%"
+            text-anchor="middle"
+            dominant-baseline="middle"
+            stroke-width="0.35"
+            fill="transparent"
+            stroke="#A1A1AA"
+            class="aceternity-text animated-stroke"
+          >
+            ANVAYA
+          </text>
+
+          <!-- Layer 3: Masked Gradient Hover Effect -->
+          <text
+            x="50%"
+            y="54%"
+            text-anchor="middle"
+            dominant-baseline="middle"
+            stroke="url(#textGradient)"
+            stroke-width="0.4"
+            fill="transparent"
+            mask="url(#textMask)"
+            class="aceternity-text"
+          >
+            ANVAYA
+          </text>
+        </svg>
+      </div>
+
+      <!-- Bottom Legal Row -->
+      <div class="footer-bottom">
+        <div>
+          © 2026 Anvaya Studio. All rights reserved.
+        </div>
+        <div class="legal-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Security</a>
+          <a href="#">Cloudflare Status</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <script>
+    const svg = document.getElementById('textHoverSvg');
+    const container = document.getElementById('textHoverContainer');
+    const revealMask = document.getElementById('revealMask');
+    const baseText = document.getElementById('baseText');
+
+    let isHovered = false;
+
+    container.addEventListener('mouseenter', () => {
+      isHovered = true;
+      baseText.style.opacity = '0.7';
+    });
+
+    container.addEventListener('mouseleave', () => {
+      isHovered = false;
+      baseText.style.opacity = '0.5';
+      revealMask.setAttribute('cx', '50%');
+      revealMask.setAttribute('cy', '50%');
+    });
+
+    container.addEventListener('mousemove', (e) => {
+      const rect = svg.getBoundingClientRect();
+      const cxPercentage = ((e.clientX - rect.left) / rect.width) * 100;
+      const cyPercentage = ((e.clientY - rect.top) / rect.height) * 100;
+
+      revealMask.setAttribute('cx', `${cxPercentage}%`);
+      revealMask.setAttribute('cy', `${cyPercentage}%`);
+    });
+  </script>
+</body>
+</html>

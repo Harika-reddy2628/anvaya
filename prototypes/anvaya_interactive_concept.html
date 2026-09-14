@@ -1,0 +1,1958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anvaya — Interactive Concept: Expand, Sticky Scroll Reveal, Shrink</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    :root {
+      --bg-base: #F8F9FC;
+      --bg-surface: #FFFFFF;
+      --border-subtle: #E2E8F0;
+      --border-strong: #CBD5E1;
+      --text-primary: #0A0D17;
+      --text-secondary: #475569;
+      --text-tertiary: #64748B;
+      --accent-cobalt: #004CE8;
+      --accent-cobalt-hover: #003BB5;
+      --accent-violet: #8B5CF6;
+      --accent-purple: #A855F7;
+      --accent-emerald: #10B981;
+      --accent-cyan: #38BDF8;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* =======================================================
+       1. ACETERNITY DYNAMIC NOTCH
+       ======================================================= */
+    .notch-wrapper {
+      position: fixed;
+      top: 20px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .notch-shell {
+      pointer-events: auto;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(226, 232, 240, 0.95);
+      box-shadow: 0 10px 36px rgba(10, 13, 23, 0.08), 0 1px 3px rgba(10, 13, 23, 0.04);
+      border-radius: 9999px;
+      padding: 5px 6px 5px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .notch-shell.expanded {
+      border-radius: 24px;
+      padding: 14px 18px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+      box-shadow: 0 24px 60px rgba(10, 13, 23, 0.16);
+    }
+
+    .notch-bar {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 17px;
+      letter-spacing: -0.03em;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .brand-star {
+      width: 17px;
+      height: 17px;
+      fill: var(--text-primary);
+    }
+
+    .notch-items {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .notch-trigger {
+      background: transparent;
+      border: none;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 6px 12px;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .notch-trigger:hover, .notch-trigger.active {
+      color: var(--text-primary);
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .notch-dropdown-panel {
+      display: none;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 12px;
+    }
+
+    .notch-shell.expanded .notch-dropdown-panel {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .notch-card {
+      background: #F8FAFC;
+      border: 1px solid var(--border-subtle);
+      padding: 12px 14px;
+      border-radius: 14px;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.15s;
+    }
+
+    .notch-card:hover {
+      background: #FFFFFF;
+      border-color: var(--accent-cobalt);
+      box-shadow: 0 4px 14px rgba(0, 76, 232, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .notch-card h4 {
+      font-size: 12.5px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .notch-card p {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      line-height: 1.4;
+    }
+
+    /* =======================================================
+       2. REACT BITS STAR BORDER BUTTON
+       ======================================================= */
+    .star-border-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5px;
+      border-radius: 9999px;
+      overflow: hidden;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(0, 76, 232, 0.25);
+      cursor: pointer;
+    }
+
+    .star-beam-top {
+      position: absolute;
+      top: -12px;
+      left: -150%;
+      width: 250%;
+      height: 45%;
+      background: radial-gradient(circle, #A855F7 0%, transparent 60%);
+      opacity: 0.85;
+      border-radius: 50%;
+      animation: beam-top 5s linear infinite alternate;
+      z-index: 0;
+    }
+
+    .star-beam-bottom {
+      position: absolute;
+      bottom: -12px;
+      right: -150%;
+      width: 250%;
+      height: 45%;
+      background: radial-gradient(circle, #004CE8 0%, transparent 60%);
+      opacity: 0.85;
+      border-radius: 50%;
+      animation: beam-bottom 5s linear infinite alternate;
+      z-index: 0;
+    }
+
+    @keyframes beam-top {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(80%); }
+    }
+
+    @keyframes beam-bottom {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-80%); }
+    }
+
+    .star-btn-inner {
+      position: relative;
+      z-index: 1;
+      background: var(--text-primary);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 9px 20px;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .star-border-btn:hover .star-btn-inner {
+      background: #141724;
+    }
+
+    /* =======================================================
+       3. PINNED MASTER STAGE:
+          HERO ("ANVAYA" + 1-LINE DESC + ASSET + 2 CTAs)
+          -> EXPAND TO FULLSCREEN
+          -> ACETERNITY STICKY SCROLL REVEAL
+          -> SHRINK BACK DOWN
+       ======================================================= */
+    .hero-master-stage {
+      position: relative;
+      width: 100%;
+      height: 100vh; /* Pinned by GSAP ScrollTrigger */
+    }
+
+    .hero-stage-viewport {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 100px;
+      text-align: center;
+    }
+
+    #tunnelCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 45%, rgba(248, 249, 252, 0.22) 0%, rgba(248, 249, 252, 0.85) 75%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Top Hero Copy: Short Heading "ANVAYA" + One-line description */
+    .hero-top-copy {
+      position: relative;
+      z-index: 10;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 24px;
+      margin-bottom: 22px;
+      will-change: transform, opacity;
+      transform-origin: center top;
+    }
+
+    .eyebrow-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 2px 12px rgba(10, 13, 23, 0.04);
+      padding: 5px 16px;
+      border-radius: 9999px;
+      font-size: 11px;
+      margin-bottom: 14px;
+    }
+
+    .beacon-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-emerald);
+      box-shadow: 0 0 8px var(--accent-emerald);
+    }
+
+    .shiny-text {
+      background: linear-gradient(
+        120deg,
+        #475569 0%,
+        #475569 35%,
+        #8B5CF6 48%,
+        #004CE8 55%,
+        #475569 68%,
+        #475569 100%
+      );
+      background-size: 220% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine 3.5s linear infinite;
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    @keyframes shine {
+      0% { background-position: 120% center; }
+      100% { background-position: -120% center; }
+    }
+
+    /* Short Main Heading: "ANVAYA" */
+    .hero-monolith-title {
+      font-size: clamp(52px, 8.5vw, 98px);
+      font-weight: 900;
+      line-height: 0.96;
+      letter-spacing: -0.05em;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .hero-monolith-title span.glow {
+      background: linear-gradient(135deg, #0A0D17 30%, #004CE8 80%, #8B5CF6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* One-Line Description */
+    .hero-one-liner {
+      font-size: clamp(15px, 1.7vw, 19px);
+      font-weight: 500;
+      color: var(--text-secondary);
+      max-width: 660px;
+      line-height: 1.5;
+      letter-spacing: -0.01em;
+    }
+
+    /* Central Portal Card:
+       Starts at 980x440px resting, expands to 100vw x 100vh full-screen,
+       hosts Aceternity Sticky Scroll Reveal, then shrinks back down! */
+    .portal-card-central {
+      position: absolute;
+      top: 360px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(980px, 92vw);
+      height: 440px;
+      border-radius: 20px;
+      background: #090D16;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 24px 70px rgba(10, 13, 23, 0.16), 0 0 0 1px rgba(139, 92, 246, 0.25);
+      overflow: hidden;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      will-change: width, height, border-radius, top, left, transform;
+      cursor: pointer;
+    }
+
+    .cockpit-chrome {
+      background: rgba(14, 18, 27, 0.96);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #94A3B8;
+      z-index: 30;
+      flex-shrink: 0;
+    }
+
+    .traffic-dots {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .traffic-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+
+    .traffic-dot.close { background: #EF4444; }
+    .traffic-dot.min { background: #F59E0B; }
+    .traffic-dot.max { background: #10B981; }
+
+    .portal-inner-stage {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #06080E;
+    }
+
+    /* Resting View inside card */
+    .resting-cockpit-view {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      will-change: opacity;
+    }
+
+    .cockpit-asset-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    .scroll-expand-prompt {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10, 13, 23, 0.9);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      padding: 7px 18px;
+      border-radius: 9999px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: none;
+      z-index: 15;
+    }
+
+    /* FULLSCREEN ACETERNITY STICKY SCROLL REVEAL VIEW (Revealed when card is 100vw x 100vh) */
+    .fullscreen-sticky-reveal {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      padding: 60px 80px;
+      gap: 50px;
+      align-items: center;
+      opacity: 0;
+      z-index: 20;
+      pointer-events: none;
+      background: radial-gradient(circle at 70% 50%, #0F1626 0%, #06080E 100%);
+    }
+
+    .reveal-narrative-col {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      max-width: 520px;
+      text-align: left;
+    }
+
+    .reveal-card {
+      background: rgba(14, 18, 27, 0.65);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 24px 28px;
+      border-radius: 18px;
+      transition: all 0.35s ease;
+      opacity: 0.35;
+      transform: scale(0.96);
+    }
+
+    .reveal-card.active {
+      opacity: 1;
+      transform: scale(1);
+      border-color: var(--accent-violet);
+      background: rgba(14, 18, 27, 0.95);
+      box-shadow: 0 16px 36px rgba(139, 92, 246, 0.18);
+    }
+
+    .rev-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-violet);
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .reveal-card h4 {
+      font-size: 22px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .reveal-card p {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: #94A3B8;
+    }
+
+    .reveal-preview-col {
+      position: relative;
+      width: 100%;
+      height: 80%;
+      background: #05070B;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 20px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .preview-stage-box {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+    }
+
+    .preview-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-layer.active {
+      opacity: 1;
+    }
+
+    .layer-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .terminal-code-box {
+      width: 90%;
+      height: 85%;
+      background: #060910;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 24px;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: #E2E8F0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+      text-align: left;
+    }
+
+    /* Below Asset: 2 CTA Buttons */
+    .hero-bottom-ctas {
+      position: absolute;
+      top: 830px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      will-change: transform, opacity;
+    }
+
+    .btn-secondary-pill {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 11px 24px;
+      border-radius: 9999px;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-secondary-pill:hover {
+      background: #FFFFFF;
+      border-color: var(--border-strong);
+      transform: translateY(-1px);
+    }
+
+    /* =======================================================
+       4. CAPABILITIES RIBBON (TEXT LOOP)
+       ======================================================= */
+    .ribbon-section {
+      background: #FFFFFF;
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 24px 0;
+      overflow: hidden;
+      position: relative;
+      z-index: 15;
+    }
+
+    .text-loop-track {
+      display: flex;
+      width: max-content;
+      animation: textLoop 28s linear infinite;
+      gap: 36px;
+      user-select: none;
+    }
+
+    @keyframes textLoop {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .loop-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+    }
+
+    .loop-star {
+      color: var(--accent-violet);
+      font-size: 15px;
+    }
+
+    /* =======================================================
+       5. STROKE TEXT SECTION ("SYSTEMS OVER SLOP")
+       ======================================================= */
+    .stroke-text-section {
+      padding: 90px 24px;
+      background: #FFFFFF;
+      text-align: center;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-cobalt);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+
+    .stroke-heading-svg {
+      width: 100%;
+      max-width: 920px;
+      height: 100px;
+      overflow: visible;
+      margin: 0 auto 12px;
+    }
+
+    .stroke-anim-text {
+      font-family: var(--font-sans);
+      font-size: 78px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      fill: #0A0D17;
+      stroke: var(--accent-violet);
+      stroke-width: 1.2px;
+      stroke-dasharray: 800;
+      stroke-dashoffset: 800;
+      transition: stroke-dashoffset 2s ease;
+    }
+
+    /* =======================================================
+       6. PROOF OF WORK: PROPER MORPH SLIDER
+       ======================================================= */
+    .morph-slider-section {
+      padding: 100px 24px;
+      background: #F8F9FC;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 48px;
+    }
+
+    .section-title {
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+
+    .morph-carousel {
+      max-width: 1040px;
+      margin: 0 auto;
+      background: #FFFFFF;
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      box-shadow: 0 20px 48px rgba(10, 13, 23, 0.06);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .morph-display-side {
+      background: #090D16;
+      color: #FFFFFF;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 420px;
+      text-align: left;
+    }
+
+    .morph-meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent-violet);
+    }
+
+    .morph-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin: 10px 0;
+      color: #FFFFFF;
+    }
+
+    .morph-desc {
+      font-size: 14px;
+      color: #94A3B8;
+      line-height: 1.6;
+    }
+
+    .morph-controls {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn-morph-nav {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #FFFFFF;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.2s;
+    }
+
+    .btn-morph-nav:hover {
+      background: var(--accent-cobalt);
+    }
+
+    .morph-stage-side {
+      background: radial-gradient(circle at 50% 50%, #151B28 0%, #04060A 100%);
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .morph-preview-card {
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      background: #0E121B;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 24px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #38BDF8;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.4);
+      text-align: left;
+    }
+
+    /* =======================================================
+       7. FREQUENTLY ASKED QUESTIONS (FAQ ACCORDION)
+       ======================================================= */
+    .faq-section {
+      padding: 90px 24px;
+      background: #FFFFFF;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .faq-list {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      text-align: left;
+    }
+
+    .faq-item {
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      background: #F8FAFC;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    .faq-item.open {
+      border-color: var(--accent-cobalt);
+      background: #FFFFFF;
+      box-shadow: 0 8px 24px rgba(0, 76, 232, 0.06);
+    }
+
+    .faq-question {
+      padding: 20px 24px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .faq-chevron {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      transition: transform 0.25s ease;
+    }
+
+    .faq-item.open .faq-chevron {
+      transform: rotate(180deg);
+      color: var(--accent-cobalt);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 0 24px;
+      color: var(--text-secondary);
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+
+    .faq-item.open .faq-answer {
+      padding-bottom: 22px;
+      max-height: 250px;
+    }
+
+    /* =======================================================
+       8. CONTACT SECTION WITH REACT BITS CURVED INPUT
+       ======================================================= */
+    .contact-section {
+      padding: 100px 24px 120px;
+      background: #F8F9FC;
+      border-top: 1px solid var(--border-subtle);
+      text-align: center;
+    }
+
+    .contact-card {
+      max-width: 760px;
+      margin: 0 auto;
+      background: #FFFFFF;
+      border: 1px solid var(--border-subtle);
+      border-radius: 28px;
+      padding: 50px 40px;
+      box-shadow: 0 20px 60px rgba(10, 13, 23, 0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Curved Input Component Representation */
+    .curved-input-container {
+      position: relative;
+      width: 100%;
+      max-width: 580px;
+      margin: 32px 0 20px;
+    }
+
+    .curved-input-svg {
+      width: 100%;
+      height: 80px;
+      overflow: visible;
+      filter: drop-shadow(0 8px 24px rgba(0, 76, 232, 0.12));
+    }
+
+    .curved-input-shell {
+      fill: #FFFFFF;
+      stroke: var(--accent-cobalt);
+      stroke-width: 2;
+      transition: all 0.3s;
+    }
+
+    .curved-input-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+
+    .curved-real-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: var(--font-sans);
+      font-size: 15px;
+      color: var(--text-primary);
+      width: 68%;
+      font-weight: 500;
+    }
+
+    .curved-real-input::placeholder {
+      color: #94A3B8;
+    }
+
+    .curved-submit-btn {
+      background: var(--text-primary);
+      color: #FFFFFF;
+      border: none;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .curved-submit-btn:hover {
+      background: var(--accent-cobalt);
+      transform: translateY(-1px);
+    }
+
+    /* =======================================================
+       9. ACETERNITY TEXT HOVER EFFECT FOOTER
+       ======================================================= */
+    footer {
+      background: #FFFFFF;
+      border-top: 1px solid var(--border-subtle);
+      padding: 60px 24px 36px;
+      text-align: center;
+    }
+
+    .aceternity-footer-svg {
+      width: 100%;
+      max-width: 900px;
+      height: 180px;
+      margin: 0 auto;
+    }
+
+    .aceternity-foot-text {
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+      font-weight: 800;
+      font-size: 58px;
+      letter-spacing: -0.02em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =======================================================
+       1. ACETERNITY DYNAMIC NOTCH
+       ======================================================= -->
+  <div class="notch-wrapper">
+    <div class="notch-shell" id="notchShell">
+      <div class="notch-bar">
+        <a href="#" class="brand">
+          <svg class="brand-star" viewBox="0 0 24 24">
+            <path d="M12 0C12 7.5 12 12 4.5 12C12 12 12 16.5 12 24C12 16.5 12 12 19.5 12C12 12 12 7.5 12 0Z"/>
+          </svg>
+          anvaya
+        </a>
+
+        <div class="notch-items">
+          <button class="notch-trigger" onclick="toggleNotch(event)">
+            <span>14-Day Sprints</span>
+            <span style="font-size: 9px;">▼</span>
+          </button>
+          <a href="javascript:scrollToExpandStage()" class="notch-trigger">Architecture</a>
+          <a href="#proof" class="notch-trigger">Proof of Work</a>
+          <a href="#faq" class="notch-trigger">FAQ</a>
+        </div>
+
+        <a href="#contact" class="star-border-btn">
+          <div class="star-beam-top"></div>
+          <div class="star-beam-bottom"></div>
+          <div class="star-btn-inner">
+            <span>Book Sprint</span>
+            <span>↗</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Expandable Notch Dropdown -->
+      <div class="notch-dropdown-panel" id="notchPanel">
+        <a href="javascript:scrollToExpandStage()" class="notch-card">
+          <h4>The 14-Day Launchpad</h4>
+          <p>Full-stack Next.js 16, FastAPI, PostgreSQL, and Docker deployment.</p>
+        </a>
+        <a href="javascript:scrollToExpandStage()" class="notch-card">
+          <h4>AI & Vector Engine</h4>
+          <p>Hybrid pgvector search, structured LLM agents, and n8n workflows.</p>
+        </a>
+        <a href="javascript:scrollToExpandStage()" class="notch-card">
+          <h4>Interface Sprint</h4>
+          <p>Bespoke Swiss frontend modernization with GSAP & WebGL.</p>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================
+       2. PINNED MASTER STAGE:
+          HERO (ANVAYA + DESC + ASSET + 2 CTAs)
+          -> EXPAND
+          -> ACETERNITY STICKY SCROLL REVEAL
+          -> SHRINK BACK DOWN
+       ======================================================= -->
+  <section class="hero-master-stage" id="masterStage">
+    <div class="hero-stage-viewport" id="heroViewport">
+      <!-- WebGL Light Tunnel Background -->
+      <canvas id="tunnelCanvas"></canvas>
+      <div class="hero-vignette"></div>
+
+      <!-- Above Asset: Heading ANVAYA + One-line description -->
+      <div class="hero-top-copy" id="heroTopCopy">
+        <div class="eyebrow-pill">
+          <span class="beacon-dot"></span>
+          <span class="shiny-text">ANVAYA PROTOCOL • ACCEPTING Q4 INTAKE</span>
+        </div>
+
+        <!-- Very Short Main Heading: "ANVAYA" -->
+        <h1 class="hero-monolith-title">
+          <span class="glow">ANVAYA</span>
+        </h1>
+
+        <!-- One-Line Description -->
+        <p class="hero-one-liner">
+          We turn raw architecture into production software in 14 days. Direct builder access, zero agency fluff.
+        </p>
+      </div>
+
+      <!-- Central Portal Card (Expands, reveals sticky scroll, then shrinks) -->
+      <div class="portal-card-central" id="portalCard" onclick="scrollToExpandStage()">
+        <!-- Top Chrome Bar -->
+        <div class="cockpit-chrome" id="portalChrome">
+          <div class="traffic-dots">
+            <span class="traffic-dot close"></span>
+            <span class="traffic-dot min"></span>
+            <span class="traffic-dot max"></span>
+            <span style="color: #E2E8F0; font-weight: 600; margin-left: 6px;" id="chromeTitle">anvaya_cockpit.tsx — Production Edge v2.4</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="beacon-dot"></span>
+            <span id="chromeBadge">100% DAY-1 IP • LIVE TELEMETRY</span>
+          </div>
+        </div>
+
+        <!-- Content Container inside Portal Card -->
+        <div class="portal-inner-stage">
+          <!-- Resting View: Single Clean Cockpit Image with HUD Badges -->
+          <div class="resting-cockpit-view" id="restingView">
+            <img src="anvaya_cockpit_asset.jpg" alt="Anvaya System Cockpit" class="cockpit-asset-img" />
+            <div class="scroll-expand-prompt" id="expandPrompt">
+              <span>SCROLL TO EXPAND ARCHITECTURE</span>
+              <span>↓</span>
+            </div>
+          </div>
+
+          <!-- Fullscreen Aceternity Sticky Scroll Reveal Interface (Revealed when expanded) -->
+          <div class="fullscreen-sticky-reveal" id="stickyRevealLayer">
+            <!-- Left Scroll Narrative Cards -->
+            <div class="reveal-narrative-col">
+              <div class="reveal-card active" id="card1">
+                <span class="rev-tag">MILESTONE 01 • DAYS 01–04</span>
+                <h4>The 14-Day MVP Launchpad</h4>
+                <p>Full-stack Next.js 16 App Router paired with high-performance FastAPI backends and PostgreSQL. Schema-first OpenAPI design with 100% Day-1 IP repository handoff.</p>
+              </div>
+
+              <div class="reveal-card" id="card2">
+                <span class="rev-tag">MILESTONE 02 • DAYS 05–10</span>
+                <h4>AI & pgvector Query Engine</h4>
+                <p>Deterministic hybrid vector search with HNSW indexing, structured LLM function calling, and automated regression testing preventing AI slop.</p>
+              </div>
+
+              <div class="reveal-card" id="card3">
+                <span class="rev-tag">MILESTONE 03 • DAYS 11–14</span>
+                <h4>Direct Senior Architecture</h4>
+                <p>Dockerized edge deployments with Cloudflare Zero Trust ingress. Real-time telemetry, zero middle managers, and 0hrs account manager bloat.</p>
+              </div>
+            </div>
+
+            <!-- Right Sticky Changing Stage -->
+            <div class="reveal-preview-col">
+              <div class="preview-stage-box">
+                <div class="preview-layer active" id="layer1">
+                  <img src="anvaya_cockpit_asset.jpg" alt="Production Cockpit" class="layer-img" />
+                </div>
+                <div class="preview-layer" id="layer2">
+                  <div class="terminal-code-box">
+                    <div style="color: #94A3B8;">// Hybrid pgvector Retrieval Stream</div>
+                    <div style="color: #F43F5E;">const queryEmbedding = await embed(userPrompt);</div>
+                    <div style="color: #E2E8F0;">const results = await db.query(sql`SELECT id, cosine_similarity(...) FROM knowledge_vectors WHERE distance &lt; 0.15 ORDER BY distance LIMIT 8`);</div>
+                    <div style="color: #10B981; margin-top: 12px;">✓ p99 Retrieval Latency: 1.5ms</div>
+                    <div style="color: #10B981;">✓ 0 Hallucination Indexing: Active</div>
+                  </div>
+                </div>
+                <div class="preview-layer" id="layer3">
+                  <div class="terminal-code-box">
+                    <div style="color: #94A3B8;">// Cloudflare Zero Trust Ingress</div>
+                    <div>$ cloudflared tunnel run anvaya-prod-edge</div>
+                    <div style="color: #38BDF8;">&gt; Routing traffic to multi-region edge nodes...</div>
+                    <div style="color: #10B981; margin-top: 8px;">✓ SSL Termination: 0ms overhead</div>
+                    <div style="color: #10B981;">✓ Direct Senior Git Handshake: 100% Complete</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Below Asset: 2 CTA Buttons -->
+      <div class="hero-bottom-ctas" id="heroBottomCtas">
+        <a href="#contact" class="star-border-btn" style="box-shadow: 0 8px 30px rgba(0,76,232,0.35);">
+          <div class="star-beam-top"></div>
+          <div class="star-beam-bottom"></div>
+          <div class="star-btn-inner" style="padding: 13px 32px; font-size: 15px;">
+            <span>Schedule 14-Day Sprint</span>
+            <span>→</span>
+          </div>
+        </a>
+
+        <button onclick="scrollToExpandStage()" class="btn-secondary-pill">
+          Inspect Architecture ↓
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================
+       3. CAPABILITIES RIBBON (TEXT LOOP)
+       ======================================================= -->
+  <section class="ribbon-section">
+    <div class="text-loop-track">
+      <div class="loop-item">14-Day Production Sprints <span class="loop-star">✦</span></div>
+      <div class="loop-item">Deterministic AI Architecture <span class="loop-star">✦</span></div>
+      <div class="loop-item">checkDK Rust AST Compiler <span class="loop-star">✦</span></div>
+      <div class="loop-item">100% Day-1 IP Ownership <span class="loop-star">✦</span></div>
+      <div class="loop-item">Zero Middle Management <span class="loop-star">✦</span></div>
+      <div class="loop-item">Direct Senior Builder Intake <span class="loop-star">✦</span></div>
+      <div class="loop-item">14-Day Production Sprints <span class="loop-star">✦</span></div>
+      <div class="loop-item">Deterministic AI Architecture <span class="loop-star">✦</span></div>
+      <div class="loop-item">checkDK Rust AST Compiler <span class="loop-star">✦</span></div>
+      <div class="loop-item">100% Day-1 IP Ownership <span class="loop-star">✦</span></div>
+      <div class="loop-item">Zero Middle Management <span class="loop-star">✦</span></div>
+      <div class="loop-item">Direct Senior Builder Intake <span class="loop-star">✦</span></div>
+    </div>
+  </section>
+
+  <!-- =======================================================
+       4. ENGINEERING STANDARD ("SYSTEMS OVER SLOP")
+       ======================================================= -->
+  <section class="stroke-text-section">
+    <div class="section-tag">ENGINEERING STANDARD</div>
+    <svg class="stroke-heading-svg" viewBox="0 0 920 100">
+      <text x="50%" y="75%" text-anchor="middle" class="stroke-anim-text" id="strokeTextAnim">
+        SYSTEMS OVER SLOP
+      </text>
+    </svg>
+    <p style="color: var(--text-secondary); max-width: 580px; margin: 0 auto; font-size: 15px;">
+      We do not stitch together brittle no-code templates. We engineer deterministic codebases with typed schemas and automated regression tests.
+    </p>
+  </section>
+
+  <!-- =======================================================
+       5. PROOF OF WORK: PROPER MORPH SLIDER
+       ======================================================= -->
+  <section class="morph-slider-section" id="proof">
+    <div class="section-header">
+      <div class="section-tag">AUTHENTIC EVIDENCE</div>
+      <h2 class="section-title">Proof of Engineering Capabilities</h2>
+      <p style="color: var(--text-secondary); font-size: 15px;">Clients buy evidence, not promises. Explore Anvaya's production systems.</p>
+    </div>
+
+    <div class="morph-carousel">
+      <div class="morph-display-side">
+        <div>
+          <span class="morph-meta" id="morphMeta">PROOF 01 OF 03 • DEVELOPER TOOLING</span>
+          <h3 class="morph-title" id="morphTitle">checkDK AST Engine</h3>
+          <p class="morph-desc" id="morphDesc">
+            Production AST parsing, real-time code diffing, and PyPI/npm CLI published tooling with zero runtime regressions.
+          </p>
+        </div>
+
+        <div class="morph-controls">
+          <button class="btn-morph-nav" onclick="prevSlide()">←</button>
+          <button class="btn-morph-nav" onclick="nextSlide()">→</button>
+        </div>
+      </div>
+
+      <div class="morph-stage-side">
+        <div class="morph-preview-card" id="morphCard">
+          <div style="color: #94A3B8; margin-bottom: 8px;">// Terminal Live Telemetry</div>
+          <div>$ checkdk diff --strict</div>
+          <div style="color: #10B981; margin-top: 8px;">✓ AST parsed in 18ms</div>
+          <div style="color: #10B981;">✓ 0 breaking regressions detected</div>
+          <div style="color: #E2E8F0; margin-top: 12px;">Package: npm install checkdk@latest</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================
+       6. FAQ SECTION (ACCORDION)
+       ======================================================= -->
+  <section class="faq-section" id="faq">
+    <div class="section-header">
+      <div class="section-tag">TRANSPARENCY FIRST</div>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p style="color: var(--text-secondary); font-size: 15px;">Everything you need to know about our sprint execution model.</p>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item open">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>How can you ship production software in 14 days without cutting corners?</span>
+          <span class="faq-chevron">▼</span>
+        </div>
+        <div class="faq-answer">
+          Traditional agencies waste 70% of time in middle-management meetings, account-manager handoffs, and outsourced junior coordination. At Anvaya, you communicate directly with lead system architects. We operate with battle-tested modular templates, schema-first contracts, and automated CI pipelines that eliminate boilerplate lag.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>What does "100% Day-1 IP Ownership" mean?</span>
+          <span class="faq-chevron">▼</span>
+        </div>
+        <div class="faq-answer">
+          You own 100% of the intellectual property, code repository, and infrastructure credentials from the very first commit. There are no proprietary lock-ins, recurring licensing fees, or hostage codebases. We transfer all GitHub repos and cloud credentials to your team upon delivery.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Do we work with junior developers or account managers?</span>
+          <span class="faq-chevron">▼</span>
+        </div>
+        <div class="faq-answer">
+          Zero junior contractors. Zero account managers. When you hire Anvaya, you interface directly with the lead engineers writing your code and deploying your database clusters.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>What happens after the 14-day sprint finishes?</span>
+          <span class="faq-chevron">▼</span>
+        </div>
+        <div class="faq-answer">
+          Every sprint includes a comprehensive 14-day warranty for bug fixes and infrastructure maintenance, along with architectural walkthrough videos and Docker container recipes for your team to run independently.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================
+       7. CONTACT INTAKE WITH REACT BITS CURVED INPUT
+       ======================================================= -->
+  <section class="contact-section" id="contact">
+    <div class="contact-card">
+      <div class="section-tag">START YOUR SPRINT</div>
+      <h2 style="font-size: 36px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 12px;">Let's build your system.</h2>
+      <p style="color: var(--text-secondary); max-width: 520px; font-size: 15px;">
+        Accepting Q4 sprint intake. Enter your work email or brief to reserve direct builder access.
+      </p>
+
+      <!-- React Bits Curved Input Component -->
+      <div class="curved-input-container">
+        <svg class="curved-input-svg" viewBox="0 0 580 80">
+          <defs>
+            <linearGradient id="curvedGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#8B5CF6"/>
+              <stop offset="50%" stop-color="#004CE8"/>
+              <stop offset="100%" stop-color="#38BDF8"/>
+            </linearGradient>
+          </defs>
+          <!-- Organic Curved Pill Boundary -->
+          <path
+            class="curved-input-shell"
+            d="M 40,16 Q 290,6 540,16 C 564,16 574,32 574,42 C 574,54 564,68 540,66 Q 290,76 40,66 C 16,68 6,54 6,42 C 6,32 16,16 40,16 Z"
+          />
+        </svg>
+
+        <div class="curved-input-inner">
+          <input
+            type="email"
+            class="curved-real-input"
+            id="clientEmailInput"
+            placeholder="Enter work email for 14-day sprint intake..."
+          />
+          <button class="curved-submit-btn" onclick="submitIntake(event)">
+            <span>Reserve Sprint</span>
+            <span>→</span>
+          </button>
+        </div>
+      </div>
+
+      <div style="font-family: var(--font-mono); font-size: 11.5px; color: var(--text-tertiary); display: flex; gap: 20px;">
+        <span>✓ Direct Senior Architect Intake</span>
+        <span>✓ Strict Non-Disclosure (NDA)</span>
+        <span>✓ 24hr Response Time</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================
+       8. ACETERNITY TEXT HOVER EFFECT FOOTER
+       ======================================================= -->
+  <footer>
+    <div style="max-width: 1040px; margin: 0 auto 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 20px;">
+      <div class="brand">
+        <svg class="brand-star" viewBox="0 0 24 24">
+          <path d="M12 0C12 7.5 12 12 4.5 12C12 12 12 16.5 12 24C12 16.5 12 12 19.5 12C12 12 12 7.5 12 0Z"/>
+        </svg>
+        anvaya
+      </div>
+      <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-tertiary);">
+        Direct Inquiries: <a href="mailto:build@anvaya.dev" style="color: var(--text-primary); font-weight: 600; text-decoration: none;">build@anvaya.dev</a>
+      </div>
+    </div>
+
+    <!-- Official Aceternity SVG TextHoverEffect -->
+    <div id="footerTextContainer">
+      <svg
+        id="textHoverSvg"
+        width="100%"
+        height="100%"
+        viewBox="0 0 300 100"
+        xmlns="http://www.w3.org/2000/svg"
+        class="aceternity-footer-svg"
+      >
+        <defs>
+          <linearGradient id="textGradient" gradientUnits="userSpaceOnUse" x1="20" y1="50" x2="280" y2="50">
+            <stop offset="0%" stop-color="#eab308" />
+            <stop offset="25%" stop-color="#ef4444" />
+            <stop offset="50%" stop-color="#3b82f6" />
+            <stop offset="75%" stop-color="#06b6d4" />
+            <stop offset="100%" stop-color="#8b5cf6" />
+          </linearGradient>
+
+          <radialGradient id="revealMask" gradientUnits="userSpaceOnUse" r="25%" cx="50%" cy="50%">
+            <stop offset="0%" stop-color="white" />
+            <stop offset="100%" stop-color="black" />
+          </radialGradient>
+
+          <mask id="textMask">
+            <rect x="0" y="0" width="100%" height="100%" fill="url(#revealMask)" />
+          </mask>
+        </defs>
+
+        <text
+          x="50%"
+          y="54%"
+          text-anchor="middle"
+          dominant-baseline="middle"
+          stroke-width="0.35"
+          fill="transparent"
+          stroke="#CBD5E1"
+          class="aceternity-foot-text"
+        >
+          ANVAYA
+        </text>
+
+        <text
+          x="50%"
+          y="54%"
+          text-anchor="middle"
+          dominant-baseline="middle"
+          stroke="url(#textGradient)"
+          stroke-width="0.4"
+          fill="transparent"
+          mask="url(#textMask)"
+          class="aceternity-foot-text"
+        >
+          ANVAYA
+        </text>
+      </svg>
+    </div>
+
+    <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 16px;">
+      © 2026 Anvaya Studio. Ideas to Impact. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- =======================================================
+       INTERACTION SCRIPTS: GSAP TIMELINE + WEBGL + MORPH SLIDER
+       ======================================================= -->
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // --- 1. NOTCH EXPANSION ---
+    let notchExpanded = false;
+    window.toggleNotch = function(e) {
+      e.stopPropagation();
+      const shell = document.getElementById('notchShell');
+      notchExpanded = !notchExpanded;
+      shell.classList.toggle('expanded', notchExpanded);
+    };
+
+    window.addEventListener('click', (e) => {
+      const shell = document.getElementById('notchShell');
+      if (notchExpanded && !shell.contains(e.target)) {
+        notchExpanded = false;
+        shell.classList.remove('expanded');
+      }
+    });
+
+    // --- 2. WEBGL 2.0 LIGHT TUNNEL (PURPLE/VIOLET LIGHT THEME) ---
+    const canvas = document.getElementById('tunnelCanvas');
+    const gl = canvas.getContext('webgl2', { alpha: true, antialias: false, premultipliedAlpha: true });
+
+    const vsSource = `#version 300 es
+    in vec2 position;
+    void main() {
+      gl_Position = vec4(position, 0.0, 1.0);
+    }`;
+
+    const fsSource = `#version 300 es
+    precision highp float;
+    uniform vec2 iResolution;
+    uniform float iTime;
+    uniform float uSpeed;
+    uniform float uFlowDir;
+    uniform float uPulseSpeed;
+    uniform float uPulseLength;
+    uniform float uPulseBlend;
+    uniform float uPulseWidth;
+    uniform float uCableCount;
+    uniform float uThickness;
+    uniform float uRimWidth;
+    uniform float uWaviness;
+    uniform float uSway;
+    uniform float uSize;
+    uniform vec2 uMouseOffset;
+    uniform float uGlow;
+    uniform float uFadeNear;
+    uniform float uFadeFar;
+    uniform float uBrightness;
+    uniform float uColorVariance;
+    uniform vec3 uCableColor;
+    uniform vec3 uPulseColor;
+    uniform vec3 uTunnelColor;
+    uniform float uTunnelOpacity;
+    uniform float uLightMode;
+    out vec4 fragColor;
+
+    void mainImage(out vec4 o, in vec2 fragCoord) {
+      float size = uSize * 2.0;
+      float speedBase = uSpeed * 4.0 * uFlowDir;
+      float waviness = uWaviness * 0.15;
+      float rotationOsc = uSway * 0.5;
+      float baseThick = uThickness * 0.35 + 0.05;
+      float borderWeight = uRimWidth * 0.15 + 0.01;
+      float cablesCount = floor(uCableCount);
+
+      vec2 res = iResolution.xy;
+      vec2 uv = (fragCoord - 0.5 * res) / min(res.y, res.x);
+      uv -= uMouseOffset;
+      uv /= (size + 0.0001);
+
+      float r = length(uv);
+      float angle = atan(uv.y, uv.x);
+      float depth = -log(r + 0.0001);
+
+      float swing = sin(iTime * (uSpeed * 0.5 + 0.1)) * rotationOsc;
+      float waveOffset = sin(depth * 1.2 + iTime * speedBase * 0.25) * waviness;
+
+      float angleNormalized = (angle / 6.2831853) + 0.5;
+      float finalAngle = fract(angleNormalized + waveOffset + swing);
+
+      float cableID = floor(finalAngle * cablesCount);
+      float gvX = (fract(finalAngle * cablesCount) - 0.5);
+
+      float rand = fract(sin(cableID * 12.9898) * 43758.5453);
+      float randSpeed = (0.4 + rand * 0.6) * speedBase * uPulseSpeed;
+      float cableThick = baseThick * (0.6 + rand * 0.4);
+
+      vec3 cableCol = uCableColor;
+      cableCol *= 1.0 + (rand - 0.5) * 0.4 * uColorVariance;
+      cableCol = mix(cableCol, uPulseColor, rand * 0.25 * uColorVariance);
+
+      float scroll = depth + (iTime * randSpeed);
+      float pulseFact = fract(scroll);
+
+      float distToCore = abs(gvX);
+      float wireMask = smoothstep(cableThick, cableThick - 0.05, distToCore);
+      float rimGlow = smoothstep(borderWeight, 0.0, abs(distToCore - cableThick));
+
+      float pulseThick = cableThick * uPulseWidth;
+      float pulseMask = smoothstep(pulseThick, pulseThick - 0.05 * uPulseWidth, distToCore);
+
+      float pulseDist = abs(pulseFact - 0.5);
+      float pulseTotal = uPulseLength;
+      float pulseCore = pulseTotal * (1.0 - uPulseBlend);
+      float pulseLo = min(pulseCore, pulseTotal - max(fwidth(scroll), 1e-4));
+      float dataPulse = 1.0 - smoothstep(pulseLo, pulseTotal, pulseDist);
+
+      float aBody = wireMask * uTunnelOpacity;
+      float aRim = rimGlow;
+      float aPulse = clamp(dataPulse * pulseMask, 0.0, 1.0);
+
+      vec3 fiberCol = uTunnelColor * aBody
+        + cableCol * aRim * 1.4 * uGlow
+        + uPulseColor * dataPulse * 3.5 * pulseMask;
+
+      float distFade = smoothstep(0.0, uFadeNear, r) * smoothstep(uFadeFar, uFadeFar - 0.9, r);
+      float inten = clamp(aBody + aRim + aPulse, 0.0, 1.0) * distFade;
+
+      vec3 finalCol = fiberCol * uBrightness;
+      float alpha = clamp(inten, 0.0, 1.0);
+      o = vec4(finalCol * alpha, alpha);
+    }
+
+    void main() {
+      vec4 o = vec4(0.0);
+      mainImage(o, gl_FragCoord.xy);
+      if (uLightMode > 0.5) {
+        float peak = max(o.r, max(o.g, o.b));
+        vec3 chroma = pow(clamp(o.rgb / max(peak, 0.0001), 0.0, 1.0), vec3(1.12));
+        fragColor = vec4(mix(vec3(0.97, 0.98, 0.99), chroma, o.a * 0.9), 1.0);
+      } else {
+        fragColor = o;
+      }
+    }`;
+
+    function createShader(gl, type, src) {
+      const s = gl.createShader(type);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      return s;
+    }
+
+    const prg = gl.createProgram();
+    gl.attachShader(prg, createShader(gl, gl.VERTEX_SHADER, vsSource));
+    gl.attachShader(prg, createShader(gl, gl.FRAGMENT_SHADER, fsSource));
+    gl.linkProgram(prg);
+
+    const quadBuf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, quadBuf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+
+    const posAttr = gl.getAttribLocation(prg, 'position');
+    gl.enableVertexAttribArray(posAttr);
+    gl.vertexAttribPointer(posAttr, 2, gl.FLOAT, false, 0, 0);
+    gl.useProgram(prg);
+
+    const uLoc = {
+      res: gl.getUniformLocation(prg, 'iResolution'),
+      time: gl.getUniformLocation(prg, 'iTime'),
+      speed: gl.getUniformLocation(prg, 'uSpeed'),
+      flowDir: gl.getUniformLocation(prg, 'uFlowDir'),
+      pulseSpeed: gl.getUniformLocation(prg, 'uPulseSpeed'),
+      pulseLength: gl.getUniformLocation(prg, 'uPulseLength'),
+      pulseBlend: gl.getUniformLocation(prg, 'uPulseBlend'),
+      pulseWidth: gl.getUniformLocation(prg, 'uPulseWidth'),
+      cableCount: gl.getUniformLocation(prg, 'uCableCount'),
+      thickness: gl.getUniformLocation(prg, 'uThickness'),
+      rimWidth: gl.getUniformLocation(prg, 'uRimWidth'),
+      waviness: gl.getUniformLocation(prg, 'uWaviness'),
+      sway: gl.getUniformLocation(prg, 'uSway'),
+      size: gl.getUniformLocation(prg, 'uSize'),
+      mouseOffset: gl.getUniformLocation(prg, 'uMouseOffset'),
+      glow: gl.getUniformLocation(prg, 'uGlow'),
+      fadeNear: gl.getUniformLocation(prg, 'uFadeNear'),
+      fadeFar: gl.getUniformLocation(prg, 'uFadeFar'),
+      brightness: gl.getUniformLocation(prg, 'uBrightness'),
+      colorVariance: gl.getUniformLocation(prg, 'uColorVariance'),
+      cableColor: gl.getUniformLocation(prg, 'uCableColor'),
+      pulseColor: gl.getUniformLocation(prg, 'uPulseColor'),
+      tunnelColor: gl.getUniformLocation(prg, 'uTunnelColor'),
+      tunnelOpacity: gl.getUniformLocation(prg, 'uTunnelOpacity'),
+      lightMode: gl.getUniformLocation(prg, 'uLightMode')
+    };
+
+    function resizeTunnel() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+    window.addEventListener('resize', resizeTunnel);
+    resizeTunnel();
+
+    let mouseOff = [0, 0];
+    let mouseTarget = [0, 0];
+    window.addEventListener('mousemove', (e) => {
+      mouseTarget[0] = ((e.clientX / window.innerWidth) - 0.5) * 0.12;
+      mouseTarget[1] = -(((e.clientY / window.innerHeight) - 0.5) * 0.12);
+    });
+
+    const tStart = performance.now();
+    function renderTunnel() {
+      requestAnimationFrame(renderTunnel);
+      const t = (performance.now() - tStart) * 0.001;
+
+      mouseOff[0] += 0.05 * (mouseTarget[0] - mouseOff[0]);
+      mouseOff[1] += 0.05 * (mouseTarget[1] - mouseOff[1]);
+
+      gl.uniform2f(uLoc.res, canvas.width, canvas.height);
+      gl.uniform1f(uLoc.time, t);
+      gl.uniform1f(uLoc.speed, 0.12);
+      gl.uniform1f(uLoc.flowDir, -1.0);
+      gl.uniform1f(uLoc.pulseSpeed, 2.2);
+      gl.uniform1f(uLoc.pulseLength, 0.3);
+      gl.uniform1f(uLoc.pulseBlend, 1.0);
+      gl.uniform1f(uLoc.pulseWidth, 1.1);
+      gl.uniform1f(uLoc.cableCount, 22.0);
+      gl.uniform1f(uLoc.thickness, 0.35);
+      gl.uniform1f(uLoc.rimWidth, 0.18);
+      gl.uniform1f(uLoc.waviness, 0.35);
+      gl.uniform1f(uLoc.sway, 0.5);
+      gl.uniform1f(uLoc.size, 1.0);
+      gl.uniform2f(uLoc.mouseOffset, mouseOff[0], mouseOff[1]);
+      gl.uniform1f(uLoc.glow, 1.2);
+      gl.uniform1f(uLoc.fadeNear, 0.45);
+      gl.uniform1f(uLoc.fadeFar, 2.2);
+      gl.uniform1f(uLoc.brightness, 1.25);
+      gl.uniform1f(uLoc.colorVariance, 1.0);
+
+      // Light Mode Violet/Purple + Electric Cyan
+      gl.uniform3f(uLoc.cableColor, 0.66, 0.33, 0.97);
+      gl.uniform3f(uLoc.pulseColor, 0.22, 0.74, 0.97);
+      gl.uniform3f(uLoc.tunnelColor, 0.23, 0.05, 0.45);
+      gl.uniform1f(uLoc.tunnelOpacity, 0.15);
+      gl.uniform1f(uLoc.lightMode, 1.0);
+
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
+    renderTunnel();
+
+    // =======================================================
+    // 3. MASTER CHOREOGRAPHY: EXPAND -> STICKY SCROLL REVEAL -> SHRINK
+    // =======================================================
+    const masterTl = gsap.timeline({
+      scrollTrigger: {
+        id: 'heroMasterPin',
+        trigger: '#masterStage',
+        start: 'top top',
+        end: '+=340%',
+        pin: true,
+        scrub: 1,
+        anticipatePin: 1
+      }
+    });
+
+    // PHASE 1: EXPAND CENTRALLY (0.0 -> 0.25)
+    // Lift & fade top copy
+    masterTl.to('#heroTopCopy', {
+      opacity: 0,
+      y: -90,
+      scale: 0.92,
+      duration: 0.2,
+      ease: 'power2.inOut'
+    }, 0);
+
+    // Drop & fade bottom CTAs
+    masterTl.to('#heroBottomCtas', {
+      opacity: 0,
+      y: 60,
+      duration: 0.2,
+      ease: 'power2.inOut'
+    }, 0);
+
+    // Hide prompt inside card
+    masterTl.to('#expandPrompt', {
+      opacity: 0,
+      duration: 0.1
+    }, 0);
+
+    // Card expands centrally to full viewport
+    masterTl.to('#portalCard', {
+      top: '0px',
+      left: '0px',
+      xPercent: 0,
+      transform: 'none',
+      width: '100vw',
+      height: '100vh',
+      borderRadius: '0px',
+      borderWidth: '0px',
+      boxShadow: 'none',
+      duration: 0.25,
+      ease: 'power2.inOut'
+    }, 0);
+
+    // Fade in fullscreen sticky reveal layer as card reaches full screen
+    masterTl.to('#stickyRevealLayer', {
+      opacity: 1,
+      pointerEvents: 'auto',
+      duration: 0.08
+    }, 0.22);
+    masterTl.to('#restingView', {
+      opacity: 0,
+      duration: 0.08
+    }, 0.22);
+
+    // PHASE 2: ACETERNITY STICKY SCROLL REVEAL (0.25 -> 0.78)
+    // Step 1: Active by default at 0.25 -> 0.42
+    masterTl.to('#card1', { className: 'reveal-card active', duration: 0.05 }, 0.25);
+    masterTl.to('#layer1', { opacity: 1, duration: 0.1 }, 0.25);
+
+    // Step 2: pgvector Query Cluster at 0.42 -> 0.60
+    masterTl.to('#card1', { className: 'reveal-card', duration: 0.05 }, 0.42);
+    masterTl.to('#card2', { className: 'reveal-card active', duration: 0.05 }, 0.42);
+    masterTl.to('#layer1', { opacity: 0, duration: 0.1 }, 0.42);
+    masterTl.to('#layer2', { opacity: 1, duration: 0.1 }, 0.42);
+    masterTl.to('#chromeTitle', { textContent: 'anvaya_query_engine.py — pgvector HNSW Stream', duration: 0.05 }, 0.42);
+
+    // Step 3: Direct Senior Edge Deployment at 0.60 -> 0.78
+    masterTl.to('#card2', { className: 'reveal-card', duration: 0.05 }, 0.60);
+    masterTl.to('#card3', { className: 'reveal-card active', duration: 0.05 }, 0.60);
+    masterTl.to('#layer2', { opacity: 0, duration: 0.1 }, 0.60);
+    masterTl.to('#layer3', { opacity: 1, duration: 0.1 }, 0.60);
+    masterTl.to('#chromeTitle', { textContent: 'cloudflare_ingress.tf — Zero Trust Direct Handshake', duration: 0.05 }, 0.60);
+
+    // PHASE 3: SHRINK BACK DOWN (0.78 -> 1.0)
+    masterTl.to('#stickyRevealLayer', {
+      opacity: 0,
+      pointerEvents: 'none',
+      duration: 0.06
+    }, 0.78);
+    masterTl.to('#restingView', {
+      opacity: 1,
+      duration: 0.06
+    }, 0.78);
+    masterTl.to('#chromeTitle', { textContent: 'anvaya_cockpit.tsx — Production Edge v2.4', duration: 0.05 }, 0.78);
+
+    // Smoothly shrink portal card back to compact card
+    masterTl.to('#portalCard', {
+      top: '360px',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      width: 'min(980px, 92vw)',
+      height: '440px',
+      borderRadius: '20px',
+      borderWidth: '1px',
+      boxShadow: '0 24px 70px rgba(10, 13, 23, 0.16), 0 0 0 1px rgba(139, 92, 246, 0.25)',
+      duration: 0.22,
+      ease: 'power2.inOut'
+    }, 0.78);
+
+    // Helper: Scroll to start of expand stage
+    window.scrollToExpandStage = function() {
+      const trigger = ScrollTrigger.getById('heroMasterPin');
+      if (trigger) {
+        window.scrollTo({
+          top: trigger.start + (trigger.end - trigger.start) * 0.3,
+          behavior: 'smooth'
+        });
+      }
+    };
+
+    // --- 4. STROKE TEXT SCROLLTRIGGER ---
+    ScrollTrigger.create({
+      trigger: '.stroke-text-section',
+      start: 'top 75%',
+      onEnter: () => {
+        document.getElementById('strokeTextAnim').style.strokeDashoffset = '0';
+      }
+    });
+
+    // --- 5. MORPH SLIDER LOGIC ---
+    const slides = [
+      {
+        meta: 'PROOF 01 OF 03 • DEVELOPER TOOLING',
+        title: 'checkDK AST Engine',
+        desc: 'Production AST parsing, real-time code diffing, and PyPI/npm CLI published tooling with zero runtime regressions.',
+        card: `<div style="color: #94A3B8; margin-bottom: 8px;">// Terminal Live Telemetry</div>
+               <div>$ checkdk diff --strict</div>
+               <div style="color: #10B981; margin-top: 8px;">✓ AST parsed in 18ms</div>
+               <div style="color: #10B981;">✓ 0 breaking regressions detected</div>
+               <div style="color: #E2E8F0; margin-top: 12px;">Package: npm install checkdk@latest</div>`
+      },
+      {
+        meta: 'PROOF 02 OF 03 • SYSTEMS RUNTIME',
+        title: 'Oppy Browser Engine',
+        desc: 'Local-first systems engineering, streaming SQLite WAL replication, and high-performance desktop runtime architecture.',
+        card: `<div style="color: #94A3B8; margin-bottom: 8px;">// SQLite WAL Engine</div>
+               <div>&gt; oppy.wal_stream.attach()</div>
+               <div style="color: #38BDF8; margin-top: 8px;">✓ Sync frequency: 120Hz</div>
+               <div style="color: #10B981;">✓ Memory footprint: &lt; 38MB</div>
+               <div style="color: #E2E8F0; margin-top: 12px;">Arch: Rust + Native IPC</div>`
+      },
+      {
+        meta: 'PROOF 03 OF 03 • ENTERPRISE AUTOMATION',
+        title: 'Self-Hosted n8n Cluster',
+        desc: 'Bare-metal automated workflows with Cloudflare Zero Trust tunnels (n8n.dshenoyh.in) replacing expensive SaaS bloat.',
+        card: `<div style="color: #94A3B8; margin-bottom: 8px;">// Cloudflare Zero Trust Ingress</div>
+               <div>&gt; cloudflared tunnel run n8n-edge</div>
+               <div style="color: #10B981; margin-top: 8px;">✓ Webhook latency: 9ms</div>
+               <div style="color: #10B981;">✓ 100% End-to-End Encrypted</div>
+               <div style="color: #E2E8F0; margin-top: 12px;">Ingress: https://n8n.dshenoyh.in</div>`
+      }
+    ];
+
+    let currentSlide = 0;
+    function updateSlide() {
+      const s = slides[currentSlide];
+      gsap.to(['#morphMeta', '#morphTitle', '#morphDesc', '#morphCard'], {
+        opacity: 0,
+        y: -10,
+        duration: 0.2,
+        onComplete: () => {
+          document.getElementById('morphMeta').innerText = s.meta;
+          document.getElementById('morphTitle').innerText = s.title;
+          document.getElementById('morphDesc').innerText = s.desc;
+          document.getElementById('morphCard').innerHTML = s.card;
+          gsap.fromTo(['#morphMeta', '#morphTitle', '#morphDesc', '#morphCard'], { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.05, ease: 'power2.out' });
+        }
+      });
+    }
+
+    window.nextSlide = function() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      updateSlide();
+    };
+
+    window.prevSlide = function() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      updateSlide();
+    };
+
+    // --- 6. FAQ ACCORDION ---
+    window.toggleFaq = function(el) {
+      const parent = el.parentElement;
+      const isOpen = parent.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(item => item.classList.remove('open'));
+      if (!isOpen) {
+        parent.classList.add('open');
+      }
+    };
+
+    // --- 7. CURVED INPUT SUBMIT LOGIC ---
+    window.submitIntake = function(e) {
+      e.preventDefault();
+      const input = document.getElementById('clientEmailInput');
+      const val = input.value.trim();
+      if (!val) {
+        alert('Please enter a valid work email.');
+        return;
+      }
+      alert('Thank you! Anvaya senior architects will review your intake within 24 hours: ' + val);
+      input.value = '';
+    };
+
+    // --- 8. ACETERNITY FOOTER CURSOR TRACKING ---
+    const footSvg = document.getElementById('textHoverSvg');
+    const footMask = document.getElementById('revealMask');
+    document.getElementById('footerTextContainer').addEventListener('mousemove', (e) => {
+      const rect = footSvg.getBoundingClientRect();
+      const cx = ((e.clientX - rect.left) / rect.width) * 100;
+      const cy = ((e.clientY - rect.top) / rect.height) * 100;
+      footMask.setAttribute('cx', `${cx}%`);
+      footMask.setAttribute('cy', `${cy}%`);
+    });
+
+    // Verification Query Params for Testing
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('step')) {
+      const step = urlParams.get('step');
+      if (masterTl.scrollTrigger) {
+        masterTl.scrollTrigger.kill();
+      }
+      if (step === 'expand') {
+        masterTl.progress(0.32);
+      } else if (step === 'step2') {
+        masterTl.progress(0.52);
+      } else if (step === 'step3') {
+        masterTl.progress(0.70);
+      } else if (step === 'shrink') {
+        masterTl.progress(0.95);
+      }
+    } else if (urlParams.has('view')) {
+      const v = urlParams.get('view');
+      const target = document.getElementById(v);
+      if (target) {
+        if (masterTl.scrollTrigger) masterTl.scrollTrigger.kill();
+        target.scrollIntoView();
+      }
+    }
+  </script>
+</body>
+</html>
