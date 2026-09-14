@@ -8,20 +8,20 @@ import { cn } from "@/lib/utils";
 
 const SPRINT_ITEMS = [
   {
-    title: "14-Day Launchpad",
-    subtitle: "Full-Stack Production MVP",
+    title: "Production MVPs",
+    subtitle: "Full-Stack Software Built to Scale",
     icon: Layers,
     href: "#sprints",
   },
   {
-    title: "AI & Vector Core",
-    subtitle: "pgvector Hybrid & RAG",
+    title: "AI & Vector Systems",
+    subtitle: "Hybrid RAG & Automated Pipelines",
     icon: Sparkles,
     href: "#sprints",
   },
   {
-    title: "Interface Sprint",
-    subtitle: "Swiss Polish & WebGL",
+    title: "Interface Engineering",
+    subtitle: "Awwwards-Tier Craft & Fluid Motion",
     icon: Zap,
     href: "#sprints",
   },
@@ -143,7 +143,7 @@ export const Navbar: React.FC = () => {
                     : "text-slate-600 hover:text-[#0A0D17] hover:bg-black/[0.04]"
                 )}
               >
-                <span>14-Day Sprints</span>
+                <span>What We Build</span>
                 <ChevronDown
                   className={cn(
                     "w-3 h-3 text-slate-500 transition-transform duration-200 ml-0.5",
@@ -238,7 +238,7 @@ export const Navbar: React.FC = () => {
                 shadow-[inset_0_1px_1px_rgba(255,255,255,0.22),inset_0_-1px_3px_rgba(255,255,255,0.32),0_3px_10px_rgba(10,13,23,0.18)]
                 hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.32),inset_0_-1px_3px_rgba(255,255,255,0.48),0_6px_20px_rgba(10,13,23,0.28)]"
             >
-              <span className="tracking-tight text-white/95 font-semibold">Book Sprint</span>
+              <span className="tracking-tight text-white/95 font-semibold">Contact</span>
               <span className="w-4.5 h-4.5 rounded-full bg-white/15 flex items-center justify-center text-[10px] group-hover:bg-white/25 transition-colors shrink-0">
                 <ArrowUpRight className="w-3 h-3 text-white" />
               </span>

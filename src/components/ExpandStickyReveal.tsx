@@ -260,7 +260,7 @@ export const ExpandStickyReveal: React.FC = () => {
                 shadow-[inset_0_1px_1px_rgba(255,255,255,0.22),inset_0_-1px_3px_rgba(255,255,255,0.32),0_8px_24px_rgba(10,13,23,0.2)]
                 hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.32),inset_0_-1px_3px_rgba(255,255,255,0.48),0_12px_32px_rgba(10,13,23,0.28)]"
             >
-              <span className="text-white/95 font-semibold">Schedule 14-Day Sprint</span>
+              <span className="text-white/95 font-semibold">Book a Call</span>
               <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
             </a>
 
@@ -272,7 +272,7 @@ export const ExpandStickyReveal: React.FC = () => {
                 transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out
                 hover:-translate-y-0.5 active:translate-y-0"
             >
-              <span>Inspect Architecture</span>
+              <span>Our Work</span>
               <ArrowDown className="w-4 h-4 text-slate-500" />
             </button>
           </div>
