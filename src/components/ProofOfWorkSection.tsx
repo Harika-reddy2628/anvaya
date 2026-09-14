@@ -81,7 +81,7 @@ const SYSTEMS: SystemProof[] = [
       { label: "Recall Precision", value: "99.2%" },
       { label: "Hallucinations", value: "0" },
     ],
-    accentColor: "#8B5CF6",
+    accentColor: "#004CE8",
   },
 ];
 
@@ -109,6 +109,20 @@ export const ProofOfWorkSection: React.FC = () => {
     };
   }, [isHovered]);
 
+  const resetTimer = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = setInterval(() => {
+        setActiveIdx((prev) => (prev + 1) % SYSTEMS.length);
+      }, 7000);
+    }
+  };
+
+  const handleTabClick = (idx: number) => {
+    setActiveIdx(idx);
+    resetTimer();
+  };
+
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopied(true);
@@ -117,10 +131,12 @@ export const ProofOfWorkSection: React.FC = () => {
 
   const handleNext = () => {
     setActiveIdx((prev) => (prev + 1) % SYSTEMS.length);
+    resetTimer();
   };
 
   const handlePrev = () => {
     setActiveIdx((prev) => (prev - 1 + SYSTEMS.length) % SYSTEMS.length);
+    resetTimer();
   };
 
   return (
@@ -129,7 +145,7 @@ export const ProofOfWorkSection: React.FC = () => {
       className="relative w-full pt-40 pb-28 px-4 sm:px-6 lg:px-8 bg-white border-b border-slate-200/80 flex flex-col items-center scroll-mt-24"
     >
       <div className="max-w-6xl mx-auto w-full flex flex-col items-center text-center">
-        {/* Authoritative Section Title (Tag removed per user request) */}
+        {/* Authoritative Section Title */}
         <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-[#0A0D17] text-center mb-4">
           Proof of Engineering Capabilities
         </h2>
@@ -145,7 +161,7 @@ export const ProofOfWorkSection: React.FC = () => {
               return (
                 <button
                   key={sys.id}
-                  onClick={() => setActiveIdx(idx)}
+                  onClick={() => handleTabClick(idx)}
                   className={`relative px-4 py-2 rounded-xl text-xs font-mono font-bold transition-colors duration-200 cursor-pointer ${
                     isActive ? "text-[#0A0D17]" : "text-slate-500 hover:text-slate-900"
                   }`}
@@ -182,68 +198,71 @@ export const ProofOfWorkSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Interactive System Cockpit Chassis with Atmospheric Ambient Glow */}
+        {/* Interactive Light-Themed System Cockpit Chassis */}
         <div className="relative w-full max-w-5xl">
-          {/* Atmospheric Ambient Aura keyed to active system accent */}
+          {/* Subtle Ambient Radial Backlight Glow */}
           <div
-            className="absolute -inset-6 sm:-inset-10 rounded-[3rem] opacity-50 blur-3xl pointer-events-none transition-all duration-700 ease-out"
+            className="absolute -inset-6 sm:-inset-10 rounded-[3rem] opacity-35 blur-3xl pointer-events-none transition-all duration-700 ease-out"
             style={{
-              background: `radial-gradient(ellipse 75% 55% at 50% 45%, ${activeSystem.accentColor} 0%, transparent 70%)`,
+              background: `radial-gradient(ellipse 75% 55% at 50% 45%, ${activeSystem.accentColor}25 0%, transparent 70%)`,
             }}
           />
 
           <div
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="relative w-full rounded-3xl p-2 bg-slate-100/90 border border-slate-200/90 shadow-[0_30px_70px_-15px_rgba(10,13,23,0.18),0_0_50px_-10px_rgba(0,76,232,0.1)]"
+            className="relative w-full rounded-3xl p-2 sm:p-2.5 bg-slate-100/90 border border-slate-200/90 shadow-[0_20px_50px_rgba(0,76,232,0.07),0_1px_3px_rgba(10,13,23,0.03)]"
           >
-          <div className="w-full rounded-2xl bg-[#090D16] border border-white/10 overflow-hidden text-left relative flex flex-col">
-            {/* Precision Chassis Top Bar */}
-            <div className="w-full px-6 py-3.5 border-b border-white/10 flex items-center justify-between bg-black/40 backdrop-blur-md">
-              <div className="flex items-center gap-2 font-mono text-xs font-medium text-slate-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
-                <span>SYSTEM 0{activeIdx + 1}</span>
-                <span className="text-white/20">//</span>
-                <span className="text-slate-500 uppercase">{activeSystem.category}</span>
+            <div className="w-full rounded-2xl bg-white border border-slate-200/90 overflow-hidden text-left relative flex flex-col shadow-sm">
+              {/* Precision Chassis Top Bar */}
+              <div className="w-full px-6 py-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+                <div className="flex items-center gap-2 font-mono text-xs font-medium text-slate-600">
+                  <span
+                    className="w-2 h-2 rounded-full transition-colors duration-300"
+                    style={{ backgroundColor: activeSystem.accentColor }}
+                  />
+                  <span className="font-bold text-slate-800">SYSTEM 0{activeIdx + 1}</span>
+                  <span className="text-slate-300">//</span>
+                  <span className="text-slate-500 uppercase tracking-wider">{activeSystem.category}</span>
+                </div>
+                <div className="font-mono text-[11px] font-bold text-slate-400 uppercase tracking-wider hidden sm:block">
+                  0{activeIdx + 1} / 0{SYSTEMS.length}
+                </div>
               </div>
-              <div className="font-mono text-[11px] text-slate-600 uppercase tracking-wider hidden sm:block">
-                0{activeIdx + 1} / 0{SYSTEMS.length}
-              </div>
-            </div>
 
-            {/* Active Stage Body */}
-            <div className="p-6 sm:p-8 lg:p-10 min-h-[460px] flex items-center">
-              <motion.div
-                key={activeSystem.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center"
-              >
+              {/* Active Stage Body */}
+              <div className="p-6 sm:p-8 lg:p-10 min-h-[460px] flex items-center">
+                <motion.div
+                  key={activeSystem.id}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                  className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center"
+                >
                   {/* Left Column: Specifications & Telemetry */}
                   <div className="lg:col-span-5 flex flex-col justify-between h-full">
                     <div>
-                      <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-white mb-2.5 leading-tight">
+                      <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-[#0A0D17] mb-2.5 leading-tight">
                         {activeSystem.title}
                       </h3>
-                      <p className="text-sm text-slate-400 leading-relaxed mb-6">
+                      <p className="text-sm text-slate-600 leading-relaxed mb-6 font-normal">
                         {activeSystem.tagline}
                       </p>
 
                       {/* Command Snippet / Quick Launch Pill */}
                       {activeSystem.command && (
-                        <div className="flex items-center justify-between gap-3 px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 mb-6 group/cmd">
-                          <div className="flex items-center gap-2.5 font-mono text-xs text-slate-300 truncate">
-                            <Terminal className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                        <div className="flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200/90 mb-6 group/cmd">
+                          <div className="flex items-center gap-2.5 font-mono text-xs text-[#0A0D17] font-semibold truncate">
+                            <Terminal className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                             <span className="truncate">{activeSystem.command}</span>
                           </div>
                           <button
                             onClick={() => handleCopy(activeSystem.command!)}
                             aria-label="Copy Command"
-                            className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer shrink-0"
+                            className="p-1.5 rounded-lg hover:bg-slate-200/70 text-slate-500 hover:text-[#0A0D17] transition-colors cursor-pointer shrink-0"
                           >
                             {copied ? (
-                              <Check className="w-3.5 h-3.5 text-emerald-400" />
+                              <Check className="w-3.5 h-3.5 text-emerald-600" />
                             ) : (
                               <Copy className="w-3.5 h-3.5" />
                             )}
@@ -252,14 +271,14 @@ export const ProofOfWorkSection: React.FC = () => {
                       )}
                     </div>
 
-                    {/* Live Telemetry Matrix (Clean 2-line stat + label) */}
-                    <div className="grid grid-cols-3 gap-4 pt-5 border-t border-white/10">
+                    {/* Live Telemetry Matrix */}
+                    <div className="grid grid-cols-3 gap-4 pt-5 border-t border-slate-100">
                       {activeSystem.telemetry.map((t, idx) => (
                         <div key={idx} className="flex flex-col">
-                          <span className="text-xl sm:text-2xl font-bold font-mono text-white tracking-tight">
+                          <span className="text-xl sm:text-2xl font-bold font-mono text-[#0A0D17] tracking-tight">
                             {t.value}
                           </span>
-                          <span className="text-[11px] font-mono font-semibold text-slate-400 uppercase tracking-wider mt-1">
+                          <span className="text-[11px] font-mono font-semibold text-slate-500 uppercase tracking-wider mt-1">
                             {t.label}
                           </span>
                         </div>
@@ -269,31 +288,32 @@ export const ProofOfWorkSection: React.FC = () => {
 
                   {/* Right Column: Visual System Proof Asset */}
                   <div className="lg:col-span-7 w-full">
-                    <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-white/15 bg-black/60 shadow-2xl group/asset">
+                    <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-200/90 bg-slate-50 shadow-md group/asset">
                       <Image
                         src={activeSystem.imageSrc}
                         alt={activeSystem.imageAlt}
                         fill
-                        className="object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/asset:scale-[1.03]"
+                        className="object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/asset:scale-[1.02]"
                       />
                       {/* Ambient Specimen Glass Sheen */}
-                      <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-white/10 pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-tr from-slate-900/[0.03] via-transparent to-white/40 pointer-events-none" />
                     </div>
                   </div>
                 </motion.div>
-            </div>
+              </div>
 
-            {/* Bottom Progress Bar (Visual indicator for automatic cycle) */}
-            <div className="w-full h-1 bg-white/5 overflow-hidden">
-              <motion.div
-                key={activeIdx}
-                initial={{ width: "0%" }}
-                animate={{ width: isHovered ? "0%" : "100%" }}
-                transition={{ duration: isHovered ? 0 : 7, ease: "linear" }}
-                className="h-full bg-[#004CE8]"
-              />
+              {/* Bottom Progress Bar (Visual indicator for automatic cycle) */}
+              <div className="w-full h-1 bg-slate-100 overflow-hidden">
+                <motion.div
+                  key={activeIdx}
+                  initial={{ width: "0%" }}
+                  animate={{ width: isHovered ? "0%" : "100%" }}
+                  transition={{ duration: isHovered ? 0 : 7, ease: "linear" }}
+                  className="h-full transition-colors duration-300"
+                  style={{ backgroundColor: activeSystem.accentColor }}
+                />
+              </div>
             </div>
-          </div>
           </div>
         </div>
       </div>
