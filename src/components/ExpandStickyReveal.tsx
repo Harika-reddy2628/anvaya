@@ -237,13 +237,13 @@ export const ExpandStickyReveal: React.FC = () => {
             </h1>
           </div>
 
-          {/* Shorter, punchier value proposition */}
-          <p className="text-lg sm:text-xl md:text-2xl text-slate-600 max-w-2xl mx-auto leading-relaxed tracking-tight mt-5 font-normal">
-            <span className="font-bold text-[#0A0D17]">
-              Production software architected and shipped in 14 days.
-            </span>{" "}
-            <span className="text-slate-500 font-medium block sm:inline mt-1 sm:mt-0">
-              Direct builder access, zero agency fluff.
+          {/* Value proposition primed for trust and partnership */}
+          <p className="max-w-2xl mx-auto leading-relaxed tracking-tight mt-5">
+            <span className="font-bold text-[#0A0D17] text-xl sm:text-2xl md:text-3xl block mb-2">
+              We got you digitally covered.
+            </span>
+            <span className="text-slate-500 font-medium text-base sm:text-lg block">
+              You focus on the vision. We handle the engineering.
             </span>
           </p>
 
