@@ -96,10 +96,10 @@ export const Navbar: React.FC = () => {
             duration: 0.35,
           }}
           className={cn(
-            "rounded-full bg-white/95 backdrop-blur-2xl border flex items-center justify-between transition-colors",
+            "rounded-full bg-white border flex items-center justify-between transition-colors",
             isScrolled
-              ? "w-[min(580px,92vw)] py-1 pl-4 pr-2 border-slate-300/90 shadow-[0_10px_32px_rgba(10,13,23,0.08),0_2px_6px_rgba(10,13,23,0.03)]"
-              : "w-[min(760px,94vw)] py-1.5 pl-5 pr-2.5 border-slate-200/90 shadow-[0_4px_20px_rgba(10,13,23,0.05),0_1px_3px_rgba(10,13,23,0.02)]"
+              ? "w-[min(580px,92vw)] py-1 pl-4 pr-2 border-slate-300 shadow-[0_10px_32px_rgba(10,13,23,0.08),0_2px_6px_rgba(10,13,23,0.03)]"
+              : "w-[min(760px,94vw)] py-1.5 pl-5 pr-2.5 border-slate-200 shadow-[0_4px_20px_rgba(10,13,23,0.05),0_1px_3px_rgba(10,13,23,0.02)]"
           )}
         >
           {/* Brand Logo */}
@@ -160,7 +160,7 @@ export const Navbar: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -4 }}
                     transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute top-full mt-2.5 left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 w-64 sm:w-72 bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-2xl p-1.5 shadow-[0_16px_40px_rgba(10,13,23,0.12),0_2px_8px_rgba(10,13,23,0.04)] z-50 overflow-hidden select-none"
+                    className="absolute top-full mt-2.5 left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 w-64 sm:w-72 bg-white border border-slate-200 rounded-2xl p-1.5 shadow-[0_20px_45px_rgba(10,13,23,0.14),0_4px_12px_rgba(10,13,23,0.06)] z-50 overflow-hidden select-none"
                   >
                     <div className="flex flex-col gap-0.5">
                       {SPRINT_ITEMS.map((item) => {
