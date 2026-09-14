@@ -35,7 +35,12 @@ export const Navbar: React.FC = () => {
   // Monitor scroll depth with passive listener
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      // When reaching near the end of the page, relax back to normal wide pill state
+      const isAtBottom = windowHeight + scrollY >= documentHeight - 350;
+      setIsScrolled(scrollY > 50 && !isAtBottom);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
