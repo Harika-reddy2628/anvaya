@@ -25,9 +25,62 @@ const syne = Syne({
 });
 
 export const metadata: Metadata = {
-  title: "Anvaya — Ideas to Impact | 14-Day Production Software & AI Studio",
+  metadataBase: new URL("https://anvaya-ruby.vercel.app"),
+  title: {
+    default: "Anvaya — Ideas to Impact | 14-Day Production Software & AI Studio",
+    template: "%s | Anvaya",
+  },
   description:
-    "We turn raw architecture into production software in 14 days. Direct senior builder access, zero agency fluff.",
+    "We turn raw architecture into production software in 14 days. Direct senior builder access, zero agency fluff, sovereign Day-1 code handoff.",
+  keywords: [
+    "production engineering",
+    "14-day sprints",
+    "software studio",
+    "next.js 16",
+    "fastapi",
+    "pgvector",
+    "mvp launchpad",
+    "zero agency fluff",
+  ],
+  authors: [{ name: "Anvaya Studio", url: "https://anvaya-ruby.vercel.app" }],
+  creator: "Anvaya Studio",
+  publisher: "Anvaya Studio",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "48x48" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+  },
+  openGraph: {
+    title: "Anvaya — Ideas to Impact | 14-Day Production Software & AI Studio",
+    description:
+      "We turn raw architecture into production software in 14 days. Direct senior builder access, zero agency fluff, sovereign Day-1 code handoff.",
+    url: "https://anvaya-ruby.vercel.app",
+    siteName: "Anvaya",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Anvaya — Ideas to Impact. Shipped in 14 Days.",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Anvaya — Ideas to Impact | 14-Day Production Software & AI Studio",
+    description:
+      "We turn raw architecture into production software in 14 days. Direct senior builder access, zero agency fluff, sovereign Day-1 code handoff.",
+    images: ["/og-image.png"],
+    creator: "@anvaya",
+  },
 };
 
 export default function RootLayout({
