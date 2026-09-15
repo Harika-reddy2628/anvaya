@@ -9,19 +9,16 @@ import { cn } from "@/lib/utils";
 const SPRINT_ITEMS = [
   {
     title: "Production MVPs",
-    subtitle: "Full-Stack Software Built to Scale",
     icon: Layers,
     href: "#sprints",
   },
   {
     title: "AI & Vector Systems",
-    subtitle: "Hybrid RAG & Automated Pipelines",
     icon: Sparkles,
     href: "#sprints",
   },
   {
     title: "Interface Engineering",
-    subtitle: "Awwwards-Tier Craft & Fluid Motion",
     icon: Zap,
     href: "#sprints",
   },
@@ -160,7 +157,7 @@ export const Navbar: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -4 }}
                     transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute top-full mt-2.5 left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 w-64 sm:w-72 bg-white border border-slate-200 rounded-2xl p-1.5 shadow-[0_20px_45px_rgba(10,13,23,0.14),0_4px_12px_rgba(10,13,23,0.06)] z-50 overflow-hidden select-none"
+                    className="absolute top-full mt-2.5 left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 w-60 sm:w-64 bg-white border border-slate-200 rounded-2xl p-1.5 shadow-[0_20px_45px_rgba(10,13,23,0.14),0_4px_12px_rgba(10,13,23,0.06)] z-50 overflow-hidden select-none"
                   >
                     <div className="flex flex-col gap-0.5">
                       {SPRINT_ITEMS.map((item) => {
@@ -170,22 +167,17 @@ export const Navbar: React.FC = () => {
                             key={item.title}
                             href={item.href}
                             onClick={(e) => handleAnchorClick(e, item.href)}
-                            className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-100/90 transition-colors group cursor-pointer text-left"
+                            className="flex items-center justify-between py-2 px-2.5 rounded-xl hover:bg-slate-100/90 transition-colors group cursor-pointer text-left"
                           >
                             <div className="flex items-center gap-2.5 min-w-0">
                               <div className="w-7 h-7 rounded-lg bg-slate-100 border border-slate-200/70 flex items-center justify-center shrink-0 group-hover:bg-white group-hover:border-slate-300 transition-colors">
                                 <Icon className="w-3.5 h-3.5 text-slate-700 group-hover:text-black" />
                               </div>
-                              <div className="min-w-0">
-                                <div className="text-xs font-bold text-[#0A0D17] leading-tight truncate">
-                                  {item.title}
-                                </div>
-                                <div className="text-[10.5px] text-slate-500 font-medium truncate mt-0.5">
-                                  {item.subtitle}
-                                </div>
-                              </div>
+                              <span className="text-[13px] font-semibold text-[#0A0D17] leading-none truncate">
+                                {item.title}
+                              </span>
                             </div>
-                            <ArrowUpRight className="w-3 h-3 text-slate-400 group-hover:text-[#0A0D17] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0 ml-1" />
+                            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0A0D17] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0 ml-2" />
                           </a>
                         );
                       })}
