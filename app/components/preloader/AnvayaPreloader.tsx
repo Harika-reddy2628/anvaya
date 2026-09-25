@@ -152,7 +152,7 @@ export const AnvayaPreloader: React.FC<Readonly<AnvayaPreloaderProps>> = ({
 
         const exit = gsap.timeline({
           onComplete: () => {
-            if (loader && loader.parentNode) loader.parentNode.removeChild(loader);
+            // Let React unmount — never call removeChild on React-managed nodes.
             window.dispatchEvent(new CustomEvent("anvaya:loader-complete"));
             onComplete?.();
           },
@@ -190,11 +190,16 @@ export const AnvayaPreloader: React.FC<Readonly<AnvayaPreloaderProps>> = ({
           ease: "power4.in",
         }, 0.46);
 
-        // Fade the whole loader at the very end
+        // Fade the whole loader at the very end, then make it inert
         exit.to(loader, {
           opacity: 0,
           duration: 0.25,
           ease: "none",
+          onComplete: () => {
+            // Make inert while React processes state update — no removeChild call
+            loader.style.pointerEvents = "none";
+            loader.style.visibility = "hidden";
+          },
         }, "-=0.3");
       }
     },
