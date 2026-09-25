@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -13,106 +13,76 @@ interface AnvayaPreloaderProps {
 export const AnvayaPreloader: React.FC<Readonly<AnvayaPreloaderProps>> = ({
   onComplete,
 }) => {
-  const loaderRef = useRef<HTMLDivElement>(null);
-  const sceneRef = useRef<HTMLDivElement>(null);
-  const archRef = useRef<SVGPathElement>(null);
-  const bridgeRef = useRef<SVGPathElement>(null);
-  const binduRef = useRef<SVGCircleElement>(null);
-  const brandRef = useRef<HTMLDivElement>(null);
-  const taglineRef = useRef<HTMLParagraphElement>(null);
-  const fillRef = useRef<HTMLSpanElement>(null);
-  const percentRef = useRef<HTMLSpanElement>(null);
-  const toplineRef = useRef<HTMLElement>(null);
+  const loaderRef      = useRef<HTMLDivElement>(null);
+  const sceneRef       = useRef<HTMLDivElement>(null);
+  const wipeRef        = useRef<HTMLDivElement>(null);   // clip-path wipe overlay
+  const archRef        = useRef<SVGPathElement>(null);
+  const bridgeRef      = useRef<SVGPathElement>(null);
+  const binduRef       = useRef<SVGCircleElement>(null);
+  const brandRef       = useRef<HTMLDivElement>(null);
+  const taglineRef     = useRef<HTMLParagraphElement>(null);
+  const fillRef        = useRef<HTMLSpanElement>(null);
+  const percentRef     = useRef<HTMLSpanElement>(null);
+  const toplineRef     = useRef<HTMLElement>(null);
   const progressRowRef = useRef<HTMLElement>(null);
-  const statusTextRef = useRef<HTMLSpanElement>(null);
+  const statusTextRef  = useRef<HTMLSpanElement>(null);
 
   useGSAP(
     () => {
-      const loader = loaderRef.current;
-      const scene = sceneRef.current;
-      const arch = archRef.current;
-      const bridge = bridgeRef.current;
-      const bindu = binduRef.current;
-      const brand = brandRef.current;
-      const tagline = taglineRef.current;
-      const fill = fillRef.current;
-      const percentEl = percentRef.current;
-      const topline = toplineRef.current;
+      const loader      = loaderRef.current;
+      const scene       = sceneRef.current;
+      const wipe        = wipeRef.current;
+      const arch        = archRef.current;
+      const bridge      = bridgeRef.current;
+      const bindu       = binduRef.current;
+      const brand       = brandRef.current;
+      const tagline     = taglineRef.current;
+      const fill        = fillRef.current;
+      const percentEl   = percentRef.current;
+      const topline     = toplineRef.current;
       const progressRow = progressRowRef.current;
-      const statusText = statusTextRef.current;
+      const statusText  = statusTextRef.current;
 
       if (
-        !loader || !scene || !arch || !bridge || !bindu ||
+        !loader || !scene || !wipe || !arch || !bridge || !bindu ||
         !brand || !tagline || !fill || !percentEl ||
         !topline || !progressRow || !statusText
       ) return;
 
-      // ── Proxy object for counter ──────────────────────────────────────────
       const counter = { value: 0 };
 
-      // ── Master timeline ───────────────────────────────────────────────────
-      const tl = gsap.timeline({
-        onComplete: () => {
-          // After progress hits 100, run the exit sequence
-          runExit();
-        },
-      });
+      const tl = gsap.timeline({ onComplete: runExit });
 
-      // Set initial states
+      // ── Initial states ────────────────────────────────────────────────────
       gsap.set([brand, tagline], { opacity: 0, y: 20 });
       gsap.set(bindu, { opacity: 0, scale: 0, transformOrigin: "120px 109px" });
-      gsap.set(arch, { strokeDasharray: 520, strokeDashoffset: 520 });
+      gsap.set(arch,   { strokeDasharray: 520, strokeDashoffset: 520 });
       gsap.set(bridge, { strokeDasharray: 118, strokeDashoffset: 118 });
 
       // 1. Draw arch stroke
-      tl.to(arch, {
-        strokeDashoffset: 0,
-        duration: 1.05,
-        ease: "power2.inOut",
-      }, 0.1);
+      tl.to(arch, { strokeDashoffset: 0, duration: 1.05, ease: "power2.inOut" }, 0.1);
 
-      // 2. Draw bridge stroke
-      tl.to(bridge, {
-        strokeDashoffset: 0,
-        duration: 0.48,
-        ease: "power2.out",
-      }, 0.88);
+      // 2. Draw bridge
+      tl.to(bridge, { strokeDashoffset: 0, duration: 0.48, ease: "power2.out" }, 0.88);
 
-      // 3. Bindu pops in with elastic spring
-      tl.to(bindu, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.6,
-        ease: "elastic.out(1.2, 0.5)",
-      }, 1.12);
+      // 3. Bindu — elastic pop
+      tl.to(bindu, { opacity: 1, scale: 1, duration: 0.6, ease: "elastic.out(1.2, 0.5)" }, 1.12);
 
-      // 4. Brand name reveals
-      tl.to(brand, {
-        opacity: 1,
-        y: 0,
-        duration: 0.65,
-        ease: "power3.out",
-      }, 1.2);
+      // 4. Brand
+      tl.to(brand, { opacity: 1, y: 0, duration: 0.65, ease: "power3.out" }, 1.2);
 
-      // 5. Tagline reveals
-      tl.to(tagline, {
-        opacity: 1,
-        y: 0,
-        duration: 0.5,
-        ease: "power3.out",
-      }, 1.42);
+      // 5. Tagline
+      tl.to(tagline, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 1.42);
 
-      // 6. Progress bar animates 0 → 100 over 1.8s
+      // 6. Progress counter
       tl.to(counter, {
-        value: 100,
-        duration: 1.8,
-        ease: "none",
-        onUpdate: () => {
+        value: 100, duration: 1.8, ease: "none",
+        onUpdate() {
           const n = Math.round(counter.value);
           fill.style.width = `${n}%`;
           percentEl.textContent = `${String(n).padStart(2, "0")}%`;
         },
-        onComplete: () => {
+        onComplete() {
           percentEl.textContent = "100%";
           fill.style.width = "100%";
         },
@@ -129,7 +99,8 @@ export const AnvayaPreloader: React.FC<Readonly<AnvayaPreloaderProps>> = ({
         tl.call(() => {
           gsap.to(statusText, {
             opacity: 0, y: -6, duration: 0.18, ease: "power2.in",
-            onComplete: () => {
+            onComplete() {
+              if (!statusText) return;
               statusText.textContent = text;
               gsap.to(statusText, { opacity: 1, y: 0, duration: 0.22, ease: "power2.out" });
             },
@@ -137,70 +108,65 @@ export const AnvayaPreloader: React.FC<Readonly<AnvayaPreloaderProps>> = ({
         }, [], 1.55 + i * 0.45);
       });
 
+      // ── EXIT — crisp clip-path circle wipe from exact bindu screen position ──
+      // Uses CSS clip-path geometry, not rasterised scaling → always pixel-sharp
       function runExit() {
-        if (!bindu || !scene || !loader) return;
-        // Measure bindu for zoom origin
-        const binduRect = bindu.getBoundingClientRect();
-        const sceneRect = scene.getBoundingClientRect();
-        const dotX = binduRect.left + binduRect.width / 2;
-        const dotY = binduRect.top + binduRect.height / 2;
+        if (!bindu || !wipe || !loader) return;
 
-        const shiftX = window.innerWidth / 2 - dotX;
-        const shiftY = window.innerHeight / 2 - dotY;
-        const originX = ((dotX - sceneRect.left) / sceneRect.width) * 100;
-        const originY = ((dotY - sceneRect.top) / sceneRect.height) * 100;
+        // Sub-pixel accurate bindu centre
+        const br   = bindu.getBoundingClientRect();
+        const dotX = br.left + br.width  / 2;
+        const dotY = br.top  + br.height / 2;
+
+        // Radius that covers the farthest viewport corner from the bindu
+        const maxR = Math.ceil(
+          Math.max(
+            Math.hypot(dotX,                         dotY),
+            Math.hypot(window.innerWidth  - dotX,    dotY),
+            Math.hypot(dotX,                         window.innerHeight - dotY),
+            Math.hypot(window.innerWidth  - dotX,    window.innerHeight - dotY),
+          )
+        ) + 2; // +2px safety margin
+
+        // Set wipe at radius 0, centred on the bindu
+        gsap.set(wipe, {
+          clipPath: `circle(0px at ${dotX}px ${dotY}px)`,
+          visibility: "visible",
+        });
 
         const exit = gsap.timeline({
-          onComplete: () => {
-            // Let React unmount — never call removeChild on React-managed nodes.
+          onComplete() {
+            loader.style.pointerEvents = "none";
+            loader.style.visibility   = "hidden";
             window.dispatchEvent(new CustomEvent("anvaya:loader-complete"));
             onComplete?.();
           },
         });
 
-        // Slide header & footer out
-        exit.to(topline, {
-          y: -80,
-          opacity: 0,
-          duration: 0.55,
-          ease: "power3.in",
-        }, 0);
-        exit.to(progressRow, {
-          y: 80,
-          opacity: 0,
-          duration: 0.55,
-          ease: "power3.in",
-        }, 0);
+        // 1. HUD bars slide out
+        exit.to(topline,     { y: -40, opacity: 0, duration: 0.35, ease: "power3.in" }, 0);
+        exit.to(progressRow, { y:  40, opacity: 0, duration: 0.35, ease: "power3.in" }, 0.04);
 
-        // Centre drifts toward bindu
-        if (scene.parentElement) {
-          exit.to(scene.parentElement, {
-            x: shiftX,
-            y: shiftY - window.innerHeight * 0.025,
-            duration: 0.5,
-            ease: "power2.inOut",
-          }, 0.08);
-        }
+        // 2. Text exits upward
+        exit.to([brand, tagline], {
+          y: -18, opacity: 0, duration: 0.28, ease: "power3.in", stagger: 0.04,
+        }, 0.05);
 
-        // Zoom through the bindu
-        exit.to(scene, {
-          scale: 64,
-          transformOrigin: `${originX}% ${originY}%`,
-          duration: 1.55,
+        // 3. SVG strokes fade — bindu is the last thing visible
+        exit.to([arch, bridge], { opacity: 0, duration: 0.22, ease: "power2.in" }, 0.08);
+
+        // 4. Bindu swells — charging up before the wipe
+        exit.to(bindu, {
+          scale: 2.6, duration: 0.25, ease: "power2.in",
+          transformOrigin: "120px 109px",
+        }, 0.28);
+
+        // 5. Clip-path circle punches out from the bindu — razor sharp
+        exit.to(wipe, {
+          clipPath: `circle(${maxR}px at ${dotX}px ${dotY}px)`,
+          duration: 0.58,
           ease: "power4.in",
-        }, 0.46);
-
-        // Fade the whole loader at the very end, then make it inert
-        exit.to(loader, {
-          opacity: 0,
-          duration: 0.25,
-          ease: "none",
-          onComplete: () => {
-            // Make inert while React processes state update — no removeChild call
-            loader.style.pointerEvents = "none";
-            loader.style.visibility = "hidden";
-          },
-        }, "-=0.3");
+        }, 0.44);
       }
     },
     { scope: loaderRef }
@@ -208,16 +174,11 @@ export const AnvayaPreloader: React.FC<Readonly<AnvayaPreloaderProps>> = ({
 
   return (
     <>
-      {/* Grain texture filter */}
-      <svg width="0" height="0" style={{ position: "absolute" }}>
+      {/* Grain texture filter — defined outside the main div so it isn't cloned */}
+      <svg width="0" height="0" style={{ position: "absolute", pointerEvents: "none" }} aria-hidden="true">
         <defs>
           <filter id="anvaya-grain">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.72"
-              numOctaves="4"
-              stitchTiles="stitch"
-            />
+            <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" stitchTiles="stitch" />
             <feColorMatrix type="saturate" values="0" />
             <feBlend in="SourceGraphic" mode="multiply" />
           </filter>
@@ -229,28 +190,40 @@ export const AnvayaPreloader: React.FC<Readonly<AnvayaPreloaderProps>> = ({
         aria-live="polite"
         aria-label="Loading Anvaya"
         style={{
-          position: "fixed",
-          inset: 0,
-          zIndex: 9999,
+          position: "fixed", inset: 0, zIndex: 9999,
           minHeight: "100vh",
           display: "grid",
           gridTemplateRows: "auto 1fr auto",
           padding: "30px 42px 34px",
           background: "var(--paper)",
           overflow: "hidden",
+          // Promote loader to its own GPU layer
           transform: "translateZ(0)",
+          willChange: "opacity, visibility",
         }}
       >
         {/* Grain overlay */}
         <div
           aria-hidden="true"
           style={{
-            position: "absolute",
-            inset: 0,
-            opacity: 0.038,
-            filter: "url(#anvaya-grain)",
-            pointerEvents: "none",
+            position: "absolute", inset: 0, pointerEvents: "none",
+            opacity: 0.038, filter: "url(#anvaya-grain)",
             background: "var(--ink)",
+          }}
+        />
+
+        {/* ── Clip-path wipe overlay — sits on top, hidden until exit ── */}
+        <div
+          ref={wipeRef}
+          aria-hidden="true"
+          style={{
+            position: "fixed", inset: 0,
+            zIndex: 10000,
+            background: "var(--paper)",
+            visibility: "hidden",
+            // GPU-composited property — no repaint during animation
+            willChange: "clip-path",
+            clipPath: "circle(0px at 50% 50%)",
           }}
         />
 
@@ -258,22 +231,14 @@ export const AnvayaPreloader: React.FC<Readonly<AnvayaPreloaderProps>> = ({
         <header
           ref={toplineRef}
           style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            fontSize: 11,
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            color: "var(--ink)",
-            position: "relative",
-            zIndex: 1,
+            display: "flex", justifyContent: "space-between", alignItems: "center",
+            fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase",
+            color: "var(--ink)", position: "relative", zIndex: 1,
           }}
         >
           <span style={{
             fontFamily: "Georgia, 'Times New Roman', serif",
-            fontSize: 18,
-            fontWeight: 600,
-            letterSpacing: "0.28em",
+            fontSize: 18, fontWeight: 600, letterSpacing: "0.28em",
           }}>
             ANVAYA
           </span>
@@ -286,66 +251,71 @@ export const AnvayaPreloader: React.FC<Readonly<AnvayaPreloaderProps>> = ({
         <section
           aria-hidden="true"
           style={{
-            display: "grid",
-            placeContent: "center",
-            justifyItems: "center",
-            textAlign: "center",
+            display: "grid", placeContent: "center",
+            justifyItems: "center", textAlign: "center",
             transform: "translateY(-2.5vh)",
-            position: "relative",
-            zIndex: 1,
+            position: "relative", zIndex: 1,
           }}
         >
           <div
             ref={sceneRef}
             style={{
-              display: "grid",
-              justifyItems: "center",
+              display: "grid", justifyItems: "center",
               willChange: "transform",
             }}
           >
-            {/* SVG Mark */}
+            {/* SVG Mark — geometricPrecision for sub-pixel sharpness */}
             <svg
               viewBox="0 0 240 240"
+              shapeRendering="geometricPrecision"
               style={{
                 width: "clamp(112px, 14vw, 174px)",
                 overflow: "visible",
-                filter: "drop-shadow(0 0 18px rgba(199, 96, 63, 0))",
+                // Isolate on its own compositor layer
+                willChange: "transform, opacity",
+                transform: "translateZ(0)",
               }}
             >
-              {/* Subtle radial glow behind bindu */}
-              <radialGradient id="bindu-glow" cx="50%" cy="45%" r="30%">
-                <stop offset="0%" stopColor="#c7603f" stopOpacity="0.18" />
-                <stop offset="100%" stopColor="#c7603f" stopOpacity="0" />
-              </radialGradient>
-              <circle cx="120" cy="109" r="32" fill="url(#bindu-glow)" />
+              <defs>
+                <radialGradient id="bindu-glow" cx="50%" cy="45%" r="30%">
+                  <stop offset="0%"   stopColor="#c7603f" stopOpacity="0.22" />
+                  <stop offset="100%" stopColor="#c7603f" stopOpacity="0"    />
+                </radialGradient>
+              </defs>
 
+              {/* Soft glow behind bindu */}
+              <circle cx="120" cy="109" r="30" fill="url(#bindu-glow)" />
+
+              {/* Arch */}
               <path
                 ref={archRef}
-                className="arch"
                 d="M48 178C62 133 78 81 120 42C162 81 178 133 192 178"
                 fill="none"
                 stroke="var(--ink)"
                 strokeWidth={22}
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                vectorEffect="non-scaling-stroke"
               />
+
+              {/* Bridge */}
               <path
                 ref={bridgeRef}
-                className="bridge"
                 d="M76 129C96 118 142 118 166 129"
                 fill="none"
                 stroke="var(--ink)"
                 strokeWidth={14}
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                vectorEffect="non-scaling-stroke"
               />
+
+              {/* Bindu — the zoom anchor */}
               <circle
                 ref={binduRef}
-                cx="120"
-                cy="109"
-                r="8"
+                cx="120" cy="109" r="8"
                 fill="var(--bindu)"
-                style={{ filter: "drop-shadow(0 0 6px rgba(199, 96, 63, 0.6))" }}
+                style={{ filter: "drop-shadow(0 0 5px rgba(199,96,63,0.55))" }}
               />
             </svg>
 
@@ -370,11 +340,8 @@ export const AnvayaPreloader: React.FC<Readonly<AnvayaPreloaderProps>> = ({
             <p
               ref={taglineRef}
               style={{
-                margin: 0,
-                color: "var(--muted)",
-                fontSize: 11,
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
+                margin: 0, color: "var(--muted)",
+                fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase",
               }}
             >
               Building with intent
@@ -388,16 +355,10 @@ export const AnvayaPreloader: React.FC<Readonly<AnvayaPreloaderProps>> = ({
           style={{
             display: "grid",
             gridTemplateColumns: "auto minmax(180px, 1fr) auto",
-            gap: 20,
-            alignItems: "center",
-            maxWidth: 660,
-            width: "100%",
-            justifySelf: "center",
-            fontSize: 11,
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            position: "relative",
-            zIndex: 1,
+            gap: 20, alignItems: "center",
+            maxWidth: 660, width: "100%", justifySelf: "center",
+            fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase",
+            position: "relative", zIndex: 1,
           }}
         >
           <span ref={statusTextRef} style={{ color: "var(--muted)" }}>
@@ -405,23 +366,15 @@ export const AnvayaPreloader: React.FC<Readonly<AnvayaPreloaderProps>> = ({
           </span>
 
           <span style={{
-            height: 1,
-            background: "var(--line)",
-            overflow: "hidden",
-            display: "block",
-            position: "relative",
+            height: 1, background: "var(--line)", overflow: "hidden",
+            display: "block", position: "relative",
           }}>
             <span
               ref={fillRef}
               style={{
-                display: "block",
-                height: "100%",
-                width: "0%",
+                display: "block", height: "100%", width: "0%",
                 background: "var(--ink)",
-                position: "absolute",
-                top: 0,
-                left: 0,
-                transition: "width 0.1s linear",
+                position: "absolute", top: 0, left: 0,
               }}
             />
           </span>
@@ -429,10 +382,8 @@ export const AnvayaPreloader: React.FC<Readonly<AnvayaPreloaderProps>> = ({
           <span
             ref={percentRef}
             style={{
-              minWidth: 34,
-              textAlign: "right",
-              color: "var(--ink)",
-              fontVariantNumeric: "tabular-nums",
+              minWidth: 34, textAlign: "right",
+              color: "var(--ink)", fontVariantNumeric: "tabular-nums",
             }}
           >
             00%
