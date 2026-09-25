@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { AnvayaPreloader } from "./components/preloader/AnvayaPreloader";
+import { Navbar } from "./components/navigation/Navbar";
+import { HeroStage } from "./components/hero/HeroStage";
 
 export default function HomePage() {
   const [loaded, setLoaded] = useState(false);
@@ -12,26 +14,12 @@ export default function HomePage() {
 
       {/* Main site content — revealed after preloader exits */}
       <main
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "var(--paper)",
-          opacity: loaded ? 1 : 0,
-          transition: "opacity 0.6s ease",
-        }}
+        className={`min-h-screen bg-[#07080D] text-[#F8FAFC] flex flex-col transition-opacity duration-700 ${
+          loaded ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
       >
-        <p
-          style={{
-            color: "var(--muted)",
-            fontSize: 11,
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-          }}
-        >
-          Site coming soon
-        </p>
+        <Navbar />
+        <HeroStage />
       </main>
     </>
   );

@@ -1,23 +1,74 @@
 @import "tailwindcss";
 
+@theme {
+  --font-clash: 'Clash Display', var(--font-sans), sans-serif;
+  --font-satoshi: 'Satoshi', var(--font-sans), sans-serif;
+  --font-mono: 'JetBrains Mono', var(--font-mono), monospace;
+  
+  --color-void: #07080D;
+  --color-surface-base: #0E111B;
+  --color-surface-elevated: #151926;
+  --color-surya-gold: #F59E0B;
+  --color-surya-hover: #D97706;
+  --color-vibranium: #A855F7;
+  --color-cobalt: #004CE8;
+  --color-emerald-status: #10B981;
+}
+
 :root {
   --paper: #f7f2ea;
   --ink: #201e1c;
   --muted: #756d64;
   --line: #d9d0c5;
   --bindu: #c7603f;
+
+  --bg-void: #07080D;
+  --bg-surface: #0E111B;
+  --bg-surface-elevated: #151926;
+  --accent-surya-gold: #F59E0B;
+  --accent-surya-hover: #D97706;
+  --accent-surya-glow: rgba(245, 158, 11, 0.22);
+  --accent-vibranium: #A855F7;
+  --accent-cobalt: #004CE8;
+  --status-emerald: #10B981;
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --wireframe-lattice: rgba(245, 158, 11, 0.035);
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 html,
 body {
   height: 100%;
   margin: 0;
-  background: var(--paper);
-  color: var(--ink);
+  background-color: var(--bg-void);
+  color: var(--text-primary);
+  font-family: 'Satoshi', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Yantra Coordinate Grid Pattern */
+.bg-yantra-grid {
+  background-image: 
+    linear-gradient(to right, rgba(245, 158, 11, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(245, 158, 11, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Subtle Amethyst Energy Glow */
+.glow-amethyst {
+  box-shadow: 0 0 32px -8px rgba(168, 85, 247, 0.25);
+}
+
+/* Surya Gold Button Shadow Glow */
+.glow-surya {
+  box-shadow: 0 0 24px -4px rgba(245, 158, 11, 0.35);
 }
 
 @media (prefers-reduced-motion: reduce) {
