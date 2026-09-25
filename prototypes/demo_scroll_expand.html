@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anvaya — React Bits Scroll Expand Hero</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #07090E;
+      --bg-surface: #0E121B;
+      --border-subtle: rgba(255, 255, 255, 0.12);
+      --accent-cobalt: #004CE8;
+      --accent-cobalt-hover: #003BB5;
+      --accent-cyan: #38BDF8;
+      --text-primary: #FFFFFF;
+      --text-secondary: #94A3B8;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Floating Navigation Pill */
+    .nav-wrapper {
+      position: fixed;
+      top: 24px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      z-index: 100;
+      padding: 0 24px;
+      pointer-events: none;
+    }
+
+    .floating-pill {
+      pointer-events: auto;
+      background: rgba(14, 18, 27, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      border-radius: 9999px;
+      width: 100%;
+      max-width: 920px;
+      height: 52px;
+      padding: 0 18px 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 19px;
+      letter-spacing: -0.03em;
+      text-decoration: none;
+      color: #FFFFFF;
+    }
+
+    .brand-star {
+      width: 20px;
+      height: 20px;
+      fill: #FFFFFF;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .nav-links a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: #FFFFFF;
+    }
+
+    .btn-nav {
+      background: var(--accent-cobalt);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      text-decoration: none;
+    }
+
+    /* Above-The-Fold Intro Header */
+    .hero-intro {
+      padding: 90px 24px 16px;
+      text-align: center;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .eyebrow-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      padding: 5px 14px;
+      border-radius: 9999px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 14px;
+    }
+
+    .headline {
+      font-size: clamp(34px, 4.5vw, 54px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      margin-bottom: 12px;
+    }
+
+    .headline span.accent {
+      background: linear-gradient(135deg, #38BDF8 20%, #004CE8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subhead {
+      font-size: 15px;
+      color: var(--text-secondary);
+      max-width: 580px;
+      margin: 0 auto 16px;
+      line-height: 1.5;
+    }
+
+    /* ==========================================================
+       REACT BITS SCROLL EXPAND ARCHITECTURE
+       ========================================================== */
+    .scroll-expand-container {
+      position: relative;
+      width: 100%;
+    }
+
+    /* The Scroll Track (Controls scroll distance) */
+    .scroll-track {
+      position: relative;
+      height: 250vh; /* scroll travel distance */
+      width: 100%;
+    }
+
+    /* Pinned Sticky Stage (Locks to viewport while scrolling) */
+    .sticky-stage {
+      position: sticky;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Expanding Frame (Animated clip-path & border radius) */
+    .expand-frame {
+      position: absolute;
+      inset: 0;
+      will-change: clip-path;
+      clip-path: inset(18% 26% 18% 26% round 24px);
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+    }
+
+    /* Inner Visual Media: The High-End Anvaya Cockpit */
+    .expand-media {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 30%, #151B28 0%, #07090E 100%);
+      will-change: transform;
+      transform: scale(1.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* Simulated Production System Cockpit Interface inside the media */
+    .cockpit-preview-board {
+      width: 90%;
+      max-width: 1100px;
+      height: 82%;
+      background: rgba(14, 18, 27, 0.95);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .cockpit-top-bar {
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #94A3B8;
+    }
+
+    .cockpit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .cockpit-pane-left {
+      padding: 24px;
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .cockpit-pane-right {
+      padding: 24px;
+      background: #05070B;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.6;
+      color: #E2E8F0;
+    }
+
+    .kw { color: #F43F5E; }
+    .fn { color: #38BDF8; }
+    .str { color: #34D399; }
+    .num { color: #FBBF24; }
+    .cmt { color: #64748B; }
+
+    /* Overlay Title (Visible initially, fades out as you scroll) */
+    .expand-title {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 10%;
+      pointer-events: none;
+      z-index: 20;
+      will-change: opacity, transform;
+    }
+
+    .expand-title h2 {
+      font-size: clamp(32px, 4vw, 54px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      text-shadow: 0 4px 24px rgba(0, 0, 0, 0.8);
+      margin-bottom: 12px;
+    }
+
+    .expand-title p {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.8);
+      font-family: var(--font-mono);
+    }
+
+    /* Scroll Down Indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 24px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      pointer-events: none;
+      z-index: 25;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .scroll-arrow {
+      animation: bounce 1.8s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(6px); }
+      60% { transform: translateY(3px); }
+    }
+
+    /* Fully Expanded Overlay (Fades in when zoom is locked) */
+    .expand-revealed-content {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
+      display: flex;
+      gap: 18px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: auto;
+    }
+
+    /* Subsequent Section */
+    .post-scroll-section {
+      position: relative;
+      z-index: 20;
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-subtle);
+      padding: 120px 24px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <div class="nav-wrapper">
+    <header class="floating-pill">
+      <a href="#" class="brand">
+        <svg class="brand-star" viewBox="0 0 24 24">
+          <path d="M12 0C12 7.5 12 12 4.5 12C12 12 12 16.5 12 24C12 16.5 12 12 19.5 12C12 12 12 7.5 12 0Z"/>
+        </svg>
+        anvaya
+      </a>
+      <ul class="nav-links">
+        <li><a href="#">14-Day Sprints</a></li>
+        <li><a href="#">AI Systems</a></li>
+        <li><a href="#">checkDK Engine</a></li>
+        <li><a href="#">Architecture</a></li>
+      </ul>
+      <a href="#" class="btn-nav">Schedule Sprint</a>
+    </header>
+  </div>
+
+  <!-- Intro -->
+  <section class="hero-intro">
+    <div class="eyebrow-tag">
+      <span>REACT BITS • SCROLL EXPAND COMPONENT</span>
+      <span style="opacity: 0.4;">|</span>
+      <span style="color: #38BDF8;">npx shadcn@latest add @react-bits/ScrollExpand-TS-TW</span>
+    </div>
+    <h1 class="headline">
+      Full-Stack Engineering in <span class="accent">14-Day Sprints.</span>
+    </h1>
+    <p class="subhead">
+      Scroll downwards to experience the seamless viewport expansion as the Anvaya Production Architecture unlocks from preview to full-screen command.
+    </p>
+  </section>
+
+  <!-- =======================================================
+       REACT BITS SCROLL EXPAND STAGE
+       ======================================================= -->
+  <div class="scroll-expand-container">
+    <div class="scroll-track" id="scrollTrack">
+      <div class="sticky-stage">
+        
+        <!-- Expanding Frame (Clip-path animates on scroll) -->
+        <div class="expand-frame" id="expandFrame">
+          
+          <!-- Inner Media (Zooms from 1.35 down to 1.0) -->
+          <div class="expand-media" id="expandMedia">
+            
+            <!-- High-End Cockpit Content -->
+            <div class="cockpit-preview-board">
+              <div class="cockpit-top-bar">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
+                  <span>ANVAYA PRODUCTION RUNTIME • CLOUDFLARE ZERO TRUST</span>
+                </div>
+                <div>DEPLOY STATUS: PASSING (P99 14ms)</div>
+              </div>
+
+              <div class="cockpit-grid">
+                <div class="cockpit-pane-left">
+                  <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-cyan); font-weight: 700;">
+                    MILESTONE PIPELINE
+                  </div>
+                  <div style="background: rgba(255,255,255,0.05); padding: 10px 12px; border-radius: 8px; font-size: 13px;">
+                    <strong>Days 01–03:</strong> Schema & OpenAPI Contracts
+                  </div>
+                  <div style="background: rgba(255,255,255,0.05); padding: 10px 12px; border-radius: 8px; font-size: 13px;">
+                    <strong>Days 04–09:</strong> Full-Stack Reactive Engine & AI Vector Core
+                  </div>
+                  <div style="background: rgba(255,255,255,0.05); padding: 10px 12px; border-radius: 8px; font-size: 13px;">
+                    <strong>Days 10–12:</strong> Third-Party Webhooks & Self-Hosted n8n
+                  </div>
+                  <div style="background: rgba(255,255,255,0.05); padding: 10px 12px; border-radius: 8px; font-size: 13px;">
+                    <strong>Days 13–14:</strong> Docker Hardening & 100% Day-1 IP Transfer
+                  </div>
+                </div>
+
+                <div class="cockpit-pane-right">
+<pre><code><span class="cmt">// checkDK AST Parser Execution</span>
+<span class="kw">pub fn</span> <span class="fn">execute_pipeline</span>() -&gt; <span class="kw">Result</span>&lt;<span class="str">"Hardened System"</span>&gt; {
+    <span class="kw">let</span> <span class="num">sprint</span> = <span class="fn">init_anvaya_sprint</span>({
+        <span class="num">duration</span>: <span class="num">14</span> <span class="cmt">/* days */</span>,
+        <span class="num">engineers</span>: <span class="str">"Senior Builder-Architects"</span>,
+        <span class="num">accountManagers</span>: <span class="num">0</span>,
+        <span class="num">ipTransfer</span>: <span class="str">"100% Immediate"</span>
+    });
+
+    <span class="num">sprint</span>.<span class="fn">deploy_cloudflare_edge</span>()?;
+    <span class="num">println!</span>(<span class="str">"System verified. Production ready."</span>);
+    <span class="kw">Ok</span>(<span class="str">"SUCCESS"</span>)
+}</code></pre>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Initial Overlay Title (Fades out as card expands) -->
+          <div class="expand-title" id="expandTitle">
+            <h2>The 14-Day Production Engine</h2>
+            <p>Scroll down to reveal the full-screen architecture</p>
+          </div>
+
+          <!-- Revealed CTA (Fades in when fully expanded) -->
+          <div class="expand-revealed-content" id="revealedContent">
+            <a href="#" class="btn-nav" style="padding: 12px 28px; font-size: 14px;">Schedule 14-Day Sprint →</a>
+            <a href="#" class="btn-nav" style="background: rgba(255,255,255,0.12); padding: 12px 24px; font-size: 14px;">Inspect Live AST Diff</a>
+          </div>
+
+        </div>
+
+        <!-- Scroll Hint -->
+        <div class="scroll-hint" id="scrollHint">
+          <span>SCROLL DOWN TO EXPAND</span>
+          <span class="scroll-arrow">↓</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Subsequent Content -->
+  <section class="post-scroll-section">
+    <h2 style="font-size: 32px; font-weight: 800; margin-bottom: 12px;">Next Section Continues Here</h2>
+    <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto;">
+      Once the viewport expansion finishes, the user flows naturally into the rest of the website without feeling trapped.
+    </p>
+  </section>
+
+  <!-- React Bits Official ScrollExpand Pure Math Engine -->
+  <script>
+    const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+    const smoothstep = (edge0, edge1, x) => {
+      const t = clamp((x - edge0) / (edge1 - edge0 || 1e-6), 0, 1);
+      return t * t * (3 - 2 * t);
+    };
+
+    const track = document.getElementById('scrollTrack');
+    const frame = document.getElementById('expandFrame');
+    const media = document.getElementById('expandMedia');
+    const title = document.getElementById('expandTitle');
+    const hint = document.getElementById('scrollHint');
+    const revealed = document.getElementById('revealedContent');
+
+    // Configuration from React Bits Props
+    const startW = 48; // starting width %
+    const startH = 64; // starting height %
+    const startR = 24; // starting border radius
+    const endR = 0;    // ending border radius
+    const mediaZoom = 1.35; // initial zoom
+
+    function onScroll() {
+      const rect = track.getBoundingClientRect();
+      const totalScrollable = track.offsetHeight - window.innerHeight;
+      const currentScroll = -rect.top;
+      
+      // Calculate progress 0 to 1
+      const p = clamp(currentScroll / totalScrollable, 0, 1);
+      const e = smoothstep(0, 1, p);
+
+      // Interpolate dimensions
+      const w = startW + (100 - startW) * e;
+      const h = startH + (100 - startH) * e;
+      const ix = Math.max(0, (100 - w) / 2);
+      const iy = Math.max(0, (100 - h) / 2);
+      const r = startR + (endR - startR) * e;
+
+      // Apply exact clip-path inset & radius
+      frame.style.clipPath = `inset(${iy}% ${ix}% ${iy}% ${ix}% round ${r}px)`;
+
+      // Counter-scale media to create smooth optical zoom
+      media.style.transform = `scale(${mediaZoom + (1 - mediaZoom) * e})`;
+
+      // Fade out title
+      const titleFade = 1.0 - smoothstep(0.15, 0.65, p);
+      title.style.opacity = titleFade;
+      title.style.transform = `translateY(${-p * 40}px)`;
+
+      // Fade out scroll hint
+      const hintFade = 1.0 - smoothstep(0.05, 0.25, p);
+      hint.style.opacity = hintFade;
+
+      // Fade in revealed content at full expansion
+      const revealFade = smoothstep(0.85, 1.0, p);
+      revealed.style.opacity = revealFade;
+    }
+
+    // Hash or initial scroll check
+    if (window.location.hash === '#mid') {
+      window.scrollTo(0, 700);
+    } else if (window.location.hash === '#full') {
+      window.scrollTo(0, 1600);
+    }
+
+    window.scrollSim = function(pct) {
+      const totalScrollable = track.offsetHeight - window.innerHeight;
+      window.scrollTo({
+        top: track.offsetTop + totalScrollable * pct,
+        behavior: 'smooth'
+      });
+    };
+  </script>
+
+  <!-- Scroll Progress HUD -->
+  <div style="position: fixed; bottom: 20px; right: 20px; z-index: 999; background: rgba(14, 18, 27, 0.9); backdrop-filter: blur(16px); border: 1px solid var(--border-subtle); padding: 8px 14px; border-radius: 9999px; display: flex; gap: 8px; font-family: var(--font-mono); font-size: 11px; align-items: center; box-shadow: 0 8px 30px rgba(0,0,0,0.5);">
+    <span style="color: #94A3B8;">Simulate Scroll:</span>
+    <button onclick="scrollSim(0)" style="background: rgba(255,255,255,0.1); border: 1px solid var(--border-subtle); color: #fff; padding: 4px 10px; border-radius: 9999px; cursor: pointer;">0% (Card)</button>
+    <button onclick="scrollSim(0.5)" style="background: rgba(255,255,255,0.1); border: 1px solid var(--border-subtle); color: #fff; padding: 4px 10px; border-radius: 9999px; cursor: pointer;">50% (Expanding)</button>
+    <button onclick="scrollSim(1)" style="background: var(--accent-cobalt); border: none; color: #fff; padding: 4px 10px; border-radius: 9999px; cursor: pointer;">100% (Full Screen)</button>
+  </div>
+</body>
+</html>
