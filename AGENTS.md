@@ -11,10 +11,10 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 # Anvaya Web — AI Agent & Developer Execution Manual (AGENTS.md)
 
 > **Repository:** `anvaya-web` (`Harika-reddy2628/anvaya`)  
-> **Brand:** Anvaya (अन्वय) — *Ideas to Impact. Production Systems in 14 Days.*  
+> **Brand:** Anvaya — *Ideas to Impact. Production Systems in 14 Days.*  
 > **Motto:** *Systems Over Slop.*  
-> **Design Language:** Kinetic Yantra (Understated Industrial Luxury: Wakanda × Indic)  
-> **Target Production Stack:** Next.js 16 (App Router), Tailwind CSS v4, GSAP 3.12, Fontshare (ITF).
+> **Aesthetic Direction:** **Full Creative Liberty** (Open Design Harness: sovereign colors, typography, and styling)  
+> **Target Production Stack:** Next.js 16 (App Router), Tailwind CSS v4, GSAP 3.12, Fontshare / Google Fonts.
 
 ---
 
@@ -26,7 +26,12 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
    - ALWAYS attribute work to `"The Team"`, `"Core Engineering Team"`, or neutral project branding (`"Anvaya"`).
    - Maintain absolute humility, neutrality, and professional harmony.
 
-2. **First-Principles Mastery Over Superficial Vibe-Coding:**
+2. **Aesthetic Sovereignty & Full Creative Freedom:**
+   - The designer/developer has complete freedom over visual identity, color scheme, typography pairing, aesthetic theme, and creative storytelling (Minimalist, Cyber-Editorial, Brutalist, Dark Luxury, etc.).
+   - No rigid cultural, cinematic, or historical locks are enforced.
+   - The engineering codebase provides a solid, pluggable harness where CSS variables and theme tokens can be freely customized.
+
+3. **First-Principles Mastery Over Superficial Vibe-Coding:**
    - Write clean, modular, deterministic code.
    - No mock placeholders that break; wire interactive states, typed schemas, and realistic telemetry.
    - Adhere to strict 60fps frame budgets and sub-1.5s LCP.
@@ -39,8 +44,8 @@ Every agent and developer MUST review and adhere to the project's documentation 
 
 | Document | Purpose & Authority |
 | :--- | :--- |
-| **`DESIGN.md` / `.stitch/DESIGN.md`** | **Visual Design System & Tokens**: Colors (Obsidian `#07080D`, Surya Brass `#F59E0B`, Vibranium Amethyst `#A855F7`), Clash Display + Satoshi + JetBrains Mono typography, border radiuses, and elevation tokens. |
-| **`ANVAYA_WEB_MASTER_PLAN.md`** | **Site Narrative & Section Specs**: 9-stage experiential sequence (Preloader, Hero Pinned Cockpit, Ticker Ribbon, Philosophy Bento, Sprint Protocols, Proof-of-Work Workstation, Testimonials, FAQ, Kinetic Footer). |
+| **`DESIGN.md` / `.stitch/DESIGN.md`** | **Open Design System Harness**: Semantic CSS variable tokens, geometry, and layout specs. Visual theme and styling are completely open to the designer. |
+| **`ANVAYA_WEB_MASTER_PLAN.md`** | **Site Narrative & Section Specs**: 9-stage modular sequence (Preloader, Hero Pinned Cockpit, Ticker Ribbon, Philosophy Bento, Sprint Protocols, Proof-of-Work Workstation, Testimonials, FAQ, Footer). |
 | **`GSAP_ORCHESTRATION.md`** | **Animation Standards**: Official GSAP 3.12 + `@gsap/react` lifecycle rules, `useGSAP()` scoping, `contextSafe()`, and ScrollTrigger pinning patterns. |
 | **`.stitch/SITE.md`** | **Stitch Project Roadmap & Screen Inventory**: Tracking Stitch project ID, screen IDs, and completed/pending deliverables. |
 | **`.stitch/next-prompt.md`** | **Active Relay Baton**: The current screen generation prompt used for the autonomous Stitch build loop. |
