@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anvaya — 2D Minimal Loading Screen (Awwwards Standard)</title>
+  <title>Anvaya — Minimal Light Loading Screen</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- GSAP 3.12 CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <!-- Google Fonts: JetBrains Mono & Inter -->
+  <!-- Google Fonts: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: #090A0F;
-      color: #F8FAFC;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #FFFFFF;
+      color: #0A0A0A;
       margin: 0;
       overflow-x: hidden;
     }
@@ -25,90 +25,82 @@
     }
   </style>
 </head>
-<body class="bg-[#090A0F] text-[#F8FAFC] min-h-screen relative flex flex-col justify-center items-center">
+<body class="bg-white text-[#0A0A0A] min-h-screen relative flex flex-col justify-center items-center">
 
-  <!-- Underlying Hero Section (Revealed when preloader curtain lifts) -->
-  <main id="hero-stage" class="w-full max-w-5xl px-8 py-20 text-center relative z-10">
-    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-500/20 bg-amber-500/5 text-amber-400 font-mono text-xs tracking-widest uppercase mb-8">
-      <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-      Deterministic AI & Full-Stack Systems
+  <!-- Underlying Pristine Light Hero Stage (Revealed when curtain wipes up) -->
+  <main id="hero-stage" class="w-full max-w-4xl px-8 py-20 text-center relative z-10">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-200 bg-neutral-50 text-neutral-600 font-mono text-[11px] tracking-widest uppercase mb-8">
+      <span class="w-1.5 h-1.5 rounded-full bg-neutral-900"></span>
+      Production Systems in 14 Days
     </div>
-    <h1 class="text-5xl sm:text-7xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-      IDEAS TO IMPACT.<br>
-      <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-200 to-slate-200">
-        PRODUCTION SYSTEMS IN 14 DAYS.
-      </span>
+    
+    <h1 class="text-6xl sm:text-7xl font-bold tracking-tight text-neutral-950 mb-6 leading-tight">
+      Ideas to impact.
     </h1>
-    <p class="text-slate-400 text-lg sm:text-xl max-w-2xl mx-auto mb-10">
+    
+    <p class="text-neutral-500 text-lg sm:text-xl max-w-xl mx-auto mb-10 leading-relaxed font-normal">
       Deterministic AI architectures, pgvector neural backends, and bespoke interfaces. No superficial fluff. Zero agency bloat.
     </p>
+    
     <div class="flex flex-wrap justify-center gap-4">
-      <button onclick="replayPreloader()" class="px-8 py-4 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-semibold transition-all shadow-[0_0_20px_rgba(245,158,11,0.3)]">
-        Replay Loading Animation ↺
+      <button onclick="replayPreloader()" class="px-7 py-3.5 rounded-full bg-neutral-950 hover:bg-neutral-800 text-white font-medium text-sm transition-all shadow-sm">
+        Replay Loading Screen ↺
       </button>
-      <a href="#details" class="px-8 py-4 rounded-full border border-white/10 hover:border-white/25 bg-white/5 text-white font-medium transition-all backdrop-blur-xl">
+      <a href="#explore" class="px-7 py-3.5 rounded-full border border-neutral-200 hover:border-neutral-300 bg-white text-neutral-800 font-medium text-sm transition-all">
         Inspect Architecture
       </a>
     </div>
   </main>
 
-  <!-- 2D Minimal Preloader Curtain -->
+  <!-- Minimal Light Preloader Curtain -->
   <div id="preloader-overlay" class="fixed inset-0 z-50 pointer-events-none select-none overflow-hidden">
-    <div id="curtain" class="absolute inset-0 bg-[#090A0F] flex flex-col justify-between p-8 sm:p-12 border-b border-white/10 pointer-events-auto">
+    <div id="curtain" class="absolute inset-0 bg-[#F8F9FA] flex flex-col justify-between p-8 sm:p-14 md:p-16 border-b border-neutral-200 pointer-events-auto">
       
-      <!-- TOP HUD: Coordinates & Runtime Telemetry -->
-      <div class="preloader-hud flex justify-between items-center text-xs font-mono tracking-widest text-slate-400 uppercase">
+      <!-- TOP: Brand & Geolocation -->
+      <div class="preloader-content flex justify-between items-center text-xs tracking-wider text-neutral-500">
         <div class="flex items-center gap-2.5">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#10B981]"></span>
-          <span class="text-white font-semibold">ANVAYA // ARCHITECTURE RUNTIME</span>
-          <span class="text-slate-600 hidden sm:inline">[SYS_V16_INIT]</span>
+          <span class="w-2 h-2 rounded-full bg-neutral-950"></span>
+          <span class="font-semibold text-neutral-950 tracking-tight text-sm">anvaya</span>
+          <span class="text-neutral-400">/ studio</span>
         </div>
-        <div class="flex items-center gap-6">
-          <span class="text-slate-500 hidden sm:inline">12.9716° N, 77.5946° E</span>
-          <span class="text-amber-400 font-semibold">STATUS: ONLINE</span>
+
+        <div class="font-mono text-[11px] tracking-widest text-neutral-500 uppercase hidden sm:block">
+          Bangalore · 12.9716° N, 77.5946° E
         </div>
       </div>
 
-      <!-- CENTER: Flat 2D Precision Geometric Reticle -->
-      <div class="preloader-hud self-center flex flex-col items-center">
-        <div class="relative w-28 h-28 sm:w-32 sm:h-32">
-          <!-- Static coordinate circle -->
-          <svg class="absolute inset-0 w-full h-full" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" stroke-dasharray="4 6"></circle>
-            <circle cx="50" cy="50" r="39" fill="none" stroke="rgba(245, 158, 11, 0.25)" stroke-width="1"></circle>
-          </svg>
-          
-          <!-- Rotating geometric diamond & square vector -->
-          <svg id="reticle-svg" class="absolute inset-0 w-full h-full" viewBox="0 0 100 100">
-            <!-- Outer Diamond -->
-            <polygon id="reticle-poly" points="50,14 86,50 50,86 14,50" fill="none" stroke="#F8FAFC" stroke-width="1.2" stroke-dasharray="350" stroke-dashoffset="350"></polygon>
-            <!-- Inner Square -->
-            <rect id="reticle-rect" x="30" y="30" width="40" height="40" fill="none" stroke="#F59E0B" stroke-width="1.2" stroke-dasharray="300" stroke-dashoffset="300"></rect>
-            <!-- Center Crosshair Point -->
-            <circle cx="50" cy="50" r="2.5" fill="#F8FAFC"></circle>
-            <line x1="50" y1="44" x2="50" y2="56" stroke="#F59E0B" stroke-width="1"></line>
-            <line x1="44" y1="50" x2="56" y2="50" stroke="#F59E0B" stroke-width="1"></line>
-          </svg>
+      <!-- CENTER: Minimal Understated Core -->
+      <div class="preloader-content self-center flex flex-col items-center text-center">
+        <!-- Minimal 1px square mark -->
+        <div class="w-8 h-8 border border-neutral-900 flex items-center justify-center mb-6">
+          <div class="w-2 h-2 bg-neutral-900"></div>
         </div>
-        <span class="mt-6 font-mono text-xs tracking-[0.3em] text-slate-400 uppercase">
-          DETERMINISTIC SYSTEMS CORE
-        </span>
+
+        <h2 class="text-2xl sm:text-3xl font-medium tracking-tight text-neutral-950">
+          Systems over slop.
+        </h2>
+
+        <p class="mt-2 font-mono text-[11px] tracking-[0.2em] text-neutral-400 uppercase">
+          Initializing Environment
+        </p>
       </div>
 
-      <!-- BOTTOM HUD: Motto + Giant Monospace Counter -->
-      <div class="preloader-hud flex justify-between items-end">
-        <div class="font-mono text-xs sm:text-sm tracking-wider text-slate-400">
-          <span class="text-amber-400 font-bold">01</span> // SYSTEMS OVER SLOP
-          <div class="text-[11px] text-slate-500 mt-1">14-DAY PRODUCTION SPRINT PROTOCOL</div>
+      <!-- BOTTOM: Progress & Minimal Counter -->
+      <div class="preloader-content flex justify-between items-end">
+        <div class="font-mono text-xs text-neutral-500 tracking-wider">
+          <span>[01 / 01]</span>
+          <div class="text-[11px] text-neutral-400 mt-0.5">READY IN 14 DAYS</div>
         </div>
-        <div class="font-mono font-bold text-6xl sm:text-8xl text-white tracking-tighter leading-none flex items-baseline">
+
+        <!-- Clean Minimal Monospace Counter -->
+        <div class="font-mono font-medium text-6xl sm:text-7xl md:text-8xl text-neutral-950 tracking-tighter leading-none">
           <span id="counter-val">00</span>
-          <span class="text-2xl sm:text-4xl text-amber-400 font-light ml-1">%</span>
+          <span class="text-xl sm:text-2xl text-neutral-400 font-light ml-1">%</span>
         </div>
       </div>
 
-      <!-- 1.5px Hairline Tracker Line -->
-      <div id="tracker-bar" class="absolute bottom-0 left-0 right-0 h-[2px] bg-amber-400 origin-left shadow-[0_0_10px_rgba(245,158,11,0.5)]"></div>
+      <!-- 1px Hairline Tracker Line -->
+      <div id="tracker-bar" class="absolute bottom-0 left-0 right-0 h-[1.5px] bg-neutral-950 origin-left"></div>
     </div>
   </div>
 
@@ -120,66 +112,46 @@
 
       const curtain = document.getElementById("curtain");
       const counterEl = document.getElementById("counter-val");
-      const reticleSvg = document.getElementById("reticle-svg");
-      const reticlePoly = document.getElementById("reticle-poly");
-      const reticleRect = document.getElementById("reticle-rect");
       const trackerBar = document.getElementById("tracker-bar");
-      const huds = document.querySelectorAll(".preloader-hud");
+      const contents = document.querySelectorAll(".preloader-content");
 
-      // Reset styles
+      // Reset
       gsap.set(curtain, { yPercent: 0 });
-      gsap.set(huds, { opacity: 1 });
+      gsap.set(contents, { opacity: 1 });
       gsap.set(trackerBar, { scaleX: 0, opacity: 1 });
-      gsap.set([reticlePoly, reticleRect], { strokeDashoffset: 350 });
-      gsap.set(reticleSvg, { rotation: 0 });
       counterEl.textContent = "00";
 
       masterTimeline = gsap.timeline();
 
-      // 1. Counter (00 to 100%)
+      // 1. Subtle, smooth counter (00 to 100%) in 1.15s
       const counterObj = { val: 0 };
       masterTimeline.to(counterObj, {
         val: 100,
-        duration: 1.2,
+        duration: 1.15,
         ease: "power2.inOut",
         onUpdate: () => {
-          const formatted = Math.floor(counterObj.val).toString().padStart(2, "0");
-          counterEl.textContent = formatted;
+          counterEl.textContent = Math.floor(counterObj.val).toString().padStart(2, "0");
         }
       });
 
-      // 2. Vector Stroke Draw & Rotation
-      masterTimeline.to([reticlePoly, reticleRect], {
-        strokeDashoffset: 0,
-        duration: 1.0,
-        stagger: 0.1,
-        ease: "power3.out"
-      }, 0);
-
-      masterTimeline.to(reticleSvg, {
-        rotation: 180,
-        duration: 1.5,
-        ease: "power1.inOut"
-      }, 0);
-
-      // 3. Hairline Bottom Tracker
+      // 2. 1px hairline tracker
       masterTimeline.to(trackerBar, {
         scaleX: 1,
-        duration: 1.2,
+        duration: 1.15,
         ease: "power2.inOut"
       }, 0);
 
-      // 4. Fade HUD elements right before curtain wipes
-      masterTimeline.to([huds, trackerBar], {
+      // 3. Gentle fade out of preloader metadata before curtain wipe
+      masterTimeline.to([contents, trackerBar], {
         opacity: 0,
-        duration: 0.25,
+        duration: 0.2,
         ease: "power2.out"
-      }, "+=0.08");
+      }, "+=0.05");
 
-      // 5. The Awwwards Shutter Curtain Reveal (Wipes upward in 0.75s)
+      // 4. Clean architectural curtain slide-up
       masterTimeline.to(curtain, {
         yPercent: -100,
-        duration: 0.75,
+        duration: 0.7,
         ease: "power4.inOut"
       });
     }
@@ -188,7 +160,6 @@
       runPreloaderAnimation();
     }
 
-    // Auto-run on window load
     window.addEventListener("DOMContentLoaded", () => {
       runPreloaderAnimation();
     });
