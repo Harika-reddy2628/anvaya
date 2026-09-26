@@ -11,10 +11,21 @@ import { FaqSection } from '@/components/faq/FaqSection';
 import { Footer } from '@/components/footer/Footer';
 
 export default function Home() {
-  const [preloaderDone, setPreloaderDone] = useState<boolean>(false);
+  const [preloaderDone, setPreloaderDone] = useState<boolean>(true);
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    // Instant deterministic scroll for testing & anchors
+    const params = new URLSearchParams(window.location.search);
+    const scrollY = params.get('scrollY');
+    if (scrollY) {
+      window.scrollTo({ top: parseInt(scrollY, 10), behavior: 'instant' });
+    }
+  }, []);
 
   return (
-    <main className="min-h-screen bg-[#07090E] text-[#F8FAFC] relative">
+    <main className="min-h-screen bg-[#04060A] text-[#F8FAFC] relative">
       {/* 0. Minimal Preloader */}
       {!preloaderDone && (
         <Preloader onComplete={() => setPreloaderDone(true)} />
@@ -26,20 +37,23 @@ export default function Home() {
       {/* 2. Hero Stage & 3D Flight Deck */}
       <Hero />
 
-      {/* 3. Capabilities Ticker Ribbon */}
-      <Ticker />
+      {/* 3. Lower Sections Container with Deep Void Background (Prevents canvas bleed-through) */}
+      <div className="relative z-10 bg-[#04060A] border-t border-white/10">
+        {/* Capabilities Ticker Ribbon */}
+        <Ticker />
 
-      {/* 4. "Systems Over Slop" Bento Grid */}
-      <BentoGrid />
+        {/* "Systems Over Slop" Bento Grid */}
+        <BentoGrid />
 
-      {/* 5. Interactive CLI Workstation */}
-      <Workstation />
+        {/* Interactive CLI Workstation */}
+        <Workstation />
 
-      {/* 6. Hairline Monospace FAQ Accordion */}
-      <FaqSection />
+        {/* Hairline Monospace FAQ Accordion */}
+        <FaqSection />
 
-      {/* 7. Monolithic Display Footer & Intake */}
-      <Footer />
+        {/* Monolithic Display Footer & Intake */}
+        <Footer />
+      </div>
     </main>
   );
 }

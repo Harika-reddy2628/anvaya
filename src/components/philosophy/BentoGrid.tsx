@@ -20,7 +20,7 @@ export const BentoGrid: React.FC<BentoGridProps> = () => {
   };
 
   return (
-    <section id="bento" ref={containerRef} className="py-24 px-6 sm:px-12 max-w-7xl mx-auto space-y-12">
+    <section id="philosophy" ref={containerRef} className="pt-32 pb-24 px-6 sm:px-12 max-w-7xl mx-auto space-y-12 scroll-mt-20">
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 font-mono text-[11px] text-[#FF2A55]">

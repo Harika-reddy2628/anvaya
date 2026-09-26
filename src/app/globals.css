@@ -1,33 +1,92 @@
 @import "tailwindcss";
 
+/* 1. Typography Fonts: Clash Display & Satoshi */
+@font-face {
+  font-family: 'Clash Display';
+  src: url('https://cdn.fontshare.com/wf/FPDAZ2S6SW4QMSRIIKNNGTPM6VIXYMKO/5HNPQ453FRLIQWV2FNOBUU3FKTDZQVSG/Z3MGHFHX6DCTLQ55LJYRJ5MDCZPMFZU6.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Clash Display';
+  src: url('https://cdn.fontshare.com/wf/BFBSY7LX5W2U2EROCLVVTQP4VS7S4PC3/IIUX4FGTMD2LK2VWD3RVTAS4SSMUN7B5/53RZKGODFYDW3QHTIL7IPOWTBCSUEZK7.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('https://cdn.fontshare.com/wf/TTX2Z3BF3P6Y5BQT3IV2VNOK6FL22KUT/7QYRJOI3JIMYHGY6CH7SOIFRQLZOLNJ6/KFIAZD4RUMEZIYV6FQ3T3GP5PDBDB6JY.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('https://cdn.fontshare.com/wf/LAFFD4SDUCDVQEXFPDC7C53EQ4ZELWQI/PXCT3G6LO6ICM5I3NTYENYPWJAECAWDD/GHM6WVH6MILNYOOCXHXB5GTSGNTMGXZR.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+  font-style: normal;
+}
+
 :root {
-  --bg-canvas: #07090E;
-  --bg-surface: #0E111A;
-  --bg-surface-elevated: #151926;
+  --bg-canvas: #04060A;
+  --bg-surface: #0A0D16;
+  --bg-surface-elevated: #111524;
   --accent-crimson: #FF2A55;
   --accent-crimson-dark: #D91B40;
-  --accent-crimson-subtle: rgba(255, 42, 85, 0.12);
+  --accent-cyan: #00F5D4;
+  --accent-violet: #8B5CF6;
   --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-glow: rgba(255, 42, 85, 0.4);
+  --border-glow: rgba(255, 42, 85, 0.35);
   --text-primary: #F8FAFC;
   --text-secondary: #94A3B8;
   --text-muted: #64748B;
-  --status-active: #10B981;
+}
+
+.font-clash {
+  font-family: 'Clash Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.035em;
+}
+
+.font-satoshi {
+  font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body {
   background-color: var(--bg-canvas);
   color: var(--text-primary);
-  font-family: var(--font-inter, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-family: var(--font-satoshi, 'Satoshi', 'Inter', sans-serif);
   overflow-x: hidden;
+}
+
+/* Deep Space Radial Atmosphere */
+.cosmic-nebula {
+  background: 
+    radial-gradient(ellipse 65% 55% at 75% 35%, rgba(0, 245, 212, 0.075) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 45% at 20% 70%, rgba(139, 92, 246, 0.065) 0%, transparent 65%),
+    radial-gradient(circle 450px at 70% 40%, rgba(255, 42, 85, 0.05) 0%, transparent 60%);
+}
+
+/* Glassmorphism Frosted Cockpit */
+.frosted-cockpit {
+  background: rgba(10, 14, 24, 0.45);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 
+    0 30px 60px -12px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 20px rgba(0, 245, 212, 0.03);
 }
 
 /* Architectural 1px Grid Background */
 .bg-grid {
-  background-size: 40px 40px;
+  background-size: 48px 48px;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
 }
 
 /* 3D Perspective Stage */

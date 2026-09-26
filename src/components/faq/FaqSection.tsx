@@ -22,7 +22,7 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ items = FAQ_ITEMS }) => 
   };
 
   return (
-    <section id="faq" className="py-20 px-6 sm:px-12 max-w-4xl mx-auto space-y-10">
+    <section id="faq" className="py-24 px-6 sm:px-12 max-w-4xl mx-auto space-y-10 scroll-mt-20">
       <div className="text-center space-y-2">
         <div className="font-mono text-xs text-[#FF2A55]">LEDGER // FAQ</div>
         <h2 className="font-clash text-3xl sm:text-4xl font-bold text-white">

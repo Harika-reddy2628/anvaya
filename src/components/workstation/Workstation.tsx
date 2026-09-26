@@ -19,7 +19,7 @@ export const Workstation: React.FC<WorkstationProps> = ({ defaultTab = 'spatial'
   const currentTab = CLI_TABS[activeTab];
 
   return (
-    <section id="workstation" className="py-20 px-6 sm:px-12 max-w-6xl mx-auto space-y-8">
+    <section id="workstation" className="py-24 px-6 sm:px-12 max-w-6xl mx-auto space-y-8 scroll-mt-20">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-white/10 pb-6">
         <div>
