@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anvaya — Real Three.js 3D MacBook into Neural Fly-Through</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- GSAP 3.12 CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700,600,500&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      background-color: #05070B;
+      color: #F8FAFC;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+    }
+    .hud-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+    }
+    .interactive {
+      pointer-events: auto;
+    }
+    .font-clash {
+      font-family: 'Clash Display', sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body class="bg-[#05070B] select-none">
+
+  <!-- Fullscreen WebGL Canvas -->
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- HUD & UI Overlay -->
+  <div class="hud-overlay flex flex-col justify-between p-6 sm:p-10">
+    
+    <!-- TOP NAVIGATION -->
+    <header class="flex justify-between items-center">
+      <div class="interactive flex items-center gap-3">
+        <span class="w-2.5 h-2.5 rounded-full bg-[#FF2A55] animate-ping"></span>
+        <span class="font-clash font-bold text-xl tracking-tight text-white">ANVAYA</span>
+        <span class="font-mono text-[10px] px-2 py-0.5 rounded bg-white/5 border border-white/10 text-neutral-400">
+          STUDIO // REAL THREE.JS
+        </span>
+      </div>
+
+      <!-- Live Flight Status -->
+      <div class="hidden sm:flex items-center gap-6 font-mono text-xs text-neutral-400">
+        <div>CAMERA_Z: <span id="cam-z" class="text-white">3.20</span></div>
+        <div>STATE: <span id="flight-state" class="text-[#FF2A55]">ORBIT_DESK</span></div>
+        <div>FPS: <span id="fps-counter" class="text-emerald-400">60</span></div>
+      </div>
+
+      <!-- Action Button -->
+      <div class="interactive flex items-center gap-3">
+        <button id="dive-btn" onclick="toggleFlightDive()" class="px-6 py-2.5 rounded-full bg-[#FF2A55] hover:bg-[#D91B40] text-white text-xs font-semibold tracking-wider uppercase transition-all shadow-[0_0_20px_rgba(255,42,85,0.4)]">
+          Dive into Neural Core →
+        </button>
+      </div>
+    </header>
+
+    <!-- CENTER DYNAMIC TITLE (Fades as camera dives) -->
+    <div id="hero-headings" class="max-w-xl space-y-4 my-auto transition-opacity duration-500">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF2A55]/10 border border-[#FF2A55]/30 text-[#FF2A55] font-mono text-[11px] uppercase tracking-wider">
+        <span>14-DAY PRODUCTION SPRINTS</span>
+      </div>
+      <h1 class="font-clash text-5xl sm:text-7xl font-bold tracking-tight text-white leading-none">
+        FROM VOID <br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-200 to-[#FF2A55]">
+          INTO MATTER.
+        </span>
+      </h1>
+      <p class="text-neutral-400 text-sm sm:text-base leading-relaxed font-normal">
+        Real 3D hardware engineering meets autonomous multi-agent intelligence. Click below or drag to orbit.
+      </p>
+    </div>
+
+    <!-- INNER NEURAL HUD (Revealed when inside the Neural Core) -->
+    <div id="neural-hud" class="max-w-2xl mx-auto text-center space-y-4 my-auto opacity-0 pointer-events-none transition-opacity duration-700">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#00F5D4]/10 border border-[#00F5D4]/30 text-[#00F5D4] font-mono text-xs uppercase tracking-wider">
+        <span class="w-2 h-2 rounded-full bg-[#00F5D4] animate-ping"></span>
+        <span>INSIDE AUTONOMOUS NEURAL MATRIX // 4 AGENTS SYNCHRONIZED</span>
+      </div>
+      <h2 class="font-clash text-4xl sm:text-6xl font-bold text-white tracking-tight">
+        THE MULTI-AGENT SWARM
+      </h2>
+      <p class="font-mono text-xs text-neutral-300 max-w-lg mx-auto">
+        Every node represents a specialized autonomous agent routing live AST diffs, pgvector embeddings, and Draco 3D geometry in parallel.
+      </p>
+
+      <!-- 4 Agent Metrics -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 font-mono text-xs">
+        <div class="p-3 rounded-xl bg-white/5 border border-[#FF2A55]/40 backdrop-blur-md">
+          <div class="text-[#FF2A55] font-bold">AGENT 01</div>
+          <div class="text-white text-[11px]">Architecture</div>
+          <div class="text-neutral-500 text-[9px] pt-1">Next.js 16</div>
+        </div>
+        <div class="p-3 rounded-xl bg-white/5 border border-[#00F5D4]/40 backdrop-blur-md">
+          <div class="text-[#00F5D4] font-bold">AGENT 02</div>
+          <div class="text-white text-[11px]">pgvector</div>
+          <div class="text-neutral-500 text-[9px] pt-1">7.4ms p99</div>
+        </div>
+        <div class="p-3 rounded-xl bg-white/5 border border-[#8B5CF6]/40 backdrop-blur-md">
+          <div class="text-[#8B5CF6] font-bold">AGENT 03</div>
+          <div class="text-white text-[11px]">3D Spatial</div>
+          <div class="text-neutral-500 text-[9px] pt-1">Draco -93%</div>
+        </div>
+        <div class="p-3 rounded-xl bg-white/5 border border-amber-400/40 backdrop-blur-md">
+          <div class="text-amber-400 font-bold">AGENT 04</div>
+          <div class="text-white text-[11px]">AST Quality</div>
+          <div class="text-neutral-500 text-[9px] pt-1">Zero Slop</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM BAR -->
+    <footer class="flex justify-between items-center text-xs font-mono text-neutral-500">
+      <div>© 2026 ANVAYA // SYSTEMS OVER SLOP</div>
+      <div class="flex items-center gap-4">
+        <span>[DRAG TO ROTATE]</span>
+        <span>[SCROLL / BUTTON TO FLY]</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- THREE.JS SIMULATION SCRIPT -->
+  <script>
+    // =========================================================================
+    // 1. SETUP SCENE, CAMERA, RENDERER
+    // =========================================================================
+    const canvas = document.getElementById('webgl-canvas');
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x05070B, 0.08);
+
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(0, 0.35, 3.2);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: false,
+      powerPreference: 'high-performance'
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+
+    // =========================================================================
+    // 2. LIGHTING
+    // =========================================================================
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    scene.add(ambientLight);
+
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    keyLight.position.set(2, 4, 3);
+    scene.add(keyLight);
+
+    // Crimson Kicker Light
+    const crimsonLight = new THREE.PointLight(0xFF2A55, 3, 6);
+    crimsonLight.position.set(-1.8, 1, 1);
+    scene.add(crimsonLight);
+
+    // Cyan Kicker Light
+    const cyanLight = new THREE.PointLight(0x00F5D4, 2.5, 6);
+    cyanLight.position.set(1.8, 0.5, 1);
+    scene.add(cyanLight);
+
+    // =========================================================================
+    // 3. PROCEDURAL 3D MACBOOK ASSEMBLY
+    // =========================================================================
+    const macbookGroup = new THREE.Group();
+    macbookGroup.position.set(0.4, -0.15, 0);
+    scene.add(macbookGroup);
+
+    // Materials
+    const aluminumMaterial = new THREE.MeshStandardMaterial({
+      color: 0x161821,
+      metalness: 0.88,
+      roughness: 0.22,
+    });
+
+    const bezelMaterial = new THREE.MeshStandardMaterial({
+      color: 0x050608,
+      roughness: 0.1,
+      metalness: 0.5
+    });
+
+    const keyboardWellMaterial = new THREE.MeshStandardMaterial({
+      color: 0x0a0c12,
+      roughness: 0.7,
+      metalness: 0.3
+    });
+
+    // Dynamic 2D Canvas for Retina Screen Terminal
+    const screenCanvas = document.createElement('canvas');
+    screenCanvas.width = 1024;
+    screenCanvas.height = 640;
+    const ctx = screenCanvas.getContext('2d');
+
+    function drawScreenTexture() {
+      // Dark Terminal Background
+      ctx.fillStyle = '#080A10';
+      ctx.fillRect(0, 0, 1024, 640);
+
+      // Window Header
+      ctx.fillStyle = '#11141E';
+      ctx.fillRect(0, 0, 1024, 48);
+
+      // Traffic Lights
+      ctx.fillStyle = '#FF5F56';
+      ctx.beginPath(); ctx.arc(28, 24, 8, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#FFBD2E';
+      ctx.beginPath(); ctx.arc(52, 24, 8, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#27C93F';
+      ctx.beginPath(); ctx.arc(76, 24, 8, 0, Math.PI * 2); ctx.fill();
+
+      // Title
+      ctx.font = 'bold 18px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#94A3B8';
+      ctx.fillText('anvaya-os // core_v4.2 — bash', 110, 30);
+
+      // Terminal Text Lines
+      ctx.font = '22px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#FF2A55';
+      ctx.fillText('ANVAYA PROTOCOL :: SYSTEMS OVER SLOP', 50, 105);
+
+      ctx.fillStyle = '#F8FAFC';
+      ctx.fillText('> anvaya sprint --target="Enterprise AI Platform"', 50, 155);
+
+      ctx.font = '19px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#64748B';
+      ctx.fillText('// Initializing Autonomous Multi-Agent Swarm...', 50, 205);
+
+      ctx.fillStyle = '#00F5D4';
+      ctx.fillText('● [AGENT_01] Scaffolding Next.js 16 App Router & Tailwind v4 [OK]', 50, 255);
+      ctx.fillText('● [AGENT_02] Generating pgvector similarity embeddings [7.4ms]', 50, 300);
+      ctx.fillText('● [AGENT_03] Draco WebGL compression: 18.4MB -> 1.2MB [OK]', 50, 345);
+      ctx.fillText('● [AGENT_04] AST diff verification: 100% type-strict [OK]', 50, 390);
+
+      // Glowing Status Box
+      ctx.strokeStyle = '#FF2A55';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(50, 440, 924, 130);
+
+      ctx.fillStyle = '#FF2A55';
+      ctx.fillText('★ STATUS: 14-DAY CADENCE GUARANTEED // 100% DAY-1 IP TRANSFER', 80, 495);
+
+      ctx.fillStyle = '#F8FAFC';
+      ctx.font = '16px "JetBrains Mono", monospace';
+      ctx.fillText('P99 LATENCY: 11.2ms | LIGHTHOUSE: 100/100 | ZERO SLOP VERIFIED', 80, 535);
+    }
+    drawScreenTexture();
+
+    const screenTexture = new THREE.CanvasTexture(screenCanvas);
+    const screenMaterial = new THREE.MeshBasicMaterial({
+      map: screenTexture,
+      transparent: true,
+      opacity: 1
+    });
+
+    // 3.1 Base Chassis
+    const baseGeo = new THREE.BoxGeometry(1.9, 0.04, 1.25);
+    const baseMesh = new THREE.Mesh(baseGeo, aluminumMaterial);
+    baseMesh.position.y = -0.02;
+    macbookGroup.add(baseMesh);
+
+    // Keyboard well & trackpad
+    const keyboardWell = new THREE.Mesh(
+      new THREE.BoxGeometry(1.65, 0.005, 0.65),
+      keyboardWellMaterial
+    );
+    keyboardWell.position.set(0, 0.005, -0.15);
+    macbookGroup.add(keyboardWell);
+
+    const trackpad = new THREE.Mesh(
+      new THREE.BoxGeometry(0.65, 0.005, 0.38),
+      new THREE.MeshStandardMaterial({ color: 0x181a24, roughness: 0.15, metalness: 0.8 })
+    );
+    trackpad.position.set(0, 0.005, 0.38);
+    macbookGroup.add(trackpad);
+
+    // 3.2 Display Lid (Hinged)
+    const lidGroup = new THREE.Group();
+    lidGroup.position.set(0, 0, -0.62); // Hinge pivot point
+    macbookGroup.add(lidGroup);
+
+    // Lid Back Shell
+    const lidShell = new THREE.Mesh(
+      new THREE.BoxGeometry(1.9, 1.25, 0.03),
+      aluminumMaterial
+    );
+    lidShell.position.set(0, 0.62, -0.015);
+    lidGroup.add(lidShell);
+
+    // Screen Bezel
+    const screenBezel = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.84, 1.2),
+      bezelMaterial
+    );
+    screenBezel.position.set(0, 0.62, 0.002);
+    lidGroup.add(screenBezel);
+
+    // Screen Display Plane
+    const screenPlane = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.72, 1.08),
+      screenMaterial
+    );
+    screenPlane.position.set(0, 0.62, 0.005);
+    lidGroup.add(screenPlane);
+
+    // Open Lid Angle: 105 degrees
+    lidGroup.rotation.x = THREE.MathUtils.degToRad(-15);
+
+    // =========================================================================
+    // 4. THE BIO-NEURAL SYNAPTIC SWARM (INSIDE & BEHIND THE SCREEN)
+    // =========================================================================
+    const neuralGroup = new THREE.Group();
+    neuralGroup.position.set(0, 0.5, -4.5);
+    scene.add(neuralGroup);
+
+    // 4.1 4000 Particle Cloud
+    const particleCount = 3500;
+    const particleGeo = new THREE.BufferGeometry();
+    const particlePositions = new Float32Array(particleCount * 3);
+    const particleColors = new Float32Array(particleCount * 3);
+
+    const colorChoices = [
+      new THREE.Color(0xFF2A55), // Crimson
+      new THREE.Color(0x00F5D4), // Cyan
+      new THREE.Color(0x8B5CF6), // Violet
+      new THREE.Color(0xFFB703), // Gold
+    ];
+
+    for (let i = 0; i < particleCount; i++) {
+      const radius = 2.5 + Math.random() * 4.5;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos((Math.random() * 2) - 1);
+
+      particlePositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+      particlePositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+      particlePositions[i * 3 + 2] = radius * Math.cos(phi);
+
+      const c = colorChoices[Math.floor(Math.random() * colorChoices.length)];
+      particleColors[i * 3] = c.r;
+      particleColors[i * 3 + 1] = c.g;
+      particleColors[i * 3 + 2] = c.b;
+    }
+
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+    particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+
+    const particleMat = new THREE.PointsMaterial({
+      size: 0.035,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending,
+    });
+
+    const particleSystem = new THREE.Points(particleGeo, particleMat);
+    neuralGroup.add(particleSystem);
+
+    // 4.2 4 Central Agentic Hubs (Wireframe Icosahedrons)
+    const agentHubs = [];
+    const hubConfigs = [
+      { color: 0xFF2A55, pos: [-1.8, 1.2, -1.0], label: 'Architecture' },
+      { color: 0x00F5D4, pos: [1.8, 1.0, -1.5], label: 'pgvector AI' },
+      { color: 0x8B5CF6, pos: [-1.2, -1.2, -2.0], label: '3D Spatial' },
+      { color: 0xFFB703, pos: [1.4, -1.0, -1.2], label: 'AST Quality' },
+    ];
+
+    hubConfigs.forEach(cfg => {
+      const hubGeo = new THREE.IcosahedronGeometry(0.35, 1);
+      const hubMat = new THREE.MeshBasicMaterial({
+        color: cfg.color,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.8
+      });
+      const hub = new THREE.Mesh(hubGeo, hubMat);
+      hub.position.set(...cfg.pos);
+      neuralGroup.add(hub);
+      agentHubs.push(hub);
+    });
+
+    // 4.3 Axon Filaments (Connecting Curves Between Hubs)
+    const axonMaterial = new THREE.LineBasicMaterial({
+      color: 0x00F5D4,
+      transparent: true,
+      opacity: 0.35,
+      blending: THREE.AdditiveBlending
+    });
+
+    for (let i = 0; i < agentHubs.length; i++) {
+      for (let j = i + 1; j < agentHubs.length; j++) {
+        const p1 = agentHubs[i].position;
+        const p2 = agentHubs[j].position;
+        const mid = p1.clone().lerp(p2, 0.5).add(new THREE.Vector3((Math.random() - 0.5) * 0.8, (Math.random() - 0.5) * 0.8, (Math.random() - 0.5) * 0.8));
+        
+        const curve = new THREE.QuadraticBezierCurve3(p1, mid, p2);
+        const points = curve.getPoints(24);
+        const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+        const line = new THREE.Line(lineGeo, axonMaterial);
+        neuralGroup.add(line);
+      }
+    }
+
+    // =========================================================================
+    // 5. CAMERA FLIGHT & GSAP FLY-THROUGH
+    // =========================================================================
+    let isInsideNeuralCore = false;
+    let targetCamPos = { x: 0, y: 0.35, z: 3.2 };
+    let targetLookAt = { x: 0.4, y: 0.1, z: 0 };
+
+    function toggleFlightDive() {
+      isInsideNeuralCore = !isInsideNeuralCore;
+      const diveBtn = document.getElementById('dive-btn');
+      const flightState = document.getElementById('flight-state');
+      const heroHeadings = document.getElementById('hero-headings');
+      const neuralHud = document.getElementById('neural-hud');
+
+      if (isInsideNeuralCore) {
+        // DIVE INTO SCREEN & NEURAL SWARM
+        diveBtn.textContent = 'Pull Back to Desk ↺';
+        diveBtn.className = 'px-6 py-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-semibold tracking-wider uppercase transition-all';
+        flightState.textContent = 'NEURAL_CORE_HYPERDIVE';
+        flightState.className = 'text-[#00F5D4]';
+
+        // Fade out hero text, fade in neural HUD
+        heroHeadings.style.opacity = '0';
+        heroHeadings.style.pointerEvents = 'none';
+        neuralHud.style.opacity = '1';
+        neuralHud.style.pointerEvents = 'auto';
+
+        // Camera flight timeline
+        const tl = gsap.timeline();
+        
+        // 1. Zoom right up to screen
+        tl.to(camera.position, {
+          x: 0.4,
+          y: 0.45,
+          z: 0.6,
+          duration: 1.2,
+          ease: 'power2.in',
+        });
+
+        // 2. Punch through screen glass into the neural swarm
+        tl.to(camera.position, {
+          x: 0,
+          y: 0.5,
+          z: -3.8,
+          duration: 1.6,
+          ease: 'power3.out',
+        });
+
+        // Fade screen plane out as camera enters
+        tl.to(screenMaterial, {
+          opacity: 0,
+          duration: 0.4,
+        }, 1.1);
+
+      } else {
+        // PULL BACK TO DESK
+        diveBtn.textContent = 'Dive into Neural Core →';
+        diveBtn.className = 'px-6 py-2.5 rounded-full bg-[#FF2A55] hover:bg-[#D91B40] text-white text-xs font-semibold tracking-wider uppercase transition-all shadow-[0_0_20px_rgba(255,42,85,0.4)]';
+        flightState.textContent = 'ORBIT_DESK';
+        flightState.className = 'text-[#FF2A55]';
+
+        heroHeadings.style.opacity = '1';
+        heroHeadings.style.pointerEvents = 'auto';
+        neuralHud.style.opacity = '0';
+        neuralHud.style.pointerEvents = 'none';
+
+        const tl = gsap.timeline();
+        
+        tl.to(screenMaterial, {
+          opacity: 1,
+          duration: 0.6,
+        }, 0.5);
+
+        tl.to(camera.position, {
+          x: 0,
+          y: 0.35,
+          z: 3.2,
+          duration: 1.8,
+          ease: 'power3.inOut',
+        });
+      }
+    }
+
+    // Mouse Interaction for Gyroscopic Parallax
+    let mouseX = 0;
+    let mouseY = 0;
+    window.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+
+    // =========================================================================
+    // 6. ANIMATION LOOP (60 FPS AUDIT)
+    // =========================================================================
+    let lastTime = performance.now();
+    let frameCount = 0;
+    const fpsEl = document.getElementById('fps-counter');
+    const camZEl = document.getElementById('cam-z');
+
+    function animate(time) {
+      requestAnimationFrame(animate);
+
+      // FPS tracking
+      frameCount++;
+      if (time - lastTime >= 1000) {
+        fpsEl.textContent = frameCount;
+        frameCount = 0;
+        lastTime = time;
+      }
+
+      camZEl.textContent = camera.position.z.toFixed(2);
+
+      // Subtle Gyro Parallax on MacBook when at desk
+      if (!isInsideNeuralCore) {
+        macbookGroup.rotation.y = THREE.MathUtils.lerp(macbookGroup.rotation.y, mouseX * 0.25 - 0.2, 0.05);
+        macbookGroup.rotation.x = THREE.MathUtils.lerp(macbookGroup.rotation.x, mouseY * 0.15 + 0.05, 0.05);
+      } else {
+        // Orbit Parallax inside Neural Core
+        neuralGroup.rotation.y += 0.002;
+        neuralGroup.rotation.x = THREE.MathUtils.lerp(neuralGroup.rotation.x, mouseY * 0.3, 0.05);
+      }
+
+      // Rotate Agentic Hubs
+      agentHubs.forEach((hub, idx) => {
+        hub.rotation.x += 0.01 * (idx + 1);
+        hub.rotation.y += 0.012;
+      });
+
+      // Swirl particle cloud
+      particleSystem.rotation.y -= 0.001;
+
+      renderer.render(scene, camera);
+    }
+    requestAnimationFrame(animate);
+
+    // Window Resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    });
+  </script>
+
+</body>
+</html>
