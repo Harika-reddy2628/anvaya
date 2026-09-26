@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+:root {
+  --bg-canvas: #07090E;
+  --bg-surface: #0E111A;
+  --bg-surface-elevated: #151926;
+  --accent-crimson: #FF2A55;
+  --accent-crimson-dark: #D91B40;
+  --accent-crimson-subtle: rgba(255, 42, 85, 0.12);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-glow: rgba(255, 42, 85, 0.4);
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --status-active: #10B981;
+}
+
+body {
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-inter, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+  overflow-x: hidden;
+}
+
+/* Architectural 1px Grid Background */
+.bg-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+}
+
+/* 3D Perspective Stage */
+.perspective-stage {
+  perspective: 1400px;
+  transform-style: preserve-3d;
+}
+
+.macbook-3d {
+  transform: rotateX(15deg) rotateY(-14deg) rotateZ(2deg);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+}
+
+.macbook-3d:hover {
+  transform: rotateX(10deg) rotateY(-10deg) rotateZ(1deg);
+}
+
+.macbook-zoomed {
+  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1.45) translateY(25px) !important;
+}
+
+/* Infinite Marquee Ticker */
+@keyframes marqueeScroll {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  width: 200%;
+  animation: marqueeScroll 24s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Animated Ant Legs */
+@keyframes crawlLegL {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(22deg); }
+}
+@keyframes crawlLegR {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-22deg); }
+}
+.ant-leg-l { transform-origin: top right; animation: crawlLegL 0.24s infinite ease-in-out; }
+.ant-leg-r { transform-origin: top left; animation: crawlLegR 0.24s infinite ease-in-out; }
+
+/* Radial Cursor Laser Border for Bento Cards */
+.bento-card {
+  position: relative;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1.25rem;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+.bento-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(400px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255, 42, 85, 0.45), transparent 40%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.bento-card:hover::before {
+  opacity: 1;
+}
+
+/* Text Reveal Hover Effect in Footer */
+.hover-spotlight-text {
+  background: radial-gradient(circle 200px at var(--mouse-x, 50%) var(--mouse-y, 50%), #FF2A55 0%, #F8FAFC 50%, rgba(255,255,255,0.1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

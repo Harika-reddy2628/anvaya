@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React, { useRef, useState } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
+import React, { useRef, useState } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
   gsap.registerPlugin(useGSAP);
 }
 
@@ -12,16 +12,9 @@ export interface PreloaderProps {
   readonly onComplete?: () => void;
 }
 
-/**
- * Anvaya Minimal Light Preloader (Swiss / Editorial Standard)
- * - Pristine light paper aesthetic (#F8F9FA / #FFFFFF)
- * - Understated, restrained typography & minimal counter
- * - 1px hairline progress line
- * - Clean architectural shutter curtain wipe
- */
 export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const curtainRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState<number>(0);
 
   useGSAP(
@@ -32,38 +25,38 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
         },
       });
 
-      // 1. Subtle, smooth counter (00 to 100%) in 1.1s
       const counterState = { val: 0 };
+
+      // 1. Progress count from 00 to 100% in 1.1s
       tl.to(counterState, {
         val: 100,
         duration: 1.15,
-        ease: "power2.inOut",
+        ease: 'power2.inOut',
         onUpdate: () => {
           setCount(Math.floor(counterState.val));
+          if (barRef.current) {
+            barRef.current.style.width = `${Math.floor(counterState.val)}%`;
+          }
         },
       });
 
-      // 2. 1px hairline tracker line
-      tl.fromTo(
-        "#preloader-progress-bar",
-        { scaleX: 0 },
-        { scaleX: 1, duration: 1.15, ease: "power2.inOut" },
-        0
-      );
-
-      // 3. Gentle fade out of preloader metadata before curtain wipe
-      tl.to(
-        [".preloader-content", "#preloader-progress-bar"],
-        { opacity: 0, duration: 0.2, ease: "power2.out" },
-        "+=0.05"
-      );
-
-      // 4. Clean architectural curtain slide-up
-      tl.to(curtainRef.current, {
-        yPercent: -100,
-        duration: 0.7,
-        ease: "power4.inOut",
+      // 2. Smooth fade of preloader content
+      tl.to('.preloader-elements', {
+        opacity: 0,
+        duration: 0.25,
+        ease: 'power2.out',
       });
+
+      // 3. Shutter curtain wipe upward
+      tl.to(
+        containerRef.current,
+        {
+          yPercent: -100,
+          duration: 0.75,
+          ease: 'power4.inOut',
+        },
+        '+=0.05'
+      );
     },
     { scope: containerRef }
   );
@@ -71,62 +64,57 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[999] pointer-events-none select-none overflow-hidden"
-      aria-hidden="true"
+      className="fixed inset-0 z-[100] flex flex-col justify-between p-8 sm:p-14 bg-[#07090E] border-b border-white/10 select-none"
     >
-      {/* Pristine Light Curtain */}
-      <div
-        ref={curtainRef}
-        className="absolute inset-0 bg-[#F8F9FA] text-[#0A0A0A] flex flex-col justify-between p-8 sm:p-12 md:p-16 border-b border-black/10"
-      >
-        {/* TOP: Brand Wordmark & Studio Tag */}
-        <div className="preloader-content flex justify-between items-center text-xs tracking-wider text-[#71717A]">
-          <div className="flex items-center gap-2.5">
-            <span className="w-2 h-2 rounded-full bg-[#0A0A0A]" />
-            <span className="font-semibold text-[#0A0A0A] tracking-tight">anvaya</span>
-            <span className="text-[#A1A1AA]">/ studio</span>
-          </div>
-
-          <div className="font-mono text-[11px] tracking-widest text-[#71717A] uppercase hidden sm:block">
-            Bangalore · 12.9716° N, 77.5946° E
-          </div>
+      {/* Top Bar */}
+      <div className="preloader-elements flex justify-between items-center text-xs font-mono text-neutral-400">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-[#FF2A55] animate-ping"></span>
+          <span className="text-white font-bold tracking-wider">ANVAYA HARNESS</span>
+          <span className="text-neutral-500">// v4.2 PROD</span>
         </div>
+        <div>BENGALURU // GLOBAL REMOTE</div>
+      </div>
 
-        {/* CENTER: Understated Minimal Core */}
-        <div className="preloader-content self-center flex flex-col items-center text-center max-w-sm">
-          {/* Minimal 1px square glyph */}
-          <div className="w-8 h-8 border border-[#18181B] flex items-center justify-center mb-6">
-            <div className="w-2 h-2 bg-[#18181B]" />
+      {/* Center Stage: Walking Ant with Counter */}
+      <div className="preloader-elements flex flex-col items-center justify-center my-auto">
+        <div className="relative flex flex-col items-center">
+          <div className="flex items-center gap-3 mb-4">
+            {/* Animated SVG Crimson Ant */}
+            <svg width="48" height="36" viewBox="0 0 50 40" fill="none" className="text-[#FF2A55] drop-shadow-[0_0_12px_rgba(255,42,85,0.8)]">
+              <ellipse cx="12" cy="20" rx="9" ry="6" fill="currentColor" />
+              <ellipse cx="25" cy="20" rx="6" ry="4.5" fill="currentColor" />
+              <circle cx="37" cy="18" r="4.5" fill="currentColor" />
+              <path d="M38 15 Q43 9 46 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              <path d="M39 16 Q45 13 47 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              <path d="M22 23 Q24 33 28 35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="ant-leg-l" />
+              <path d="M26 23 Q28 34 33 36" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="ant-leg-r" />
+              <path d="M12 24 Q10 32 6 35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="ant-leg-l" />
+              <path d="M15 24 Q16 33 13 36" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="ant-leg-r" />
+            </svg>
+            <div className="px-3 py-1.5 rounded-lg bg-[#0E111A] border border-[#FF2A55] font-mono text-sm font-bold text-white shadow-lg">
+              <span className="text-[#FF2A55]">{count < 10 ? `0${count}` : count}</span>% SPRINT_READY
+            </div>
           </div>
 
-          <h2 className="text-xl sm:text-2xl font-medium tracking-tight text-[#0A0A0A]">
-            Systems over slop.
+          <h2 className="font-clash text-2xl font-bold tracking-tight text-white mb-2">
+            COLONY INITIALIZING...
           </h2>
-
-          <p className="mt-2 font-mono text-[11px] tracking-widest text-[#71717A] uppercase">
-            Initializing Environment
+          <p className="font-mono text-xs text-neutral-400 max-w-sm text-center">
+            Deploying autonomous multi-agent workers. Synchronizing AST diff engine.
           </p>
         </div>
 
-        {/* BOTTOM: Monospace Counter & Progress */}
-        <div className="preloader-content flex justify-between items-end">
-          <div className="font-mono text-xs text-[#71717A] tracking-wider">
-            <span>[01 / 01]</span>
-            <div className="text-[11px] text-[#A1A1AA] mt-0.5">READY IN 14 DAYS</div>
-          </div>
-
-          {/* Minimal Clean Counter */}
-          <div className="font-mono font-medium text-5xl sm:text-7xl text-[#0A0A0A] tracking-tighter leading-none">
-            {count.toString().padStart(2, "0")}
-            <span className="text-xl sm:text-2xl text-[#71717A] font-light ml-1">%</span>
-          </div>
-        </div>
-
         {/* 1px Hairline Tracker Line */}
-        <div
-          id="preloader-progress-bar"
-          className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#0A0A0A] origin-left"
-        />
+        <div className="w-full max-w-md h-[2px] bg-white/10 rounded-full mt-8 overflow-hidden relative">
+          <div ref={barRef} className="h-full bg-[#FF2A55] w-0 transition-all duration-75"></div>
+        </div>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="preloader-elements flex justify-between items-center text-[11px] font-mono text-neutral-500">
+        <div>SYSTEMS OVER SLOP</div>
+        <div>100% DAY-1 IP OWNERSHIP</div>
       </div>
     </div>
   );
