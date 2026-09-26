@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anvaya — Crimson Ant Colony & 3D Flight Deck</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- GSAP 3.12 CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  
+  <!-- Fontshare Clash Display & Google JetBrains Mono -->
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700,600,500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            void: '#090B10',
+            surface: '#11141D',
+            crimson: {
+              DEFAULT: '#FF2A55',
+              glow: 'rgba(255, 42, 85, 0.4)',
+              dark: '#D91B40',
+              subtle: 'rgba(255, 42, 85, 0.12)'
+            },
+          },
+          fontFamily: {
+            clash: ['Clash Display', 'sans-serif'],
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #090B10;
+      color: #F8FAFC;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+    
+    /* Architectural 1px Grid Background */
+    .bg-grid {
+      background-size: 48px 48px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    }
+    
+    /* Crimson Glow Utilities */
+    .crimson-glow {
+      box-shadow: 0 0 25px rgba(255, 42, 85, 0.35);
+    }
+    .crimson-text-glow {
+      text-shadow: 0 0 15px rgba(255, 42, 85, 0.6);
+    }
+    
+    /* 3D Perspective Stage */
+    .perspective-stage {
+      perspective: 1200px;
+      transform-style: preserve-3d;
+    }
+
+    .macbook-3d {
+      transform: rotateX(16deg) rotateY(-18deg) rotateZ(3deg);
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      transform-style: preserve-3d;
+    }
+
+    .macbook-3d:hover {
+      transform: rotateX(12deg) rotateY(-12deg) rotateZ(1deg);
+    }
+
+    /* Zoomed In State */
+    .macbook-zoomed {
+      transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1.65) translateY(40px) !important;
+    }
+
+    /* Hand-drawn Doodle Wiggle Animation */
+    @keyframes doodleWiggle {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(-1px, 1px) rotate(-1deg); }
+      75% { transform: translate(1px, -1px) rotate(1deg); }
+    }
+    .doodle-active {
+      animation: doodleWiggle 2.5s ease-in-out infinite;
+    }
+
+    /* Ant leg crawling animation */
+    @keyframes legCrawlLeft {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(18deg); }
+    }
+    @keyframes legCrawlRight {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-18deg); }
+    }
+    .leg-l { transform-origin: top right; animation: legCrawlLeft 0.28s infinite ease-in-out; }
+    .leg-r { transform-origin: top left; animation: legCrawlRight 0.28s infinite ease-in-out; }
+  </style>
+</head>
+<body class="bg-void min-h-screen relative selection:bg-crimson selection:text-white bg-grid">
+
+  <!-- TOP HUD: Dynamic Floating Notch Navbar -->
+  <header class="fixed top-5 inset-x-0 z-50 flex justify-center px-4 pointer-events-none">
+    <nav class="pointer-events-auto h-12 px-5 rounded-full bg-[#11141D]/90 backdrop-blur-md border border-white/10 flex items-center gap-6 shadow-2xl">
+      <!-- Wordmark -->
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-crimson animate-pulse"></span>
+        <span class="font-clash font-bold tracking-tight text-white text-base">ANVAYA</span>
+        <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-neutral-400">STUDIO</span>
+      </div>
+
+      <div class="hidden md:flex items-center gap-6 text-xs text-neutral-400 font-medium">
+        <a href="#services" class="hover:text-white transition-colors">Services</a>
+        <a href="#colony" class="hover:text-crimson transition-colors flex items-center gap-1.5">
+          <span class="text-crimson">✦</span> The Ant Colony
+        </a>
+        <a href="#proof" class="hover:text-white transition-colors">Proof of Work</a>
+        <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Audio Haptic Toggle -->
+        <button id="sound-toggle" onclick="toggleAudio()" class="p-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-400 hover:text-white transition-all text-[11px] font-mono flex items-center gap-1">
+          <span id="sound-dot" class="w-1.5 h-1.5 rounded-full bg-neutral-500"></span>
+          <span id="sound-text">SOUND: OFF</span>
+        </button>
+
+        <!-- CTA -->
+        <a href="#intake" class="px-4 py-1.5 rounded-full bg-crimson hover:bg-crimson-dark text-white text-xs font-semibold tracking-wide transition-all shadow-lg hover:shadow-crimson/30">
+          Book Sprint →
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO STAGE & 3D MACBOOK WITH CRIMSON ANTS -->
+  <main class="relative min-h-screen pt-28 pb-16 px-6 sm:px-12 flex flex-col justify-center max-w-7xl mx-auto">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <!-- LEFT COLUMN: Monumental Typography & Business Proposition -->
+      <div class="lg:col-span-5 z-20 space-y-6">
+        
+        <!-- Live Intake Status Badge -->
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-crimson-subtle border border-crimson/30 text-crimson font-mono text-[11px] uppercase tracking-wider">
+          <span class="w-2 h-2 rounded-full bg-crimson animate-ping"></span>
+          <span>COLONY ACTIVE // Q4 SPRINT INTAKE OPEN</span>
+        </div>
+
+        <!-- Monumental Headline -->
+        <h1 class="font-clash text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.05]">
+          IDEAS TO <br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-100 to-crimson">
+            IMPACT.
+          </span>
+        </h1>
+
+        <!-- Plain English, High-Trust Copy -->
+        <p class="text-neutral-400 text-base sm:text-lg leading-relaxed max-w-md font-normal">
+          We engineer production-grade web systems, autonomous AI backends, and 3D pipelines in <strong class="text-white font-semibold">14 days</strong>. Powered by an industrious multi-agent colony moving with zero agency slop.
+        </p>
+
+        <!-- Metrics Ticker Strip -->
+        <div class="grid grid-cols-3 gap-4 pt-2 border-t border-white/10 font-mono text-xs text-neutral-400">
+          <div>
+            <div class="text-xl font-bold text-white font-sans">14 Days</div>
+            <div class="text-[10px] text-neutral-500 uppercase">Fixed Turnaround</div>
+          </div>
+          <div>
+            <div class="text-xl font-bold text-crimson font-sans">100%</div>
+            <div class="text-[10px] text-neutral-500 uppercase">Day-1 IP Rights</div>
+          </div>
+          <div>
+            <div class="text-xl font-bold text-white font-sans">&lt;12ms</div>
+            <div class="text-[10px] text-neutral-500 uppercase">p99 Latency</div>
+          </div>
+        </div>
+
+        <!-- Dual CTA Buttons -->
+        <div class="flex flex-wrap items-center gap-4 pt-4">
+          <button onclick="triggerZoom()" class="px-6 py-3.5 rounded-full bg-crimson hover:bg-crimson-dark text-white font-semibold text-sm transition-all shadow-xl hover:shadow-crimson/40 flex items-center gap-2">
+            <span>Explore 3D Cockpit</span>
+            <span id="zoom-indicator">🔍</span>
+          </button>
+          
+          <button onclick="resetZoom()" class="px-5 py-3.5 rounded-full bg-[#181B26] hover:bg-white/10 border border-white/15 text-neutral-300 font-medium text-sm transition-all">
+            Reset Camera ↺
+          </button>
+        </div>
+
+        <!-- Metaphor Note -->
+        <div class="flex items-center gap-2 font-mono text-[11px] text-neutral-500 pt-1">
+          <span class="text-crimson font-bold">ANVAYA:</span> (अन्वय) Logical connection & causal continuity.
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: 3D MACBOOK WORKSTATION + CRIMSON ANT DOODLES -->
+      <div class="lg:col-span-7 relative flex justify-center items-center perspective-stage min-h-[500px] lg:min-h-[620px]">
+        
+        <!-- ========================================== -->
+        <!-- 2D CRIMSON ANTS & ARCHITECTURAL DOODLES    -->
+        <!-- ========================================== -->
+        
+        <!-- ANT 1: Hoisting Code Slab on the Left -->
+        <div id="ant-1" class="absolute -top-4 left-6 z-30 doodle-active cursor-pointer" onclick="antCheer('ant-1')">
+          <div class="relative flex items-center gap-2">
+            <!-- Animated SVG Crimson Ant -->
+            <svg width="44" height="34" viewBox="0 0 50 40" fill="none" class="text-crimson drop-shadow-[0_0_8px_rgba(255,42,85,0.8)]">
+              <!-- Ant Body (Abdomen, Thorax, Head) -->
+              <ellipse cx="12" cy="20" rx="9" ry="6" fill="currentColor"/>
+              <ellipse cx="25" cy="20" rx="6" ry="4.5" fill="currentColor"/>
+              <circle cx="37" cy="18" r="4.5" fill="currentColor"/>
+              <!-- Antennae -->
+              <path d="M38 15 Q43 9 46 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M39 16 Q45 13 47 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <!-- 6 Legs with Crawl Animation -->
+              <path d="M22 23 Q24 33 28 35" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="leg-l"/>
+              <path d="M26 23 Q28 34 33 36" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="leg-r"/>
+              <path d="M12 24 Q10 32 6 35" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="leg-l"/>
+              <path d="M15 24 Q16 33 13 36" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="leg-r"/>
+              <path d="M34 21 Q37 28 42 30" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="leg-l"/>
+              <path d="M36 21 Q40 26 44 28" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="leg-r"/>
+            </svg>
+            
+            <!-- Code Doodle Speech Bubble -->
+            <div class="px-2.5 py-1 rounded bg-[#161922] border border-crimson/50 font-mono text-[10px] text-white shadow-lg">
+              <span class="text-crimson">const</span> sprint = <span class="text-emerald-400">14_DAYS</span>;
+            </div>
+          </div>
+        </div>
+
+        <!-- ANT 2: Walking Across the Top Bezel of the MacBook -->
+        <div id="ant-2" class="absolute top-12 right-20 z-40 doodle-active cursor-pointer" onclick="antCheer('ant-2')">
+          <div class="flex items-center gap-1.5">
+            <div class="px-2 py-0.5 rounded bg-crimson text-white font-mono text-[9px] font-bold tracking-wider uppercase">
+              AGENT_01: ARCHITECTURE
+            </div>
+            <!-- Ant facing left -->
+            <svg width="36" height="28" viewBox="0 0 50 40" fill="none" class="text-crimson -scale-x-100 drop-shadow-[0_0_8px_rgba(255,42,85,0.8)]">
+              <ellipse cx="12" cy="20" rx="9" ry="6" fill="currentColor"/>
+              <ellipse cx="25" cy="20" rx="6" ry="4.5" fill="currentColor"/>
+              <circle cx="37" cy="18" r="4.5" fill="currentColor"/>
+              <path d="M38 15 Q43 9 46 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M39 16 Q45 13 47 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M22 23 Q24 33 28 35" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="leg-l"/>
+              <path d="M26 23 Q28 34 33 36" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="leg-r"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- ANT 3: Carrying a Wire / Cable on the Bottom Right -->
+        <div id="ant-3" class="absolute -bottom-6 right-8 z-30 doodle-active cursor-pointer" onclick="antCheer('ant-3')">
+          <div class="flex items-center gap-2">
+            <svg width="42" height="32" viewBox="0 0 50 40" fill="none" class="text-crimson -scale-x-100 drop-shadow-[0_0_8px_rgba(255,42,85,0.8)]">
+              <ellipse cx="12" cy="20" rx="9" ry="6" fill="currentColor"/>
+              <ellipse cx="25" cy="20" rx="6" ry="4.5" fill="currentColor"/>
+              <circle cx="37" cy="18" r="4.5" fill="currentColor"/>
+              <path d="M38 15 Q43 9 46 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M22 23 Q24 33 28 35" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="leg-l"/>
+              <path d="M26 23 Q28 34 33 36" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="leg-r"/>
+            </svg>
+            <div class="px-2 py-1 rounded bg-[#161922] border border-white/20 font-mono text-[9px] text-neutral-300">
+              ⚡ pgvector_cluster <span class="text-crimson">synced</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Red Architectural Dimension Doodles (Hand-drawn Hairline Marks) -->
+        <svg class="absolute inset-0 w-full h-full pointer-events-none z-10 opacity-70" viewBox="0 0 600 500" fill="none">
+          <!-- Measuring Arrow Doodle -->
+          <path d="M 60 420 L 260 420" stroke="#FF2A55" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <path d="M 60 415 L 60 425" stroke="#FF2A55" stroke-width="1.5"/>
+          <path d="M 260 415 L 260 425" stroke="#FF2A55" stroke-width="1.5"/>
+          <text x="110" y="440" fill="#FF2A55" font-family="JetBrains Mono" font-size="10">WIDTH: 100vw DETERMINISTIC</text>
+          
+          <!-- Isometric Grid Axis Doodles -->
+          <circle cx="180" cy="80" r="3" fill="#FF2A55"/>
+          <path d="M 180 80 L 150 50" stroke="#FF2A55" stroke-width="1"/>
+          <text x="75" y="45" fill="#FF2A55" font-family="JetBrains Mono" font-size="10">[NODE: 0x0A92_AGENTIC]</text>
+        </svg>
+
+        <!-- ========================================== -->
+        <!-- THE 3D MACBOOK FLIGHT DECK CONTAINER       -->
+        <!-- ========================================== -->
+        <div id="macbook" class="macbook-3d w-full max-w-[540px] aspect-[16/10] bg-[#161821] rounded-2xl p-3 border-2 border-neutral-700/80 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] relative overflow-hidden transition-all duration-700">
+          
+          <!-- Glossy Bezel Header & Webcam Notch -->
+          <div class="w-full flex justify-between items-center px-3 pb-2 border-b border-white/10">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-green-500/80"></span>
+            </div>
+
+            <!-- Apple Style Notch -->
+            <div class="w-16 h-3.5 bg-neutral-900 rounded-b-lg flex items-center justify-center">
+              <span class="w-1.5 h-1.5 rounded-full bg-neutral-700"></span>
+            </div>
+
+            <!-- Window Status -->
+            <div class="font-mono text-[9px] text-neutral-400">
+              anvaya-os // live
+            </div>
+          </div>
+
+          <!-- INNER MACBOOK SCREEN (The Anvaya Agency Dashboard) -->
+          <div class="w-full h-[calc(100%-28px)] bg-[#0C0E14] rounded-lg p-4 font-mono flex flex-col justify-between relative overflow-hidden border border-white/5">
+            
+            <!-- Atmospheric Crimson Aura Inside Screen -->
+            <div class="absolute -top-12 -right-12 w-48 h-48 bg-crimson/15 rounded-full blur-3xl pointer-events-none"></div>
+
+            <!-- Top Dashboard Bar -->
+            <div class="flex justify-between items-center text-[10px] text-neutral-400 pb-2 border-b border-white/10">
+              <div class="flex items-center gap-2">
+                <span class="text-crimson font-bold">⚡ CLUSTER:</span>
+                <span class="text-white font-semibold">ANVAYA_CORE_v4</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-emerald-400">● 60 FPS</span>
+                <span>p99: 11.8ms</span>
+              </div>
+            </div>
+
+            <!-- Interactive Terminal Diff Screen -->
+            <div class="my-auto space-y-2 text-xs">
+              <div class="text-neutral-500 text-[11px]">// Autonomous Multi-Agent Council Initialized:</div>
+              
+              <div class="flex items-center gap-2 bg-white/5 p-2 rounded border border-white/10">
+                <span class="text-crimson">❯</span>
+                <span class="text-neutral-300">anvaya sprint --target="Enterprise AI Platform"</span>
+              </div>
+
+              <!-- Live Execution Logs -->
+              <div class="space-y-1 text-[11px] pl-3 border-l-2 border-crimson/60">
+                <div class="text-neutral-400"><span class="text-crimson">[AGENT_01]</span> Scaffolding Next.js 16 App Router & Tailwind CSS... <span class="text-emerald-400">✓ Done</span></div>
+                <div class="text-neutral-400"><span class="text-crimson">[AGENT_02]</span> Provisioning pgvector embeddings & AST compiler... <span class="text-emerald-400">✓ Done</span></div>
+                <div class="text-neutral-400"><span class="text-crimson">[AGENT_03]</span> Validating sub-12ms latency p99 budget... <span class="text-emerald-400">✓ 11.2ms</span></div>
+                <div class="text-white font-semibold pt-1"><span class="text-crimson">★ STATUS:</span> Production Architecture Shipped in 14 Days.</div>
+              </div>
+            </div>
+
+            <!-- Bottom Screen Footer -->
+            <div class="pt-2 border-t border-white/10 flex justify-between items-center text-[10px] text-neutral-400">
+              <div>IP Ownership: <span class="text-white font-semibold">100% Client Transfer</span></div>
+              <div class="px-2 py-0.5 rounded bg-crimson/20 text-crimson font-bold border border-crimson/40">
+                VERIFIED DEPLOY
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Lip & Trackpad Reflection of MacBook -->
+          <div class="absolute bottom-1 inset-x-12 h-1 bg-neutral-700 rounded-full opacity-60"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- INTERACTIVE CLIENT AUDIO & GSAP SCRIPT -->
+  <script>
+    let isZoomed = false;
+    let audioCtx = null;
+    let isSoundOn = false;
+
+    // Toggle 3D Zoom on the MacBook
+    function triggerZoom() {
+      const macbook = document.getElementById('macbook');
+      const indicator = document.getElementById('zoom-indicator');
+      
+      isZoomed = !isZoomed;
+      if (isZoomed) {
+        macbook.classList.add('macbook-zoomed');
+        indicator.textContent = '🔍 (Zoomed In)';
+        playClickSound(800, 'triangle', 0.08);
+      } else {
+        macbook.classList.remove('macbook-zoomed');
+        indicator.textContent = '🔍';
+        playClickSound(400, 'sine', 0.08);
+      }
+    }
+
+    function resetZoom() {
+      const macbook = document.getElementById('macbook');
+      const indicator = document.getElementById('zoom-indicator');
+      isZoomed = false;
+      macbook.classList.remove('macbook-zoomed');
+      indicator.textContent = '🔍';
+      playClickSound(400, 'sine', 0.08);
+    }
+
+    // Ant Click Easter Egg Animation
+    function antCheer(antId) {
+      const el = document.getElementById(antId);
+      gsap.to(el, {
+        scale: 1.35,
+        y: -15,
+        duration: 0.2,
+        yoyo: true,
+        repeat: 1,
+        ease: 'power2.out'
+      });
+      playClickSound(1200, 'square', 0.04);
+    }
+
+    // Web Audio API Synthesizer (0 External Audio Files Required)
+    function toggleAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+
+      isSoundOn = !isSoundOn;
+      const soundDot = document.getElementById('sound-dot');
+      const soundText = document.getElementById('sound-text');
+
+      if (isSoundOn) {
+        soundDot.className = 'w-1.5 h-1.5 rounded-full bg-crimson animate-pulse';
+        soundText.textContent = 'SOUND: ON';
+        playClickSound(600, 'sine', 0.1);
+      } else {
+        soundDot.className = 'w-1.5 h-1.5 rounded-full bg-neutral-500';
+        soundText.textContent = 'SOUND: OFF';
+      }
+    }
+
+    function playClickSound(freq, type = 'sine', duration = 0.08) {
+      if (!isSoundOn || !audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  </script>
+
+</body>
+</html>
