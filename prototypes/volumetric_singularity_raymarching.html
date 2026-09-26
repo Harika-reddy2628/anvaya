@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anvaya — Volumetric Gravitational Singularity (GLSL Raymarching)</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- GSAP 3.12 CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <!-- Google & Fontshare Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700,600,500&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      background-color: #030407;
+      color: #F8FAFC;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    
+    #shader-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .font-clash {
+      font-family: 'Clash Display', sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* 2.39:1 Anamorphic Framing Marks */
+    .anamorphic-letterbox {
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    /* Glass Cockpit */
+    .glass-cockpit {
+      background: rgba(8, 11, 18, 0.65);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-[#030407] selection:bg-[#FF2A55] selection:text-white">
+
+  <!-- FULLSCREEN GLSL RAYMARCHED VOLUMETRIC SINGULARITY -->
+  <canvas id="shader-canvas"></canvas>
+
+  <!-- TOP HUD: Cinematic 2.39:1 Framing & Dynamic Notch -->
+  <div class="fixed top-0 inset-x-0 z-40 p-4 sm:p-6 flex justify-between items-center pointer-events-none text-xs font-mono">
+    <div class="pointer-events-auto flex items-center gap-3">
+      <span class="w-2.5 h-2.5 rounded-full bg-[#FF2A55] animate-ping"></span>
+      <span class="font-clash font-bold text-lg tracking-tight text-white">ANVAYA</span>
+      <span class="text-[10px] px-2 py-0.5 rounded bg-white/5 border border-white/10 text-neutral-400">
+        VOLUMETRIC RAYMARCHING // 60 FPS
+      </span>
+    </div>
+
+    <!-- Live Telemetry -->
+    <div class="hidden md:flex items-center gap-6 text-neutral-400">
+      <div>SINGULARITY: <span class="text-[#00F5D4]">ACTIVE (GARGANTUA_v4)</span></div>
+      <div>GRAVITY_WELL: <span id="grav-well" class="text-white">1.000 G</span></div>
+      <div>SAMPLES: <span class="text-white">64 STEPS/RAY</span></div>
+    </div>
+
+    <div class="pointer-events-auto flex items-center gap-3">
+      <a href="#intake" class="px-5 py-2 rounded-full bg-[#FF2A55] hover:bg-[#D91B40] text-white text-xs font-semibold tracking-wider uppercase transition-all shadow-[0_0_25px_rgba(255,42,85,0.45)]">
+        Book 14-Day Sprint →
+      </a>
+    </div>
+  </div>
+
+  <!-- MAIN SCROLLABLE EDITORIAL EXPERIENCE -->
+  <div class="relative z-10 min-h-screen flex flex-col justify-between p-6 sm:p-12 max-w-7xl mx-auto pt-24 pb-12">
+    
+    <!-- HERO SECTION: Architectural Restraint over Cinematic Singularity -->
+    <div class="my-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <!-- Headline & Value Prop -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#00F5D4]/10 border border-[#00F5D4]/30 text-[#00F5D4] font-mono text-xs uppercase tracking-wider">
+          <span class="w-2 h-2 rounded-full bg-[#00F5D4] animate-pulse"></span>
+          <span>AUTONOMOUS SYSTEMS // COSMIC CONDENSATION</span>
+        </div>
+
+        <h1 class="font-clash text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-[0.95]">
+          FROM VOID <br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-[#00F5D4]">
+            INTO MATTER.
+          </span>
+        </h1>
+
+        <p class="text-neutral-300 text-lg sm:text-xl leading-relaxed max-w-xl font-normal drop-shadow-md">
+          We bring order out of chaos. Production-grade web applications, pgvector neural backends, and 3D spatial pipelines shipped in <strong class="text-white font-semibold">14 days</strong>. Zero agency slop.
+        </p>
+
+        <!-- 3 Pillars -->
+        <div class="grid grid-cols-3 gap-6 pt-4 border-t border-white/15 max-w-lg font-mono text-xs">
+          <div>
+            <div class="text-2xl sm:text-3xl font-bold text-white font-sans">14 Days</div>
+            <div class="text-[10px] text-neutral-400 uppercase pt-1">Fixed Cadence</div>
+          </div>
+          <div>
+            <div class="text-2xl sm:text-3xl font-bold text-[#FF2A55] font-sans">100%</div>
+            <div class="text-[10px] text-neutral-400 uppercase pt-1">Day-1 IP Rights</div>
+          </div>
+          <div>
+            <div class="text-2xl sm:text-3xl font-bold text-[#00F5D4] font-sans">&lt;12ms</div>
+            <div class="text-[10px] text-neutral-400 uppercase pt-1">p99 Latency</div>
+          </div>
+        </div>
+
+        <!-- Interactive Triggers -->
+        <div class="flex flex-wrap items-center gap-4 pt-4">
+          <a href="#intake" class="px-8 py-4 rounded-full bg-[#00F5D4] hover:bg-[#00D0B4] text-black font-bold text-sm tracking-wide transition-all shadow-[0_0_30px_rgba(0,245,212,0.45)]">
+            Schedule 14-Day Sprint →
+          </a>
+          <button onclick="pulseSingularity()" class="px-6 py-4 rounded-full bg-white/5 hover:bg-white/10 border border-white/20 text-white font-mono text-xs uppercase tracking-wider transition-all backdrop-blur-md">
+            Pulse Singularity ✦
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Flight Deck Telemetry -->
+      <div class="lg:col-span-5">
+        <div class="glass-cockpit rounded-2xl p-6 space-y-5 font-mono text-xs text-neutral-300">
+          <div class="flex justify-between items-center pb-3 border-b border-white/10">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-[#00F5D4]"></span>
+              <span class="text-white font-bold">CORE_ENGINE_TELEMETRY</span>
+            </div>
+            <span class="text-[10px] text-neutral-400">LAGRANGE_PT_01</span>
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex justify-between">
+              <span class="text-neutral-400">Volumetric Engine:</span>
+              <span class="text-emerald-400 font-bold">Raymarched GLSL 2.0</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-neutral-400">Gravitational Lensing:</span>
+              <span class="text-[#00F5D4] font-bold">Schwarzschild Geodesic</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-neutral-400">Bioluminescent Fluid:</span>
+              <span class="text-[#FF2A55] font-bold">Curl-Noise 3D fBM</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-neutral-400">Delivery SLA:</span>
+              <span class="text-white font-bold">14-Day Production Release</span>
+            </div>
+          </div>
+
+          <!-- Live Terminal Output -->
+          <div class="p-3.5 rounded-xl bg-black/60 border border-white/10 text-[11px] space-y-1">
+            <div class="text-neutral-400"><span class="text-[#00F5D4]">$</span> anvaya synthesize --quantum</div>
+            <div class="text-neutral-300">[INFO] Bending light around event horizon...</div>
+            <div class="text-[#00F5D4]">[OK] 4 Autonomous Agents Synchronized.</div>
+            <div class="text-white font-semibold pt-1">[STATUS] 100% Day-1 IP Ready for Transfer.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM HUD BAR -->
+    <div class="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center text-xs font-mono text-neutral-400 gap-4">
+      <div>© 2026 ANVAYA // IDEAS TO IMPACT. SYSTEMS OVER SLOP.</div>
+      <div class="flex items-center gap-6">
+        <span>MOVE MOUSE: WARP GRAVITATION</span>
+        <span>SCROLL: CONDENSE INTO ARCHITECTURE</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- GLSL RAYMARCHING SHADER PIPELINE -->
+  <script>
+    const canvas = document.getElementById('shader-canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+
+    if (!gl) {
+      alert('WebGL not supported on this browser.');
+    }
+
+    // Quad Vertex Shader
+    const vsSource = `
+      attribute vec2 a_position;
+      varying vec2 v_uv;
+      void main() {
+        v_uv = (a_position + 1.0) * 0.5;
+        gl_Position = vec4(a_position, 0.0, 1.0);
+      }
+    `;
+
+    // Volumetric Gravitational Lensing & Bioluminescent Accretion Disk Fragment Shader
+    const fsSource = `
+      precision highp float;
+      varying vec2 v_uv;
+      uniform vec2 u_resolution;
+      uniform vec2 u_mouse;
+      uniform float u_time;
+      uniform float u_pulse;
+
+      // 3D Simplex / Value Noise
+      float hash(vec3 p) {
+        p = fract(p * 0.3183099 + 0.1);
+        p *= 17.0;
+        return fract(p.x * p.y * p.z * (p.x + p.y + p.z));
+      }
+
+      float noise(vec3 x) {
+        vec3 i = floor(x);
+        vec3 f = fract(x);
+        f = f * f * (3.0 - 2.0 * f);
+        return mix(mix(mix(hash(i + vec3(0,0,0)), hash(i + vec3(1,0,0)), f.x),
+                       mix(hash(i + vec3(0,1,0)), hash(i + vec3(1,1,0)), f.x), f.y),
+                   mix(mix(hash(i + vec3(0,0,1)), hash(i + vec3(1,0,1)), f.x),
+                       mix(hash(i + vec3(0,1,1)), hash(i + vec3(1,1,1)), f.x), f.y), f.z);
+      }
+
+      // Fractional Brownian Motion (fBM)
+      float fbm(vec3 p) {
+        float v = 0.0;
+        float a = 0.5;
+        vec3 shift = vec3(100.0);
+        for (int i = 0; i < 4; ++i) {
+          v += a * noise(p);
+          p = p * 2.0 + shift;
+          a *= 0.5;
+        }
+        return v;
+      }
+
+      // Raymarching Volumetric Singularity
+      void main() {
+        // Normalized Coordinates with aspect correction
+        vec2 uv = (gl_FragCoord.xy - 0.5 * u_resolution.xy) / u_resolution.y;
+        
+        // Mouse warp offset
+        vec2 m = (u_mouse - 0.5 * u_resolution.xy) / u_resolution.y;
+        vec3 singularityPos = vec3(m.x * 0.8 + 0.3, m.y * 0.6, 0.0);
+
+        // Camera setup
+        vec3 ro = vec3(0.0, 0.0, 3.2);
+        vec3 rd = normalize(vec3(uv, -1.6));
+
+        // Colors
+        vec3 voidColor = vec3(0.012, 0.015, 0.028);
+        vec3 cyanBiolum = vec3(0.0, 0.96, 0.83);    // #00F5D4
+        vec3 crimsonEnergy = vec3(1.0, 0.165, 0.33); // #FF2A55
+        vec3 violetCore = vec3(0.55, 0.36, 0.96);    // #8B5CF6
+        vec3 starlightGold = vec3(1.0, 0.72, 0.01);  // #FFB703
+
+        // Volumetric Raymarch Accumulators
+        vec3 col = voidColor;
+        float distToCenter = length(uv - singularityPos.xy);
+
+        // 1. GRAVITATIONAL LENSING (Curved Spacetime around singularity)
+        float gravity = 0.18 / (distToCenter * distToCenter + 0.02);
+        vec2 bend = normalize(singularityPos.xy - uv) * gravity * 0.04;
+        vec2 warpedUv = uv + bend;
+
+        // 2. EINSTEIN PHOTON RING (Relativistic Glow around event horizon)
+        float eventHorizonRadius = 0.22 + u_pulse * 0.04;
+        float ringDist = abs(distToCenter - eventHorizonRadius);
+        float photonRing = 0.012 / (ringDist * ringDist + 0.003);
+        
+        // Asymmetric Doppler Beaming (one side of disk is brighter)
+        float doppler = 1.0 + (uv.x - singularityPos.x) * 1.5;
+        photonRing *= clamp(doppler, 0.3, 2.2);
+
+        // 3. VOLUMETRIC ACCRETION DISK (Swirling Fluid fBM)
+        float angle = atan(warpedUv.y - singularityPos.y, warpedUv.x - singularityPos.x);
+        float radius = length(warpedUv - singularityPos.xy);
+        
+        // Spiral coordinate
+        vec3 spiralCoord = vec3(
+          radius * 4.0 - u_time * 0.6,
+          angle * 2.0 + u_time * 0.4 + radius * 3.0,
+          u_time * 0.2
+        );
+        
+        float fluid = fbm(spiralCoord);
+        fluid = smoothstep(0.3, 0.85, fluid) * smoothstep(1.6, 0.28, radius);
+
+        // Color Grading: Center Crimson, Mid Cyan, Outer Violet
+        vec3 accretionColor = mix(crimsonEnergy, cyanBiolum, smoothstep(0.2, 0.7, radius));
+        accretionColor = mix(accretionColor, violetCore, smoothstep(0.6, 1.4, radius));
+        accretionColor += starlightGold * photonRing * 0.5;
+
+        // Combine Volumetrics
+        col += accretionColor * fluid * 1.4;
+        col += cyanBiolum * (photonRing * 0.4);
+        col += crimsonEnergy * (photonRing * 0.25);
+
+        // 4. EVENT HORIZON (Pure Obsidian Shadow at the center)
+        float blackHoleShadow = smoothstep(eventHorizonRadius * 0.95, eventHorizonRadius * 0.6, distToCenter);
+        col *= (1.0 - blackHoleShadow);
+
+        // 5. ANAMORPHIC CHROMATIC ABERRATION & FILM GRAIN
+        float grain = (hash(vec3(gl_FragCoord.xy, u_time)) - 0.5) * 0.04;
+        col += vec3(grain);
+
+        // Subtle Vignette
+        float vignette = 1.0 - length(v_uv - 0.5) * 0.7;
+        col *= clamp(vignette, 0.0, 1.0);
+
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `;
+
+    // Helper: Compile Shader
+    function compileShader(gl, type, source) {
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        console.error('Shader compile error:', gl.getShaderInfoLog(shader));
+        gl.deleteShader(shader);
+        return null;
+      }
+      return shader;
+    }
+
+    const vs = compileShader(gl, gl.VERTEX_SHADER, vsSource);
+    const fs = compileShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
+    const program = gl.createProgram();
+    gl.attachShader(program, vs);
+    gl.attachShader(program, fs);
+    gl.linkProgram(program);
+
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      console.error('Program link error:', gl.getProgramInfoLog(program));
+    }
+    gl.useProgram(program);
+
+    // Quad Buffer
+    const positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+      -1, -1,
+       1, -1,
+      -1,  1,
+      -1,  1,
+       1, -1,
+       1,  1,
+    ]), gl.STATIC_DRAW);
+
+    const aPos = gl.getAttribLocation(program, 'a_position');
+    gl.enableVertexAttribArray(aPos);
+    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+    // Uniform Locations
+    const uResolution = gl.getUniformLocation(program, 'u_resolution');
+    const uMouse = gl.getUniformLocation(program, 'u_mouse');
+    const uTime = gl.getUniformLocation(program, 'u_time');
+    const uPulse = gl.getUniformLocation(program, 'u_pulse');
+
+    // Resize
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.uniform2f(uResolution, canvas.width, canvas.height);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Mouse Tracking with smooth Lerp
+    let targetMouseX = canvas.width * 0.65;
+    let targetMouseY = canvas.height * 0.5;
+    let currentMouseX = targetMouseX;
+    let currentMouseY = targetMouseY;
+
+    window.addEventListener('mousemove', (e) => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      targetMouseX = e.clientX * dpr;
+      targetMouseY = (window.innerHeight - e.clientY) * dpr; // Invert Y for GLSL
+    });
+
+    // Pulse Animation
+    let pulseVal = 0.0;
+    function pulseSingularity() {
+      gsap.to({ val: 0 }, {
+        val: 1.0,
+        duration: 0.6,
+        yoyo: true,
+        repeat: 1,
+        ease: 'power2.out',
+        onUpdate: function() {
+          pulseVal = this.targets()[0].val;
+        }
+      });
+    }
+
+    // Render Loop (60 FPS Guaranteed)
+    let startTime = performance.now();
+    function render(now) {
+      requestAnimationFrame(render);
+
+      const elapsedTime = (now - startTime) * 0.001;
+
+      // Lerp mouse coordinates for physical fluid inertia
+      currentMouseX += (targetMouseX - currentMouseX) * 0.05;
+      currentMouseY += (targetMouseY - currentMouseY) * 0.05;
+
+      gl.uniform2f(uMouse, currentMouseX, currentMouseY);
+      gl.uniform1f(uTime, elapsedTime);
+      gl.uniform1f(uPulse, pulseVal);
+
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+    }
+    requestAnimationFrame(render);
+  </script>
+
+</body>
+</html>
