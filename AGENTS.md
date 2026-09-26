@@ -38,7 +38,69 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ---
 
-## 2. Master Blueprints & Source of Truth
+## 2. The 15 Ironclad DON'Ts (Awwwards & Agency Invariants)
+
+To prevent catastrophic performance collapses, aesthetic "vibe-slop", or commercial conversion failures, every agent and developer MUST strictly obey these 15 DON'Ts:
+
+### A. WebGL, Shader & Performance Traps
+1. **DON'T run unbounded full-resolution fragment shaders:** Cap `renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))`. Never calculate full 3x retina buffers. Always pause the animation loop via `IntersectionObserver` when the canvas is off-screen.
+2. **DON'T spawn multiple WebGL `<canvas>` contexts across sections:** Maintain a single, persistent canvas across the background. Control camera positions, uniform values, and particle states via GSAP ScrollTrigger rather than creating new canvases.
+3. **DON'T scroll-jack or fight native trackpad momentum:** Never hijack wheel velocity or use heavy, sticky scroll smoothing. Couple Lenis (`lerp: 0.08`, `syncTouch: false`) cleanly with `ScrollTrigger.update`.
+4. **DON'T animate layout/geometry properties on scroll:** Never animate `top`, `left`, `width`, `height`, `margin`, or `filter: blur()` during scroll scrub. Strictly use hardware-accelerated `transform` (`x`, `y`, `scale3d`) and `opacity`.
+5. **DON'T trap users behind a 10-second preloader:** The DOM hero text and CTA must render immediately (<1.2s LCP). WebGL shaders compile asynchronously and fade in smoothly without holding the user hostage.
+
+### B. Aesthetic & Visual Traps
+6. **DON'T sacrifice contrast and legibility for glows:** Maintain the **80/20 Architectural Ratio** (80% high-contrast architectural restraint with `#F8FAFC` typography on `#020408` void; 20% signature bioluminescent cyan `#00F5D4` & violet `#8B5CF6` energy). Never place glowing text on glowing backgrounds.
+7. **DON'T build a generic 2021 Web3/Crypto theme:** No cheesy spinning low-poly planets, cartoon astronauts, purple NFT gradients, or default Three.js tutorial starfields. Ground visuals in astrophysical gravitational lensing and living neural filaments.
+8. **DON'T create disjointed visual metaphors:** Maintain strict visual continuity. The site is an advanced computational world forge and interstellar cockpit, not a patchwork of random 3D experiments.
+9. **DON'T build all-flash, zero-substance gimmicks:** Cool shaders must never distract from the core value proposition. Within 5 seconds, any visitor must understand exactly what Anvaya builds, in how many days, and how to hire the team.
+
+### C. Agency Commercial & Conversion Traps
+10. **DON'T drown business value in sci-fi lore:** The cosmic bioluminescent theme is a metaphor for bringing order out of chaos (*"Ideas to Impact"*). Keep copy ruthlessly commercial: 10-14 day production sprints, 100% Day-1 IP ownership, verified telemetry (<12ms p99 latency).
+11. **DON'T bury the Call-To-Action (CTA):** The primary conversion trigger (`"Schedule 14-Day Sprint"`) must remain permanently accessible in the floating dynamic notch navigation and at high-intent rhythm points throughout the narrative.
+12. **DON'T violate the Strict Team Equality Protocol:** NEVER single out individual teammates' names, titles, or personal vanity tags. Strictly attribute all engineering to `"The Team"`, `"Core Engineering Team"`, or `"Anvaya"`.
+13. **DON'T display fake or superficial mockups:** No generic Dribbble placeholders or `Lorem Ipsum`. Display authentic production telemetry, real AST diff engines, typed schemas, and real terminal commands (`anvaya spatial generate`).
+
+### D. Accessibility, Mobile & Audio Traps
+14. **DON'T play unsolicited, auto-playing audio:** Default strictly to MUTED. Provide an elegant `[SOUND: OFF/ON]` toggle with an animated waveform. If activated, softly ramp up an atmospheric sub-bass drone via the Web Audio API.
+15. **DON'T break on mobile or ignore motion sensitivity:** Always respect `@media (prefers-reduced-motion: reduce)`. On mobile viewports, automatically scale particle count down from 20,000 to 2,000, disable heavy post-processing passes, and verify touch interactions.
+
+---
+
+## 3. The Master Execution Plan (Cosmic Bioluminescence)
+
+```
+===================================================================================
+PHASE 1: FOUNDATIONS & HARNESS
+- Implement Cosmic Bioluminescent Design Tokens (Void #020408, Cyan #00F5D4, Violet #8B5CF6)
+- Setup Single Persistent Canvas + Lenis Smooth Scroll + GSAP ScrollTrigger Sync
+- Frame budget audit (60fps guaranteed, DPR clamped to 1.5)
+
+PHASE 2: HERO SINGULARITY & FLIGHT DECK
+- GLSL Gravitational Lensing & Bioluminescent Particle Swarm (Canvas/WebGL)
+- Pinned GSAP ScrollTrigger: Typographic punch lifts -> Cockpit Terminal expands
+- Architectural Headline: "FROM THE VOID INTO MATTER. // SYSTEMS OVER SLOP"
+
+PHASE 3: AGENCY STORYLINE & PROOF-OF-WORK WORKSTATION
+- Infinite Kinetic Capabilities Ticker (14-Day MVP, Neural Core, 3D Spatial Pipelines)
+- "Systems Over Slop" Bento Grid with cursor-following radial laser borders
+- Interactive Proof-of-Work Cockpit: Terminal AST diffing and real Anvaya CLI commands
+
+PHASE 4: EVIDENCE, LEDGER & MONOLITHIC INTAKE
+- Verified Founder Endorsements with commit verification badges
+- Monospace-Indexed Hairline Accordion FAQ killing objections (IP, timeline, pricing)
+- Monolithic Footer Wordmark Reveal + Dynamic Sprint Booking Intake Modal
+
+PHASE 5: OPTICALS, AUDIO HAPTICS & RESPONSIVE POLISH
+- 2.39:1 Anamorphic Letterbox HUD brackets + subtle 35mm procedural film grain
+- Web Audio API ambient drone (opt-in) & crisp mechanical click haptics
+- Mobile Safari stress test (<1.5s LCP, zero WebGL context loss)
+===================================================================================
+```
+
+---
+
+## 4. Master Blueprints & Source of Truth
 
 Every agent and developer MUST review and adhere to the project's documentation hierarchy:
 
@@ -52,7 +114,7 @@ Every agent and developer MUST review and adhere to the project's documentation 
 
 ---
 
-## 3. Stitch MCP Integration & The Autonomous Build Loop
+## 5. Stitch MCP Integration & The Autonomous Build Loop
 
 The project leverages Google Stitch via the Stitch MCP server to design high-fidelity screens, paired with our local skills (`stitch-loop`, `stitch::react-components`, `enhance-prompt`, `design-md`).
 
@@ -77,7 +139,7 @@ The project leverages Google Stitch via the Stitch MCP server to design high-fid
 
 ---
 
-## 4. GSAP 3.12 & Animation Architecture
+## 6. GSAP 3.12 & Animation Architecture
 
 To achieve Awwwards-caliber motion without memory leaks or layout thrashing, all animations must strictly follow `GSAP_ORCHESTRATION.md`:
 
@@ -127,7 +189,7 @@ export const HeroStage: React.FC = () => {
 
 ---
 
-## 5. Component & Code Architecture
+## 7. Component & Code Architecture
 
 ### Directory Structure
 ```
@@ -166,7 +228,7 @@ src/
 
 ---
 
-## 6. Git Commit & Collaboration Workflow
+## 8. Git Commit & Collaboration Workflow
 
 - **Branching**: Feature work branches from `main` (e.g. `feat/hero-monolith`, `feat/bento-grid`).
 - **Commit Messages**: Conventional commits with neutral attribution:
