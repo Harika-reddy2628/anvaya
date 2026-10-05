@@ -161,3 +161,115 @@ h2 {
   color: var(--muted);
   letter-spacing: 0.14em;
 }
+.work-section {
+  padding-bottom: 0;
+  background: var(--white);
+}
+.work-story {
+  display: block;
+}
+.work-story > .work-chapter {
+  display: block;
+  margin: 0;
+}
+.work-scene {
+  position: relative;
+  min-height: min(850px, calc(100svh - 76px));
+  padding-block: 80px;
+}
+.work-tone-0 {
+  background: #fefbfb;
+}
+.work-tone-1 {
+  background: #f1ebe7;
+}
+.work-tone-2 {
+  background: #e9e3df;
+}
+.work-tone-3 {
+  background: #e7dad5;
+}
+.work-tone-4 {
+  background: #ded2cf;
+}
+.work-scene-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 9%;
+  min-height: min(660px, calc(100svh - 236px));
+}
+.work-story .work-preview {
+  height: auto;
+  min-height: 420px;
+  margin: 0;
+  border-radius: 0;
+  min-width: 0;
+}
+.work-story .work-narrative {
+  position: relative;
+  isolation: isolate;
+  padding-block: 65px;
+  min-width: 0;
+}
+.story-number {
+  position: absolute;
+  z-index: -1;
+  top: -125px;
+  left: -24px;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(270px, 31vw, 460px);
+  line-height: 1;
+  font-weight: 300;
+  letter-spacing: -0.09em;
+  color: rgb(255 255 255 / 52%);
+  pointer-events: none;
+}
+.work-story .work-meta {
+  margin-top: 0;
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.03em;
+}
+.work-story .work-title {
+  gap: 16px;
+  margin-top: 28px;
+}
+.work-story .work-title h3 {
+  font-size: clamp(34px, 3.1vw, 48px);
+  line-height: 1.05;
+  text-transform: uppercase;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.work-story-statement {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 25px;
+  color: #725653;
+  margin-top: 42px;
+  line-height: 1.25;
+}
+.work-story-description {
+  max-width: 370px;
+  margin-top: 22px;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+.work-narrative > .text-link {
+  margin-top: 28px;
+  border-bottom: 1px solid var(--accent);
+}
+.story-position {
+  position: absolute;
+  bottom: -40px;
+  right: 0;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 19px;
+}
+.story-position > span {
+  font-size: 12px;
+  color: var(--muted);
+  margin-left: 8px;
+}
