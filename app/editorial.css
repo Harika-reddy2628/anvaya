@@ -249,3 +249,59 @@ h2 {
   font-size: 12px;
 }
 
+/* Four clear, expandable milestones instead of a dense timeline dashboard. */
+.process-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+.milestone {
+  display: grid;
+  grid-template-columns: 0.32fr 0.9fr 1fr;
+  gap: 36px;
+  border-bottom: 1px solid var(--line);
+  padding: 35px 0;
+}
+.milestone-top {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 8px;
+  padding: 0;
+  font-size: 10px;
+}
+.milestone h3 {
+  font-size: clamp(26px, 2.5vw, 37px);
+  margin: 0;
+  line-height: 1.22;
+  align-self: center;
+}
+.milestone > p {
+  margin: 0;
+  font-size: 15px;
+  align-self: center;
+}
+.milestone details {
+  grid-column: 3;
+  margin: -16px 0 0;
+}
+.milestone summary {
+  font-size: 12px;
+  justify-content: flex-start;
+  gap: 30px;
+}
+.milestone details p {
+  font-size: 14px;
+  line-height: 1.7;
+  max-width: 580px;
+}
+.process-note {
+  margin-top: 28px;
+  border: 0;
+  align-items: baseline;
+}
+.process-note p {
+  font-size: 13px;
+}
+
