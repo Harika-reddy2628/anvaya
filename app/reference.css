@@ -448,3 +448,62 @@ h2 {
 .price-pill {
   border-color: var(--line);
 }
+.studio-section {
+  background: var(--hero-paper);
+  color: var(--ink);
+}
+.studio-section .section-kicker > span {
+  color: var(--muted);
+}
+.studio-sanskrit {
+  color: var(--accent);
+  font-family: var(--font-sahitya), Georgia, serif;
+}
+.studio-definition {
+  color: var(--muted);
+  border-color: var(--line);
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: 11px;
+}
+.studio-grid {
+  align-items: center;
+}
+.studio-grid h2 {
+  font-size: clamp(43px, 4.8vw, 70px);
+}
+.studio-grid .accent,
+.studio-mantra svg {
+  color: var(--accent);
+}
+.studio-grid p {
+  color: var(--muted);
+  font-size: 14px;
+}
+.studio-mantra {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 30px;
+  border-color: var(--line);
+}
+.studio-global {
+  color: var(--muted);
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: 9px;
+}
+.studio-circle {
+  display: flex;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 11px;
+  margin: 38px 0 0 auto;
+  transition: background 250ms;
+}
+.studio-circle:hover {
+  background: #795956;
+}
