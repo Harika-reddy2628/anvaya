@@ -2038,3 +2038,11 @@ summary::-webkit-details-marker {
   color: var(--muted);
 }
 
+@media (min-width: 1600px) {
+  .hero-headline {
+    font-size: 90px;
+  }
+  .hero {
+    padding-top: 90px;
+  }
+}
