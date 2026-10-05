@@ -643,3 +643,99 @@ h2 {
   font-size: 11px;
 }
 
+/* Supporting pages use the same editorial scale and evidence hierarchy. */
+.inner-page {
+  padding-top: 80px;
+  padding-bottom: 120px;
+}
+.page-heading {
+  margin-block: 15px 75px;
+}
+.page-heading h1,
+.not-found-page h1 {
+  font-size: clamp(48px, 6.8vw, 104px);
+  letter-spacing: -0.04em;
+  max-width: 1200px;
+}
+.page-heading p {
+  font-size: 18px;
+  max-width: 680px;
+}
+.filter-list {
+  gap: 12px 28px;
+  border-block: 1px solid var(--line);
+  padding-block: 15px;
+  margin-bottom: 70px;
+}
+.filter-list > button {
+  border: 0;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+  font-size: 13px;
+  min-height: 44px;
+  padding: 8px 0;
+}
+.filter-list > button[aria-pressed="true"] {
+  background: none;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.case-visual {
+  max-width: none;
+  border: 0;
+  border-radius: 0;
+}
+.case-description {
+  grid-template-columns: 0.7fr 1.3fr;
+  gap: 12%;
+  padding-block: 85px;
+}
+.case-role {
+  margin-top: 32px;
+}
+.case-role p {
+  margin-top: 14px;
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.case-deliverables-label {
+  margin-top: 32px;
+}
+.case-sidebar .tag-list {
+  margin-top: 15px;
+}
+.case-narrative h2 {
+  font-size: clamp(25px, 2.5vw, 35px);
+  line-height: 1.45;
+}
+.case-narrative > section {
+  margin-bottom: 50px;
+}
+.evidence-note {
+  border-radius: 0;
+  padding: 28px;
+}
+.evidence-note .eyebrow {
+  font-size: 10px;
+}
+.evidence-note p {
+  font-size: 14px;
+}
+.case-next {
+  padding-top: 40px;
+}
+.case-next h2 {
+  font-size: 44px;
+}
+.service-detail-section p,
+.policy-content p {
+  font-size: 16px;
+}
+.large-deliverables li {
+  font-size: 20px;
+}
+.policy-content h2 {
+  font-size: 34px;
+}
+
