@@ -2046,3 +2046,82 @@ summary::-webkit-details-marker {
     padding-top: 90px;
   }
 }
+@media (max-width: 1200px) {
+  .container {
+    width: calc(100% - 72px);
+  }
+  .hero {
+    gap: 0 35px;
+    padding-top: 65px;
+  }
+  .hero-headline {
+    font-size: 6.05vw;
+  }
+  .hero-edition {
+    display: none;
+  }
+  .hero-description {
+    font-size: 13px;
+  }
+  .hero-actions {
+    gap: 19px;
+  }
+  .hero-actions .button {
+    padding-inline: 18px;
+    font-size: 10px;
+  }
+  .hero-work-link {
+    font-size: 10px;
+    gap: 9px;
+  }
+  .hero-visual-label .eyebrow {
+    font-size: 7px;
+  }
+  .work-preview {
+    height: 320px;
+  }
+  .work-grid {
+    gap: 20px;
+  }
+  .service-panel {
+    padding: 28px;
+    margin-left: 28px;
+  }
+  .engineering-nodes {
+    gap: 25px;
+  }
+  .engineering-nodes > button {
+    padding-inline: 14px;
+  }
+  .engineering-nodes > button > :nth-child(2) {
+    font-size: 12px;
+  }
+  .price-card {
+    padding: 23px 20px;
+  }
+  .price-pill {
+    font-size: 6px;
+  }
+  .studio-grid {
+    gap: 65px;
+  }
+  .faq-layout {
+    gap: 50px;
+  }
+  .brief-builder {
+    gap: 22px;
+  }
+  .brief-form {
+    padding: 25px;
+  }
+  .brief-summary {
+    padding: 25px;
+  }
+  .form-actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .form-actions > span br {
+    display: none;
+  }
+}
