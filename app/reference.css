@@ -507,3 +507,47 @@ h2 {
 .studio-circle:hover {
   background: #795956;
 }
+.faq-layout {
+  grid-template-columns: 1fr;
+  gap: 65px;
+}
+.faq-layout > div:first-child {
+  text-align: center;
+}
+.faq-list {
+  width: min(760px, 100%);
+  margin-inline: auto;
+}
+.faq-item,
+.faq-item:last-child {
+  border: 0;
+  margin-bottom: 18px;
+}
+.faq-item summary {
+  justify-content: center;
+  text-align: center;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(25px, 2.5vw, 35px);
+  line-height: 1.25;
+  padding-block: 25px;
+}
+.faq-item summary > span:nth-child(2) {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 8px;
+}
+.faq-item summary > svg {
+  display: none;
+}
+.faq-index {
+  display: none;
+}
+.faq-item[open] summary {
+  color: var(--accent);
+}
+.faq-item > p {
+  max-width: 480px;
+  padding: 10px 0 30px;
+  margin-inline: auto;
+  font-size: 14px;
+}
