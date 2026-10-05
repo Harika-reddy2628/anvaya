@@ -551,3 +551,67 @@ h2 {
   margin-inline: auto;
   font-size: 14px;
 }
+.site-footer {
+  background: var(--footer);
+}
+.footer-invitation {
+  padding-block: 85px;
+  text-align: center;
+  border: 0;
+}
+.footer-invitation > a {
+  justify-content: center;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(43px, 5vw, 70px);
+  gap: 24px;
+}
+.footer-invitation > a svg {
+  width: 36px;
+  height: 36px;
+}
+.footer-invitation > p {
+  font-size: 13px;
+}
+.footer-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  padding: 0 0 70px;
+  text-align: center;
+}
+.footer-top .brand {
+  font-size: clamp(42px, 5vw, 64px);
+}
+.footer-top .footer-description {
+  margin: 0;
+  font-size: 11px;
+}
+.footer-links {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 35px;
+  padding: 0;
+  font-size: 11px;
+}
+.footer-location {
+  text-align: center;
+  margin-top: 15px;
+}
+.footer-location .eyebrow {
+  display: none;
+}
+.footer-location p {
+  font-size: 10px;
+  margin: 0;
+}
+.footer-bottom {
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: 10px;
+  border-color: #ccbcb4;
+}
+.footer-meaning {
+  font-family: var(--font-hind), Arial, sans-serif;
+}
