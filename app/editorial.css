@@ -453,3 +453,193 @@ h2 {
   line-height: 1.8;
 }
 
+/* Studio, brief, and footer remain calm enough to make decisions. */
+.studio-section {
+  background: var(--ink);
+}
+.studio-grid {
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 12%;
+}
+.studio-grid h2 {
+  font-size: clamp(42px, 4.3vw, 64px);
+}
+.studio-sanskrit {
+  margin-top: 60px;
+  font-size: 82px;
+}
+.studio-definition {
+  font-size: 10px;
+  line-height: 1.8;
+  max-width: 360px;
+  color: #c7cabe;
+  border-color: #57594d;
+}
+.studio-grid p {
+  font-size: 16px;
+  line-height: 1.8;
+  max-width: 570px;
+  color: #c7cabe;
+}
+.studio-mantra {
+  font-size: 25px;
+  margin-top: 35px;
+  padding-block: 25px;
+  border-color: #57594d;
+}
+.studio-global {
+  font-size: 10px;
+  color: #c7cabe;
+}
+.faq-layout {
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 12%;
+}
+.faq-layout > div > p {
+  font-size: 15px;
+}
+.faq-item summary {
+  font-size: 17px;
+  padding-block: 28px;
+  line-height: 1.5;
+}
+.faq-index {
+  font-size: 10px;
+}
+.faq-item > p {
+  font-size: 15px;
+  padding: 0 20px 28px 40px;
+}
+.project-section {
+  background: var(--surface);
+}
+.brief-builder {
+  gap: 8%;
+  grid-template-columns: 1.2fr 0.8fr;
+}
+.brief-form {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+}
+.form-heading {
+  margin-bottom: 30px;
+}
+.form-heading > :last-child {
+  font-size: 10px;
+}
+.field > label {
+  font-size: 13px;
+}
+.field .optional {
+  font-size: 11px;
+}
+.field input,
+.field select,
+.field textarea {
+  background: var(--paper);
+  border-color: var(--line);
+  border-radius: 0;
+  font-size: 14px;
+  padding: 13px;
+  min-height: 49px;
+}
+.field-error,
+.retainer-checkbox,
+.brief-more > summary {
+  font-size: 12px;
+}
+.form-actions > span {
+  font-size: 11px;
+}
+.form-actions .button {
+  font-size: 12px;
+}
+.brief-summary {
+  border: 0;
+  border-top: 1px solid var(--ink);
+  padding: 28px 0;
+  border-radius: 0;
+}
+.brief-summary h3 {
+  font-size: 41px;
+}
+.brief-summary > .eyebrow,
+.estimate > span,
+.estimate-assumptions .eyebrow {
+  font-size: 10px;
+}
+.brief-summary > p,
+.brief-summary .deliverables > li {
+  font-size: 14px;
+}
+.estimate > strong {
+  font-size: 35px;
+}
+.estimate > small,
+.estimate-assumptions p {
+  font-size: 12px;
+}
+.brief-result {
+  border-color: var(--line);
+  border-radius: 0;
+  padding: 36px;
+}
+.brief-result > p,
+.brief-result pre {
+  font-size: 13px;
+}
+.brief-result pre {
+  max-height: 400px;
+}
+.site-footer {
+  padding-top: 0;
+}
+.footer-invitation {
+  padding-block: 105px;
+  border-bottom: 1px solid var(--line);
+}
+.footer-invitation > a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  font-family: var(--font-sahitya), Georgia, serif;
+  font-size: clamp(46px, 6vw, 94px);
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+  margin-top: 30px;
+}
+.footer-invitation > a svg {
+  color: var(--accent);
+}
+.footer-invitation > a:hover {
+  color: var(--accent);
+}
+.footer-invitation > p {
+  font-size: 16px;
+  color: var(--muted);
+  margin-top: 20px;
+}
+.footer-top {
+  padding-top: 55px;
+}
+.footer-top p,
+.footer-links {
+  font-size: 13px;
+}
+.footer-location .eyebrow {
+  font-size: 10px;
+}
+.footer-location p {
+  font-size: 12px;
+}
+.footer-wordmark {
+  font-size: clamp(120px, 23vw, 375px);
+  margin-block: 55px 15px;
+}
+.footer-bottom {
+  font-size: 11px;
+}
+
