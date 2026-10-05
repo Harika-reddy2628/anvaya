@@ -71,3 +71,123 @@ h2 {
   border-color: var(--accent);
 }
 
+/* A staggered portfolio, with enough space to read the work's provenance. */
+.work-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 100px 7%;
+}
+.work-preview {
+  height: clamp(350px, 35vw, 510px);
+  border: 0;
+  border-radius: 0;
+}
+.work-meta {
+  font-size: 10px;
+  gap: 16px;
+  margin-top: 24px;
+  line-height: 1.6;
+}
+.work-title {
+  margin-top: 12px;
+  align-items: flex-start;
+}
+.work-title h3 {
+  font-size: clamp(28px, 2.6vw, 40px);
+  letter-spacing: -0.03em;
+}
+.work-arrow {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+.work-card > p {
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 440px;
+  margin-top: 16px;
+  color: var(--muted);
+}
+.work-card > .text-link {
+  margin-top: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.featured-work-grid > :nth-child(2) {
+  margin-top: 175px;
+}
+.featured-work-grid > :last-child:nth-child(3) {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  column-gap: 9%;
+  align-content: center;
+}
+.featured-work-grid > :last-child:nth-child(3) .work-preview {
+  grid-row: 1 / 6;
+  height: auto;
+  min-height: 450px;
+}
+.featured-work-grid > :last-child:nth-child(3) .work-meta {
+  align-self: end;
+  margin-top: 60px;
+}
+.featured-work-grid > :last-child:nth-child(3) > .text-link {
+  justify-self: start;
+  align-self: start;
+  margin-bottom: 50px;
+}
+.index-work-grid > :nth-child(even) {
+  margin-top: 90px;
+}
+.work-preview .terminal-body {
+  padding: 35px;
+}
+.work-preview .terminal-logo {
+  font-size: clamp(64px, 7vw, 112px);
+}
+.work-preview .terminal-command {
+  font-size: 14px;
+}
+.work-preview .terminal-top,
+.work-preview .terminal-bottom {
+  font-size: 9px;
+  padding: 18px 24px;
+}
+.work-preview .workflow-visual {
+  padding: 24px;
+  min-height: inherit;
+}
+.work-preview.preview-workflow {
+  height: auto;
+  min-height: clamp(420px, 35vw, 510px);
+}
+.work-preview .workflow-canvas {
+  padding-block: 32px;
+}
+.work-preview .workflow-source,
+.work-preview .workflow-output {
+  font-size: 12px;
+}
+.work-preview .workflow-node {
+  padding: 19px;
+}
+.work-preview .workflow-node strong {
+  font-size: 14px;
+}
+.work-preview .workflow-node span {
+  font-size: 10px;
+}
+.work-preview .spatial-demo {
+  background: var(--surface);
+}
+.work-preview .spatial-compact .spatial-canvas > svg {
+  min-height: 280px;
+}
+.work-preview .demo-topline {
+  padding: 20px;
+  font-size: 9px;
+}
+.work-preview .visual-note {
+  font-size: 9px;
+}
+
