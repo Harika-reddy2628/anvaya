@@ -365,3 +365,91 @@ h2 {
   border-radius: 0;
 }
 
+/* Pricing is an editorial comparison with the founder sprint first. */
+.pricing-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+.price-card {
+  display: grid;
+  grid-template-columns: 1.05fr 0.85fr 1.1fr;
+  gap: 7%;
+  padding: 44px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+}
+.price-featured {
+  background: transparent;
+}
+.price-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.price-top .eyebrow {
+  font-size: 9px;
+}
+.price-pill {
+  background: none;
+  color: var(--accent);
+  border: 1px solid #b8442d55;
+  font-size: 9px;
+  padding: 3px 7px;
+  border-radius: 0;
+}
+.price-card h3 {
+  font-size: clamp(29px, 2.8vw, 42px);
+  line-height: 1.15;
+}
+.price-featured h3 {
+  color: var(--accent);
+}
+.price-audience {
+  font-size: 14px;
+  margin-top: 17px;
+  min-height: 0;
+  max-width: 300px;
+}
+.price-value {
+  font-size: clamp(30px, 3vw, 44px);
+  margin-top: 0;
+  letter-spacing: -0.045em;
+}
+.price-value > span,
+.price-local {
+  font-size: 11px;
+}
+.price-local {
+  margin-top: 12px;
+}
+.price-time {
+  font-size: 13px;
+  padding: 0;
+  border: 0;
+  margin-top: 26px;
+}
+.price-card .deliverables {
+  margin: 0 0 18px;
+  gap: 12px;
+}
+.price-card .deliverables > li {
+  font-size: 13px;
+}
+.price-note {
+  font-size: 12px;
+  margin-bottom: 16px;
+}
+.price-details > .text-link {
+  border-bottom: 1px solid var(--line);
+}
+.pricing-terms {
+  font-size: 13px;
+  margin-top: 35px;
+  line-height: 1.8;
+}
+
