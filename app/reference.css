@@ -1,0 +1,93 @@
+/* Original Anvaya adaptation of the reference's editorial rhythm. */
+body {
+  font-size: 14px;
+}
+h2 {
+  font-size: clamp(40px, 4.4vw, 68px);
+}
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  background: rgb(248 244 238 / 87%);
+  backdrop-filter: blur(10px);
+}
+.header-inner {
+  height: 76px;
+}
+.brand {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 33px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.brand-period {
+  color: var(--ink);
+}
+.desktop-nav {
+  margin-left: auto;
+  gap: 46px;
+  font-size: 11px;
+}
+.header-actions {
+  margin-left: 65px;
+}
+.header-cta {
+  font-size: 11px;
+}
+.rolling-label {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  line-height: 1.5;
+}
+.rolling-label > span {
+  display: block;
+  transition: transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.rolling-label > span:last-child {
+  position: absolute;
+  inset: 0;
+  transform: translateY(105%);
+}
+.rolling-link:hover .rolling-label > span:first-child,
+.rolling-link:focus-visible .rolling-label > span:first-child {
+  transform: translateY(-105%);
+}
+.rolling-link:hover .rolling-label > span:last-child,
+.rolling-link:focus-visible .rolling-label > span:last-child {
+  transform: translateY(0);
+}
+.desktop-nav a::after {
+  display: none;
+}
+.mobile-toggle {
+  width: auto;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 17px;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.inner-page {
+  padding-top: 145px;
+}
+.section-kicker {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 21px;
+  letter-spacing: -0.015em;
+  gap: 22px;
+}
+.section-kicker > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: 9px;
+}
+.section-kicker::before {
+  content: "";
+  width: 75px;
+  height: 1px;
+  background: var(--ink);
+  opacity: 0.45;
+}
