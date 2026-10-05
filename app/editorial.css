@@ -1228,3 +1228,33 @@ h2 {
     font-size: 17px;
   }
 }
+@media (max-width: 370px) {
+  .container {
+    width: calc(100% - 32px);
+  }
+  h2 {
+    font-size: 37px;
+  }
+  .service-tabs > button {
+    font-size: 28px;
+  }
+  .studio-grid h2 {
+    font-size: 38px;
+  }
+  .studio-mantra {
+    font-size: 21px;
+    gap: 10px;
+  }
+  .footer-invitation > a {
+    font-size: 34px;
+  }
+  .work-preview .terminal-body {
+    padding: 24px 18px;
+  }
+  .work-preview .terminal-command {
+    font-size: 11px;
+  }
+  .price-value {
+    font-size: 35px;
+  }
+}
