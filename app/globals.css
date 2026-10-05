@@ -1024,3 +1024,107 @@ summary::-webkit-details-marker {
   margin-top: 24px;
 }
 
+/* Goals come before implementation details. */
+.services-section {
+  background: var(--surface);
+}
+.service-explorer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid #ccc8be;
+}
+.service-tabs {
+  display: flex;
+  flex-direction: column;
+}
+.service-tabs > button {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  text-align: left;
+  padding: 29px 24px 29px 0;
+  border: 0;
+  border-bottom: 1px solid #ccc8be;
+  background: none;
+  font-size: clamp(19px, 2.25vw, 30px);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  transition: color 180ms;
+}
+.service-number {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0;
+}
+.service-tabs > button > svg {
+  margin-left: auto;
+}
+.service-tabs > button[aria-selected="true"] {
+  color: var(--accent);
+}
+.service-tabs > button[aria-selected="true"] .service-number {
+  color: var(--accent);
+}
+.service-panel {
+  background: var(--paper);
+  padding: 35px 38px;
+  margin: 25px 0 0 42px;
+  border: 1px solid #d9cbbb;
+  border-radius: 3px;
+}
+.service-panel > .eyebrow {
+  color: var(--accent);
+}
+.service-panel > h3 {
+  font-size: 23px;
+  line-height: 1.4;
+  letter-spacing: -0.03em;
+  margin-top: 13px;
+}
+.deliverables {
+  padding: 0;
+  margin: 22px 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+.deliverables > li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.deliverables svg {
+  color: var(--accent);
+  margin-top: 2px;
+}
+.service-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.service-price {
+  font-size: 22px;
+  letter-spacing: -0.04em;
+  line-height: 1.4;
+}
+.service-price > small {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0;
+  margin-top: 3px;
+}
+.service-bottom .button {
+  width: fit-content;
+}
+.service-panel > .text-link {
+  margin-top: 21px;
+  font-size: 10px;
+}
+
