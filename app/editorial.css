@@ -305,3 +305,63 @@ h2 {
   font-size: 13px;
 }
 
+/* The engineering explorer is a quiet typographic diagram. */
+.engineering-section {
+  padding-top: 0;
+}
+.engineering-nodes {
+  gap: 0;
+  border-block: 1px solid var(--line);
+}
+.engineering-nodes::before {
+  display: none;
+}
+.engineering-nodes > button {
+  border: 0;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+  padding: 24px 12px 24px 0;
+  gap: 14px;
+  background: none;
+}
+.engineering-nodes > button > :nth-child(2) {
+  font-family: var(--font-sahitya), Georgia, serif;
+  font-size: 28px;
+}
+.engineering-nodes > button[aria-selected="true"] {
+  background: none;
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.engineering-index {
+  top: 7px;
+  right: 24px;
+  font-size: 9px;
+}
+.engineering-detail {
+  grid-template-columns: 1.3fr 0.7fr;
+  border: 0;
+  padding: 42px 0 0;
+  gap: 12%;
+  min-height: 280px;
+}
+.engineering-detail h3 {
+  font-size: clamp(30px, 3vw, 43px);
+  line-height: 1.25;
+  margin-block: 20px;
+}
+.engineering-detail p {
+  font-size: 15px;
+}
+.tag-list {
+  gap: 10px;
+}
+.tag-list > span {
+  padding: 7px 0;
+  margin-right: 10px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+  border-radius: 0;
+}
+
