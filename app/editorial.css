@@ -933,3 +933,298 @@ h2 {
     gap: 45px;
   }
 }
+@media (max-width: 680px) {
+  .container {
+    width: calc(100% - 40px);
+  }
+  .section {
+    padding-block: 76px;
+  }
+  h2 {
+    font-size: 42px;
+  }
+  .section-kicker {
+    margin-bottom: 25px;
+    font-size: 9px;
+  }
+  .section-heading {
+    margin-bottom: 42px;
+    gap: 23px;
+  }
+  .section-heading-aside p {
+    font-size: 14px;
+  }
+  .header-inner {
+    height: 72px;
+  }
+  .brand {
+    font-size: 28px;
+  }
+  .header-cta {
+    font-size: 11px;
+    padding-inline: 0;
+    gap: 12px;
+  }
+  .mobile-toggle {
+    min-width: 40px;
+    min-height: 44px;
+  }
+  .work-grid {
+    grid-template-columns: 1fr;
+    gap: 55px;
+  }
+  .work-grid > :last-child:nth-child(3) {
+    display: block;
+  }
+  .featured-work-grid > :nth-child(2),
+  .index-work-grid > :nth-child(even) {
+    margin-top: 0;
+  }
+  .work-preview {
+    height: 370px;
+  }
+  .work-preview .terminal-body {
+    padding: 28px;
+  }
+  .work-preview .terminal-logo {
+    font-size: 83px;
+  }
+  .work-preview .terminal-command {
+    font-size: 12px;
+  }
+  .work-preview .workflow-visual {
+    padding: 20px;
+  }
+  .work-preview .workflow-canvas {
+    padding-block: 22px;
+  }
+  .work-preview .workflow-node {
+    padding: 13px;
+  }
+  .work-preview .workflow-node strong {
+    font-size: 12px;
+  }
+  .work-preview .workflow-top {
+    font-size: 8px;
+  }
+  .work-preview .visual-note {
+    font-size: 7px;
+  }
+  .work-meta {
+    font-size: 9px;
+    margin-top: 20px;
+  }
+  .work-title h3 {
+    font-size: 31px;
+  }
+  .work-card > p {
+    font-size: 14px;
+  }
+  .work-card > .text-link {
+    font-size: 12px;
+  }
+  .service-explorer {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .service-tabs > button {
+    font-size: 31px;
+    padding-block: 23px;
+  }
+  .service-panel {
+    padding-top: 0;
+  }
+  .service-panel > h3 {
+    font-size: 29px;
+  }
+  .milestone {
+    padding-block: 28px;
+  }
+  .milestone h3 {
+    font-size: 28px;
+  }
+  .milestone > p,
+  .milestone details p {
+    font-size: 14px;
+  }
+  .process-note {
+    margin-top: 20px;
+    padding: 10px 0;
+  }
+  .process-note p {
+    font-size: 12px;
+  }
+  .engineering-section {
+    padding-top: 0;
+  }
+  .engineering-nodes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .engineering-nodes > button {
+    padding: 20px 6px;
+    border-bottom-color: var(--line);
+  }
+  .engineering-nodes > button > :nth-child(2) {
+    font-size: 26px;
+  }
+  .engineering-index {
+    right: 12px;
+  }
+  .engineering-detail {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding-top: 30px;
+  }
+  .engineering-detail h3 {
+    font-size: 33px;
+  }
+  .price-card {
+    grid-template-columns: 1fr;
+    gap: 26px;
+    padding-block: 35px;
+  }
+  .price-card h3 {
+    font-size: 36px;
+  }
+  .price-top {
+    margin-bottom: 15px;
+  }
+  .price-value {
+    font-size: 38px;
+  }
+  .price-details {
+    grid-column: auto;
+  }
+  .price-card .deliverables {
+    flex-direction: column;
+  }
+  .price-card .deliverables > li {
+    flex: initial;
+  }
+  .pricing-terms {
+    flex-direction: column;
+    gap: 16px;
+    font-size: 12px;
+  }
+  .studio-grid {
+    gap: 45px;
+  }
+  .studio-grid h2 {
+    font-size: 42px;
+  }
+  .studio-grid p {
+    font-size: 15px;
+  }
+  .studio-mantra {
+    font-size: 24px;
+    gap: 13px;
+  }
+  .studio-global {
+    font-size: 9px;
+  }
+  .faq-item summary {
+    font-size: 16px;
+    gap: 15px;
+    padding-block: 24px;
+  }
+  .faq-item > p {
+    font-size: 14px;
+    padding-left: 30px;
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    font-size: 16px;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .form-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .brief-result {
+    padding: 24px;
+  }
+  .brief-result pre {
+    padding: 16px;
+    font-size: 11px;
+  }
+  .footer-invitation {
+    padding-block: 76px;
+  }
+  .footer-invitation > a {
+    font-size: 42px;
+    gap: 15px;
+  }
+  .footer-invitation > a svg {
+    width: 34px;
+    height: 34px;
+  }
+  .footer-invitation > p {
+    font-size: 14px;
+  }
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    padding-top: 40px;
+  }
+  .footer-links {
+    padding: 0;
+  }
+  .footer-location {
+    grid-column: 1 / -1;
+    text-align: left;
+  }
+  .footer-wordmark {
+    font-size: 22vw;
+    margin-block: 42px 12px;
+  }
+  .footer-bottom {
+    gap: 15px;
+    font-size: 10px;
+  }
+  .inner-page {
+    padding-block: 50px 80px;
+  }
+  .page-heading {
+    margin-block: 15px 45px;
+  }
+  .page-heading h1,
+  .not-found-page h1 {
+    font-size: 45px;
+  }
+  .page-heading p {
+    font-size: 16px;
+  }
+  .filter-list {
+    gap: 10px 23px;
+    margin-bottom: 40px;
+  }
+  .case-description {
+    padding-block: 55px;
+  }
+  .case-narrative h2 {
+    font-size: 27px;
+  }
+  .case-next {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 30px;
+  }
+  .case-next h2 {
+    font-size: 35px;
+  }
+  .evidence-note {
+    padding: 22px;
+  }
+  .service-detail-section p,
+  .policy-content p {
+    font-size: 15px;
+  }
+  .large-deliverables li {
+    font-size: 17px;
+  }
+}
