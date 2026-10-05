@@ -664,3 +664,174 @@ h2 {
     font-size: 180px;
   }
 }
+@media (max-width: 680px) {
+  .header-inner {
+    height: 64px;
+  }
+  .brand {
+    font-size: 24px;
+  }
+  .header-actions {
+    margin-left: auto;
+  }
+  .header-cta {
+    display: none;
+  }
+  .mobile-toggle {
+    min-width: 45px;
+    height: 44px;
+  }
+  .mobile-nav {
+    padding-bottom: 24px;
+  }
+  .mobile-nav > a {
+    font-family: var(--font-cormorant), Georgia, serif;
+    font-size: 24px;
+    padding-block: 15px;
+  }
+  .inner-page {
+    padding-top: 115px;
+  }
+  .section-kicker {
+    font-size: 17px;
+    gap: 14px;
+  }
+  .section-kicker::before {
+    width: 38px;
+  }
+  .connection-story {
+    padding: 90px 24px 75px;
+  }
+  .connection-copy p {
+    max-width: 295px;
+    font-size: 12px;
+  }
+  .connection-arrow {
+    height: 85px;
+    margin-block: 30px;
+  }
+  .connection-filament {
+    width: 95px;
+    left: -40px;
+    top: 300px;
+    opacity: 0.25;
+  }
+  .connection-caption {
+    margin-top: 60px;
+    font-size: 7px;
+  }
+  .work-scene {
+    padding-block: 65px;
+  }
+  .work-scene-inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
+  .work-story .work-preview {
+    min-height: 0;
+    height: auto;
+  }
+  .work-story .work-preview.preview-terminal {
+    height: 335px;
+  }
+  .work-story .work-narrative {
+    padding-block: 15px 20px;
+  }
+  .story-number {
+    font-size: 240px;
+    left: 30%;
+    top: -20px;
+  }
+  .work-story .work-title h3 {
+    font-size: clamp(28px, 8.7vw, 36px);
+  }
+  .work-story-statement {
+    margin-top: 27px;
+  }
+  .work-story-description {
+    font-size: 12px;
+    margin-top: 18px;
+  }
+  .story-position {
+    bottom: -30px;
+    font-size: 16px;
+  }
+  .service-explorer {
+    gap: 50px;
+  }
+  .service-panel {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .service-initial {
+    font-size: 90px;
+    text-align: left;
+    padding: 0;
+    margin-bottom: 25px;
+  }
+  .service-copy {
+    padding-left: 24px;
+  }
+  .service-copy h3 {
+    font-size: 37px;
+    margin-block: 23px;
+  }
+  .service-description {
+    font-size: 13px;
+  }
+  .service-tabs {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+  .service-tabs > button {
+    font-size: 20px;
+    padding-block: 20px;
+    gap: 10px;
+  }
+  .service-tabs > button .service-preview-initial {
+    font-size: 42px;
+  }
+  .milestone {
+    padding-block: 18px;
+  }
+  .milestone details p {
+    font-size: 13px;
+  }
+  .studio-grid h2 {
+    font-size: 46px;
+  }
+  .studio-mantra {
+    gap: 10px;
+    font-size: 26px;
+  }
+  .studio-sanskrit {
+    font-size: 65px;
+  }
+  .studio-circle {
+    width: 110px;
+    height: 110px;
+  }
+  .faq-layout {
+    gap: 40px;
+  }
+  .faq-item > p {
+    font-size: 13px;
+    padding-inline: 10px;
+  }
+  .footer-invitation {
+    padding-block: 70px;
+  }
+  .footer-invitation > a {
+    gap: 14px;
+  }
+  .footer-invitation > a svg {
+    width: 25px;
+  }
+  .footer-links {
+    gap: 18px;
+    font-size: 10px;
+  }
+  .footer-bottom {
+    font-size: 9px;
+  }
+}
