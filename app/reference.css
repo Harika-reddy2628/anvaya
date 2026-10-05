@@ -629,3 +629,38 @@ h2 {
     gap: 25px;
   }
 }
+@media (max-width: 999px) {
+  .work-scene {
+    min-height: 0;
+    padding-block: 80px;
+  }
+  .work-scene-inner {
+    min-height: 0;
+  }
+  .story-number {
+    font-size: 260px;
+    top: -70px;
+  }
+  .work-story .work-preview {
+    min-height: 350px;
+  }
+  .work-story .work-title h3 {
+    font-size: 32px;
+  }
+  .work-story-statement {
+    font-size: 22px;
+  }
+  .work-story .work-narrative {
+    padding-block: 30px;
+  }
+  .service-panel {
+    grid-template-columns: 0.35fr 1fr;
+    gap: 30px;
+  }
+  .service-copy {
+    padding-left: 30px;
+  }
+  .service-initial {
+    font-size: 180px;
+  }
+}
