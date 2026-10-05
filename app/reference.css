@@ -91,3 +91,73 @@ h2 {
   background: var(--ink);
   opacity: 0.45;
 }
+.connection-story {
+  position: relative;
+  overflow: clip;
+  padding: 130px 24px 110px;
+  text-align: center;
+  background: var(--hero-paper);
+}
+.connection-copy {
+  position: relative;
+  max-width: 540px;
+  margin-inline: auto;
+}
+.connection-copy > .eyebrow {
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.13em;
+  color: var(--accent);
+}
+.connection-copy h2 {
+  font-size: clamp(32px, 3vw, 45px);
+  line-height: 1.12;
+  margin-top: 35px;
+}
+.connection-copy p {
+  max-width: 355px;
+  margin-inline: auto;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.connection-arrow {
+  position: relative;
+  display: block;
+  width: 16px;
+  height: 105px;
+  margin: 40px auto;
+  color: var(--accent);
+}
+.connection-arrow::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 11px;
+  width: 1px;
+  left: 7px;
+  background: var(--line);
+}
+.connection-arrow svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+.connection-filament {
+  position: absolute;
+  width: 150px;
+  left: calc(50% - 385px);
+  top: 220px;
+  color: #8c857b;
+  transform: rotate(-14deg);
+  opacity: 0.5;
+}
+.connection-filament svg {
+  width: 100%;
+}
+.connection-caption {
+  display: block;
+  margin-top: 85px;
+  font-size: 8px;
+  color: var(--muted);
+  letter-spacing: 0.14em;
+}
