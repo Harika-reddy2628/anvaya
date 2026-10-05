@@ -332,3 +332,201 @@ summary::-webkit-details-marker {
   display: none;
 }
 
+/* Hero: a statement and a working, deliberately annotated spatial study. */
+.hero {
+  display: grid;
+  grid-template-columns: 1.14fr 1fr;
+  gap: 0 54px;
+  padding-top: 75px;
+}
+.hero-copy {
+  padding-top: 10px;
+}
+.hero-copy > .eyebrow {
+  gap: 7px;
+  font-size: 8px;
+  letter-spacing: 0.035em;
+  margin-bottom: 35px;
+}
+.status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.hero-edition {
+  margin-left: 15px;
+  color: var(--muted);
+}
+.hero-headline {
+  font-size: clamp(55px, 6.4vw, 94px);
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+.word-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.15em;
+  margin-bottom: -0.08em;
+}
+.indic-signature {
+  font-family: var(--font-sahitya), serif;
+  font-size: 19px;
+  line-height: 1;
+  color: var(--accent);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.hero-eyebrow-divider {
+  width: 20px;
+  height: 1px;
+  background: var(--brass);
+  margin-inline: 3px;
+}
+.indic-label {
+  font-family: var(--font-sahitya), serif;
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--accent);
+  margin-right: 7px;
+}
+.hero-bottom > span > .indic-label {
+  display: inline-block;
+  margin-right: 15px;
+  padding-right: 15px;
+  border-right: 1px solid var(--line);
+}
+.hero-word {
+  display: inline-block;
+  transform-origin: left bottom;
+}
+.hero-description {
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 14px;
+  margin-top: 27px;
+  max-width: 465px;
+}
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-top: 29px;
+}
+.hero-work-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+  border-bottom: 1px solid var(--line);
+  padding-block: 12px;
+}
+.hero-work-link:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.hero-footnote {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  max-width: 440px;
+  padding-top: 25px;
+  margin-top: 35px;
+  border-top: 1px solid var(--line);
+}
+.sprint-badge {
+  font-size: 32px;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+.sprint-badge > span {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 8px;
+  letter-spacing: 0.06em;
+}
+.hero-footnote p {
+  font-size: 12px;
+  line-height: 1.6;
+}
+.hero-footnote p > span {
+  color: var(--muted);
+  font-size: 10px;
+}
+.hero-footnote > a {
+  display: inline-flex;
+  margin-left: auto;
+  padding: 8px;
+}
+.hero-visual {
+  min-width: 0;
+  align-self: center;
+}
+.hero-visual-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 17px;
+}
+.hero-visual-label .eyebrow {
+  font-size: 8px;
+}
+.hero-visual-label > :last-child {
+  color: var(--muted);
+}
+.hero-visual-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 13px;
+  font-size: 9px;
+  color: var(--muted);
+}
+.hero-visual-caption > :last-child {
+  font-family: var(--font-geist-mono), monospace;
+  color: var(--accent);
+  font-size: 8px;
+  white-space: nowrap;
+}
+.hero-bottom {
+  display: flex;
+  grid-column: 1 / -1;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 56px;
+  padding: 27px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.hero-bottom > span {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.connection-motif {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--accent);
+}
+.connection-motif > span {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 10px;
+  color: var(--ink);
+}
+.scroll-cue {
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+}
+.scroll-cue:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
