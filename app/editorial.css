@@ -788,3 +788,148 @@ h2 {
     gap: 5%;
   }
 }
+@media (max-width: 800px) {
+  .container {
+    width: calc(100% - 48px);
+  }
+  .header-inner {
+    height: 78px;
+  }
+  .desktop-nav {
+    gap: 24px;
+    font-size: 12px;
+  }
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .section-heading-aside {
+    max-width: 440px;
+  }
+  .section-heading-aside br {
+    display: none;
+  }
+  .featured-work-grid > :last-child:nth-child(3) {
+    display: block;
+    grid-column: 1 / -1;
+  }
+  .featured-work-grid > :last-child:nth-child(3) .work-preview {
+    min-height: 0;
+    height: auto;
+  }
+  .featured-work-grid > :last-child:nth-child(3) .work-meta {
+    margin-top: 24px;
+  }
+  .featured-work-grid > :last-child:nth-child(3) > .text-link {
+    margin-bottom: 0;
+    margin-top: 20px;
+  }
+  .work-title h3 {
+    font-size: 29px;
+  }
+  .service-explorer {
+    gap: 5%;
+  }
+  .service-tabs > button {
+    font-size: 29px;
+    gap: 14px;
+  }
+  .service-panel > h3 {
+    font-size: 28px;
+  }
+  .milestone {
+    grid-template-columns: 0.25fr 1fr;
+    gap: 18px;
+  }
+  .milestone-top {
+    grid-row: 1 / 4;
+    justify-content: flex-start;
+    padding-top: 8px;
+  }
+  .milestone > p,
+  .milestone details {
+    grid-column: 2;
+  }
+  .milestone details {
+    margin: 0;
+  }
+  .engineering-section {
+    padding-top: 0;
+  }
+  .engineering-nodes > button > :nth-child(2) {
+    font-size: 22px;
+  }
+  .engineering-icon {
+    display: none;
+  }
+  .engineering-index {
+    right: 12px;
+    font-size: 8px;
+  }
+  .engineering-detail {
+    gap: 6%;
+  }
+  .price-card {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 7%;
+  }
+  .price-details {
+    grid-column: 1 / -1;
+  }
+  .price-card .deliverables {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+  }
+  .price-card .deliverables > li {
+    flex: 1 1 180px;
+  }
+  .studio-grid {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+  .studio-sanskrit {
+    margin-top: 10px;
+    font-size: 60px;
+  }
+  .studio-grid > div:first-child {
+    max-width: 420px;
+  }
+  .studio-section .section-kicker {
+    margin-bottom: 15px;
+  }
+  .studio-grid h2 {
+    font-size: 52px;
+  }
+  .faq-layout {
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+  .brief-builder {
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+  .brief-summary {
+    max-width: none;
+  }
+  .form-actions {
+    flex-direction: row;
+    align-items: center;
+  }
+  .case-description {
+    grid-template-columns: 1fr;
+    gap: 55px;
+  }
+  .case-sidebar {
+    max-width: 600px;
+  }
+  .case-sidebar .tag-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .service-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+}
