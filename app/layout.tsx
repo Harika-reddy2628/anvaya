@@ -1,32 +1,84 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
+import { Header } from "./components/studio/Header";
+import { Footer } from "./components/studio/Footer";
+import { Motion } from "./components/studio/Motion";
+import { ProjectProvider } from "./components/studio/ProjectContext";
+import { StudioIntro } from "./components/studio/StudioIntro";
 import "./globals.css";
+import "./editorial.css";
+import "./reference.css";
+
+const sahitya = localFont({
+  src: [
+    { path: "./fonts/Sahitya-Regular.ttf", weight: "400", style: "normal" },
+    { path: "./fonts/Sahitya-Bold.ttf", weight: "700", style: "normal" },
+  ],
+  variable: "--font-sahitya",
+  display: "swap",
+  preload: false,
+});
+const hind = localFont({
+  src: [
+    { path: "./fonts/Hind-Regular.ttf", weight: "400", style: "normal" },
+    { path: "./fonts/Hind-Medium.ttf", weight: "500", style: "normal" },
+    { path: "./fonts/Hind-SemiBold.ttf", weight: "600", style: "normal" },
+  ],
+  variable: "--font-hind",
+  display: "swap",
+  preload: false,
+});
+const cormorant = localFont({
+  src: "./fonts/Cormorant-Latin.woff2",
+  variable: "--font-cormorant",
+  weight: "300 700",
+  display: "swap",
+  adjustFontFallback: "Times New Roman",
+});
+const inter = localFont({
+  src: "./fonts/Inter-Latin.woff2",
+  variable: "--font-inter",
+  weight: "100 900",
+  display: "swap",
+});
+const geistMono = localFont({
+  src: "./fonts/geist-mono-latin.woff2",
+  variable: "--font-geist-mono",
+  weight: "100 900",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "Anvaya (अन्वय) — Ideas to Impact | Production Systems in 14 Days",
+  title: {
+    default: "Anvaya — From ambitious idea to working product",
+    template: "%s — Anvaya",
+  },
   description:
-    "Deterministic AI architectures, pgvector neural backends, and bespoke interfaces. Direct senior builder access, zero agency fluff, Day-1 code handoff.",
+    "A Bengaluru engineering collective building software, agentic AI workflows, and spatial 3D experiences. Focused 14-day sprints. Global delivery.",
+  icons: { icon: "/icon.svg" },
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://api.fontshare.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://api.fontshare.com/v2/css?f[]=clash-display@700,600,500&f[]=satoshi@700,500,400&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="bg-[#07080D] text-[#F8FAFC] font-satoshi antialiased selection:bg-[#F59E0B]/20 selection:text-[#F59E0B]">
-        {children}
+    <html
+      lang="en"
+      className={`${cormorant.variable} ${inter.variable} ${sahitya.variable} ${hind.variable} ${geistMono.variable}`}
+    >
+      <body>
+        <ProjectProvider>
+          <StudioIntro>
+            <a href="#main-content" className="skip-link">
+              Skip to content
+            </a>
+            <Motion>
+              <Header />
+              {children}
+              <Footer />
+            </Motion>
+          </StudioIntro>
+        </ProjectProvider>
       </body>
     </html>
   );
