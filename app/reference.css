@@ -835,3 +835,15 @@ h2 {
     font-size: 9px;
   }
 }
+@media (prefers-reduced-motion: reduce) {
+  .rolling-label > span {
+    transition: none;
+  }
+  .rolling-link:hover .rolling-label > span:first-child,
+  .rolling-link:focus-visible .rolling-label > span:first-child {
+    transform: none;
+  }
+  .rolling-label > span:last-child {
+    display: none;
+  }
+}
