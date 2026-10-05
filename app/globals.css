@@ -2125,3 +2125,241 @@ summary::-webkit-details-marker {
     display: none;
   }
 }
+@media (max-width: 900px) {
+  .container {
+    width: calc(100% - 48px);
+  }
+  .header-inner {
+    height: 78px;
+  }
+  .desktop-nav {
+    gap: 20px;
+    font-size: 11px;
+  }
+  .hero {
+    gap: 0 26px;
+    padding-top: 50px;
+  }
+  .hero-copy {
+    padding-top: 0;
+  }
+  .hero-headline {
+    font-size: 6.15vw;
+  }
+  .hero-copy > .eyebrow {
+    font-size: 7px;
+    margin-bottom: 25px;
+  }
+  .hero-description {
+    font-size: 11px;
+  }
+  .desktop-break {
+    display: none;
+  }
+  .hero-actions {
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .hero-actions .button {
+    min-height: 42px;
+  }
+  .hero-footnote {
+    margin-top: 22px;
+    padding-top: 19px;
+  }
+  .hero-footnote p {
+    font-size: 10px;
+  }
+  .hero-footnote p > span {
+    font-size: 8px;
+  }
+  .hero-visual-label > :last-child {
+    display: none;
+  }
+  .hero-visual-caption > :last-child {
+    display: none;
+  }
+  .demo-topline > :last-child {
+    display: none;
+  }
+  .hero-bottom {
+    margin-top: 40px;
+  }
+  .hero-bottom > span {
+    font-size: 7px;
+  }
+  .connection-motif {
+    gap: 12px;
+  }
+  .connection-motif svg {
+    width: 45px;
+  }
+  .section {
+    padding-block: 85px;
+  }
+  .section-heading {
+    gap: 25px;
+    margin-bottom: 40px;
+  }
+  .section-heading-aside {
+    max-width: 285px;
+  }
+  .section-heading-aside p {
+    font-size: 12px;
+  }
+  .work-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 35px 22px;
+  }
+  .work-grid > :last-child:nth-child(3) {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 30px;
+  }
+  .work-grid > :last-child:nth-child(3) .work-preview {
+    grid-row: 1 / 6;
+  }
+  .work-grid > :last-child:nth-child(3) .work-meta {
+    margin-top: 20px;
+    align-self: end;
+  }
+  .work-grid > :last-child:nth-child(3) > p {
+    margin-top: 0;
+  }
+  .work-grid > :last-child:nth-child(3) > .text-link {
+    margin-top: 0;
+    align-self: start;
+  }
+  .work-title h3 {
+    font-size: 21px;
+  }
+  .work-preview {
+    height: 335px;
+  }
+  .service-panel {
+    margin-left: 24px;
+    padding: 25px;
+  }
+  .service-panel > h3 {
+    font-size: 19px;
+  }
+  .service-tabs > button {
+    padding-block: 27px;
+    font-size: 22px;
+  }
+  .process-grid {
+    gap: 18px;
+  }
+  .milestone h3 {
+    font-size: 19px;
+  }
+  .milestone > p {
+    font-size: 11px;
+  }
+  .process-note p {
+    font-size: 9px;
+  }
+  .engineering-section {
+    padding-top: 0;
+  }
+  .engineering-nodes {
+    gap: 18px;
+  }
+  .engineering-nodes > button {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 17px;
+  }
+  .engineering-nodes::before {
+    top: 43px;
+  }
+  .engineering-detail {
+    grid-template-columns: 1.5fr 1fr;
+    gap: 30px;
+    padding: 28px;
+  }
+  .pricing-grid {
+    gap: 13px;
+  }
+  .price-card {
+    padding: 22px 17px;
+  }
+  .price-card h3 {
+    font-size: 21px;
+  }
+  .price-top {
+    align-items: flex-start;
+    flex-direction: column;
+    height: 37px;
+    margin-bottom: 18px;
+  }
+  .price-audience {
+    min-height: 52px;
+  }
+  .price-value {
+    font-size: 25px;
+  }
+  .price-card .deliverables > li {
+    font-size: 10px;
+  }
+  .price-card > .button {
+    padding-inline: 10px;
+    font-size: 9px;
+  }
+  .studio-grid {
+    gap: 45px;
+  }
+  .studio-definition {
+    font-size: 7px;
+  }
+  .studio-mantra {
+    gap: 10px;
+    font-size: 16px;
+  }
+  .faq-layout {
+    grid-template-columns: 0.6fr 1.4fr;
+    gap: 35px;
+  }
+  .faq-item summary {
+    font-size: 12px;
+    gap: 14px;
+  }
+  .brief-builder {
+    grid-template-columns: 1.3fr 0.85fr;
+    gap: 20px;
+  }
+  .form-row {
+    gap: 13px;
+  }
+  .brief-summary {
+    padding: 23px;
+  }
+  .brief-summary h3 {
+    font-size: 27px;
+  }
+  .estimate > strong {
+    font-size: 25px;
+  }
+  .form-heading > :last-child {
+    display: none;
+  }
+  .footer-links {
+    padding-left: 20px;
+  }
+  .footer-location p {
+    font-size: 8px;
+  }
+  .footer-meaning {
+    display: none;
+  }
+  .case-description {
+    gap: 50px;
+  }
+  .service-detail-grid {
+    gap: 45px;
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+}
