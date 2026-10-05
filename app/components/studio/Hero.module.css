@@ -1,0 +1,337 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  min-height: max(850px, 100svh);
+  overflow: clip;
+  background: var(--hero-paper);
+}
+.content {
+  position: relative;
+  z-index: 2;
+  min-height: max(850px, 100svh);
+  padding-top: 76px;
+  display: flex;
+  flex-direction: column;
+}
+.artwork {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.82;
+}
+.artwork::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(
+      ellipse at 49% 40%,
+      rgb(248 244 238 / 56%),
+      rgb(248 244 238 / 15%) 55%,
+      transparent 77%
+    ),
+    linear-gradient(
+      to bottom,
+      rgb(248 244 238 / 36%),
+      transparent 24%,
+      rgb(248 244 238 / 10%) 52%,
+      rgb(248 244 238 / 85%) 81%,
+      var(--hero-paper) 98%
+    );
+}
+.scene {
+  position: absolute;
+  inset: -24px;
+}
+.drift,
+.surface {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.poster {
+  position: absolute;
+  inset: 0;
+}
+.poster,
+.poster img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.poster img {
+  object-fit: cover;
+  object-position: 50% 65%;
+}
+.motionControl {
+  position: absolute;
+  z-index: 3;
+  top: 94px;
+  right: max(40px, calc((100vw - 1280px) / 2));
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid rgb(20 32 34 / 13%);
+  border-radius: 999px;
+  background: rgb(248 244 238 / 68%);
+  color: var(--muted);
+  font-size: 9px;
+  cursor: pointer;
+}
+.motionControl:hover {
+  color: var(--ink);
+  border-color: rgb(20 32 34 / 30%);
+}
+.hero:not(:has(:global([data-hero-motion]))) .motionControl {
+  display: none;
+}
+.statement {
+  padding-top: clamp(105px, 15svh, 180px);
+  margin-bottom: auto;
+}
+.overline {
+  display: block;
+  text-align: center;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.13em;
+  color: var(--muted);
+  margin-bottom: 38px;
+}
+.headline {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(60px, 6.15vw, 106px);
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+  font-weight: 400;
+}
+.line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.15em;
+  margin-bottom: -0.02em;
+}
+.line > span {
+  display: inline-block;
+}
+.line:nth-of-type(1) {
+  margin-left: 12%;
+}
+.line:nth-of-type(2) {
+  margin-left: 30%;
+}
+.line:nth-of-type(3) {
+  margin-left: 20%;
+}
+.line:nth-of-type(4) {
+  margin-left: 57%;
+}
+.lower {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
+  margin-top: 55px;
+  padding-bottom: 44px;
+}
+.introduction {
+  max-width: 400px;
+}
+.introduction p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 28px;
+  margin-top: 18px;
+}
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 44px;
+  font-size: 12px;
+  border-bottom: 1px solid var(--ink);
+}
+.primary svg {
+  color: var(--accent);
+}
+.secondary {
+  border-color: var(--line);
+  color: var(--muted);
+}
+.actions a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.signature {
+  text-align: right;
+  padding-bottom: 8px;
+}
+.signature > span {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 23px;
+}
+.signature small {
+  display: block;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+}
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding-block: 24px;
+  font-size: 10px;
+  color: var(--muted);
+}
+.bottom a {
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  min-height: 24px;
+}
+.bottom a:hover {
+  color: var(--accent);
+}
+.bottom > span,
+.bottom > :last-child {
+  font-size: 8px;
+  letter-spacing: 0.07em;
+}
+@media (max-width: 1100px) {
+  .headline {
+    font-size: clamp(57px, 6.5vw, 80px);
+  }
+  .line:nth-of-type(2) {
+    margin-left: 23%;
+  }
+  .line:nth-of-type(4) {
+    margin-left: 55%;
+  }
+}
+@media (max-width: 680px) {
+  .hero,
+  .content {
+    min-height: max(790px, 100svh);
+  }
+  .content {
+    padding-top: 64px;
+  }
+  .motionControl {
+    top: 80px;
+    right: 20px;
+    font-size: 8px;
+  }
+  .artwork {
+    opacity: 0.72;
+  }
+  .artwork::after {
+    background: linear-gradient(
+      to bottom,
+      rgb(248 244 238 / 24%),
+      rgb(248 244 238 / 14%) 24%,
+      rgb(248 244 238 / 58%) 48%,
+      rgb(248 244 238 / 92%) 77%,
+      var(--hero-paper) 96%
+    );
+  }
+  .poster img {
+    object-position: 50% 50%;
+  }
+  .statement {
+    padding-top: clamp(165px, 25svh, 235px);
+  }
+  .overline {
+    font-size: 7px;
+    letter-spacing: 0.07em;
+    margin-bottom: 30px;
+  }
+  .headline {
+    font-size: clamp(34px, 9.5vw, 60px);
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+  }
+  .line:nth-of-type(1) {
+    margin-left: 1%;
+  }
+  .line:nth-of-type(2) {
+    margin-left: 8%;
+  }
+  .line:nth-of-type(3) {
+    margin-left: 3%;
+  }
+  .line:nth-of-type(4) {
+    margin-left: 48%;
+  }
+  .lower {
+    margin-top: 45px;
+    padding-bottom: 23px;
+  }
+  .introduction {
+    max-width: 340px;
+  }
+  .introduction p {
+    font-size: 12px;
+  }
+  .signature {
+    display: none;
+  }
+  .actions {
+    gap: 26px;
+    margin-top: 16px;
+  }
+  .primary,
+  .secondary {
+    font-size: 11px;
+    gap: 10px;
+  }
+  .bottom {
+    padding-block: 20px;
+    gap: 16px;
+    font-size: 9px;
+  }
+  .bottom > span {
+    display: none;
+  }
+  .bottom > :last-child {
+    font-size: 7px;
+  }
+  .bottom a {
+    gap: 9px;
+  }
+}
+@media (max-width: 370px) {
+  .headline {
+    font-size: 9.3vw;
+  }
+  .overline {
+    font-size: 6px;
+  }
+  .line:nth-of-type(2) {
+    margin-left: 2%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scene,
+  .drift,
+  .surface,
+  .poster,
+  .poster img {
+    transform: none !important;
+  }
+  .motionControl {
+    display: none;
+  }
+}
