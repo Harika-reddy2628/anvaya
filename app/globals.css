@@ -2363,3 +2363,626 @@ summary::-webkit-details-marker {
     grid-template-columns: 1.2fr 0.8fr;
   }
 }
+@media (max-width: 680px) {
+  html {
+    scroll-padding-top: 85px;
+  }
+  .container {
+    width: calc(100% - 40px);
+  }
+  .section {
+    padding-block: 65px;
+  }
+  .header-inner {
+    height: 72px;
+    gap: 15px;
+  }
+  .brand {
+    font-size: 27px;
+  }
+  .brand-mark {
+    width: 26px;
+    height: 26px;
+  }
+  .brand small {
+    display: none;
+  }
+  .desktop-nav {
+    display: none;
+  }
+  .header-cta {
+    padding: 10px 12px;
+    gap: 14px;
+    font-size: 10px;
+    min-height: 36px;
+  }
+  .mobile-toggle {
+    display: inline-flex;
+    width: 32px;
+  }
+  .mobile-nav {
+    display: flex;
+    flex-direction: column;
+    padding-block: 10px 20px;
+  }
+  .mobile-nav > a {
+    display: flex;
+    justify-content: space-between;
+    padding-block: 16px;
+    border-bottom: 1px solid var(--line);
+    font-size: 15px;
+  }
+  .hero {
+    grid-template-columns: 1fr;
+    padding-top: 39px;
+    gap: 0;
+  }
+  .hero-copy > .eyebrow {
+    font-size: 8px;
+    margin-bottom: 28px;
+  }
+  .hero-headline {
+    font-size: clamp(45px, 10.8vw, 70px);
+    line-height: 1.04;
+  }
+  .hero-description {
+    font-size: 13px;
+    line-height: 1.75;
+    margin-top: 22px;
+    max-width: 420px;
+  }
+  .hero-actions {
+    margin-top: 23px;
+    gap: 20px;
+  }
+  .hero-actions .button {
+    min-height: 46px;
+    padding-inline: 16px;
+    font-size: 11px;
+  }
+  .hero-work-link {
+    font-size: 11px;
+  }
+  .hero-footnote {
+    margin-top: 30px;
+    padding-top: 21px;
+    max-width: none;
+  }
+  .hero-footnote p {
+    font-size: 11px;
+  }
+  .hero-footnote p > span {
+    font-size: 9px;
+  }
+  .hero-visual {
+    margin-top: 45px;
+  }
+  .hero-visual-label {
+    padding-bottom: 14px;
+  }
+  .hero-visual-label > :last-child {
+    display: inline-flex;
+  }
+  .hero-visual-label .eyebrow {
+    font-size: 8px;
+  }
+  .hero-visual-caption {
+    font-size: 9px;
+  }
+  .hero-visual-caption > :last-child {
+    display: inline;
+    font-size: 6px;
+  }
+  .demo-topline {
+    font-size: 8px;
+  }
+  .demo-topline > :last-child {
+    display: inline;
+  }
+  .hero-bottom {
+    margin-top: 30px;
+    padding-block: 23px;
+  }
+  .hero-bottom > span {
+    display: none;
+  }
+  .connection-motif {
+    gap: 14px;
+  }
+  .connection-motif svg {
+    width: 38px;
+  }
+  .connection-motif span {
+    font-size: 9px;
+  }
+  .section-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 23px;
+    margin-bottom: 34px;
+  }
+  .section-kicker {
+    margin-bottom: 24px;
+    font-size: 9px;
+  }
+  h2 {
+    font-size: 38px;
+  }
+  .section-heading-aside p {
+    font-size: 12px;
+  }
+  .section-heading-aside .text-link {
+    margin-top: 15px;
+  }
+  .work-grid {
+    grid-template-columns: 1fr;
+    gap: 42px;
+  }
+  .work-preview {
+    height: auto;
+    min-height: 340px;
+  }
+  .work-grid > :last-child:nth-child(3) {
+    display: block;
+    grid-column: auto;
+  }
+  .work-grid > :last-child:nth-child(3) > p {
+    margin-top: 12px;
+  }
+  .work-grid > :last-child:nth-child(3) > .text-link {
+    margin-top: 18px;
+  }
+  .work-title h3 {
+    font-size: 23px;
+  }
+  .work-meta {
+    font-size: 8px;
+  }
+  .work-card > p {
+    font-size: 12px;
+  }
+  .spatial-compact .spatial-canvas > svg {
+    min-height: 230px;
+  }
+  .spatial-compact .demo-topline {
+    padding: 15px;
+  }
+  .spatial-compact .demo-controls {
+    padding-block: 9px;
+  }
+  .workflow-visual {
+    min-height: 350px;
+    padding: 20px;
+  }
+  .workflow-canvas {
+    padding: 20px 10px;
+  }
+  .workflow-node {
+    padding: 17px;
+  }
+  .workflow-node strong {
+    font-size: 12px;
+  }
+  .workflow-node span {
+    font-size: 9px;
+  }
+  .workflow-top {
+    font-size: 8px;
+  }
+  .workflow-source {
+    font-size: 11px;
+  }
+  .workflow-output {
+    font-size: 9px;
+  }
+  .visual-note {
+    font-size: 7px;
+  }
+  .terminal-visual {
+    min-height: 340px;
+  }
+  .terminal-top {
+    padding: 15px 20px;
+    font-size: 8px;
+  }
+  .terminal-body {
+    padding: 28px;
+  }
+  .terminal-logo {
+    font-size: 75px;
+  }
+  .terminal-command {
+    font-size: 11px;
+  }
+  .terminal-tags,
+  .terminal-bottom {
+    font-size: 7px;
+  }
+  .verification-visual {
+    min-height: 340px;
+  }
+  .robotics-visual {
+    min-height: 340px;
+  }
+  .service-explorer {
+    grid-template-columns: 1fr;
+  }
+  .service-tabs > button {
+    font-size: 23px;
+    padding: 23px 5px 23px 0;
+  }
+  .service-number {
+    font-size: 9px;
+  }
+  .service-panel {
+    margin: 25px 0 0;
+    padding: 25px;
+  }
+  .service-panel > h3 {
+    font-size: 21px;
+  }
+  .service-bottom {
+    flex-direction: column;
+    gap: 18px;
+  }
+  .service-price {
+    font-size: 24px;
+  }
+  .process-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding-left: 26px;
+  }
+  .process-track {
+    top: 0;
+    left: 0;
+    width: 1px;
+    right: auto;
+    height: 100%;
+  }
+  .process-progress {
+    width: 1px;
+    height: 100%;
+    transform: none !important;
+  }
+  .milestone-top {
+    padding-bottom: 0;
+    position: relative;
+  }
+  .milestone-top::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    position: absolute;
+    top: 3px;
+    left: -29px;
+    background: var(--accent);
+  }
+  .milestone h3 {
+    margin-top: 14px;
+    font-size: 23px;
+  }
+  .milestone > p {
+    font-size: 12px;
+    margin-top: 10px;
+  }
+  .milestone details {
+    margin-top: 12px;
+  }
+  .milestone details p {
+    font-size: 12px;
+  }
+  .process-note {
+    align-items: flex-start;
+    padding-block: 19px;
+    margin-top: 32px;
+  }
+  .process-note .small-square {
+    margin-top: 5px;
+  }
+  .process-note p {
+    font-size: 10px;
+  }
+  .engineering-section {
+    padding-top: 0;
+  }
+  .engineering-nodes {
+    gap: 9px;
+  }
+  .engineering-nodes > button {
+    align-items: center;
+    padding: 21px 5px 13px;
+    gap: 8px;
+  }
+  .engineering-nodes > button > :nth-child(2) {
+    font-size: 9px;
+  }
+  .engineering-icon svg {
+    width: 20px;
+  }
+  .engineering-detail {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px;
+  }
+  .engineering-detail h3 {
+    font-size: 25px;
+  }
+  .engineering-detail p {
+    font-size: 12px;
+  }
+  .engineering-detail .text-link {
+    margin-top: 18px;
+  }
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .price-card {
+    padding: 28px;
+  }
+  .price-top {
+    height: auto;
+    flex-direction: row;
+    margin-bottom: 22px;
+  }
+  .price-pill {
+    font-size: 8px;
+  }
+  .price-card h3 {
+    font-size: 28px;
+  }
+  .price-audience {
+    font-size: 12px;
+    min-height: 0;
+    max-width: 250px;
+  }
+  .price-value {
+    font-size: 39px;
+  }
+  .price-value > span,
+  .price-local {
+    font-size: 10px;
+  }
+  .price-time {
+    font-size: 11px;
+  }
+  .price-card .deliverables > li {
+    font-size: 12px;
+  }
+  .price-note {
+    font-size: 11px;
+  }
+  .price-card > .button {
+    font-size: 11px;
+    padding-block: 15px;
+  }
+  .pricing-terms {
+    flex-direction: column;
+    gap: 13px;
+    font-size: 10px;
+  }
+  .studio-grid {
+    grid-template-columns: 1fr;
+    gap: 43px;
+  }
+  .studio-sanskrit {
+    margin-top: 5px;
+    font-size: 108px;
+  }
+  .studio-mandala {
+    width: 260px;
+    left: auto;
+    right: 0;
+    top: 0;
+    opacity: 0.22;
+  }
+  .studio-definition {
+    margin-top: 0;
+    font-size: 8px;
+  }
+  .studio-grid h2 {
+    font-size: 40px;
+  }
+  .studio-grid p {
+    font-size: 13px;
+  }
+  .studio-mantra {
+    gap: 14px;
+    font-size: 19px;
+  }
+  .studio-global {
+    font-size: 8px;
+  }
+  .faq-layout {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+  .faq-layout > div > p {
+    font-size: 12px;
+    margin-top: 19px;
+  }
+  .faq-item summary {
+    font-size: 13px;
+    gap: 14px;
+    padding-block: 22px;
+  }
+  .faq-item > p {
+    padding-left: 28px;
+    font-size: 12px;
+  }
+  .brief-builder {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .brief-form {
+    padding: 22px;
+  }
+  .form-row {
+    gap: 14px;
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    font-size: 16px;
+    padding: 10px;
+  }
+  .field > label {
+    font-size: 10px;
+  }
+  .field input::placeholder,
+  .field textarea::placeholder {
+    font-size: 11px;
+  }
+  .form-actions > span {
+    font-size: 9px;
+  }
+  .form-actions .button {
+    width: 100%;
+    font-size: 12px;
+  }
+  .brief-summary {
+    padding: 25px;
+  }
+  .brief-summary h3 {
+    font-size: 32px;
+  }
+  .estimate > strong {
+    font-size: 31px;
+  }
+  .estimate-assumptions p {
+    font-size: 10px;
+  }
+  .brief-result {
+    padding: 24px;
+  }
+  .brief-result pre {
+    font-size: 9px;
+    padding: 15px;
+  }
+  .result-actions {
+    gap: 12px;
+  }
+  .result-actions .button {
+    padding-inline: 15px;
+    font-size: 11px;
+  }
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+  .footer-links {
+    padding-left: 0;
+    align-items: flex-end;
+  }
+  .footer-location {
+    text-align: left;
+    grid-column: 1 / -1;
+  }
+  .footer-location p {
+    font-size: 10px;
+    margin-top: 8px;
+  }
+  .footer-wordmark {
+    font-size: 23vw;
+    margin-top: 33px;
+  }
+  .site-footer {
+    padding-top: 45px;
+  }
+  .footer-bottom {
+    font-size: 7px;
+    gap: 12px;
+  }
+  .footer-bottom > div {
+    gap: 14px;
+  }
+  .inner-page {
+    padding-top: 40px;
+    padding-bottom: 65px;
+  }
+  .page-heading {
+    margin-bottom: 40px;
+  }
+  .page-heading h1,
+  .not-found-page h1 {
+    font-size: 46px;
+  }
+  .page-heading p {
+    font-size: 13px;
+  }
+  .filter-list {
+    gap: 7px;
+    margin-bottom: 30px;
+  }
+  .filter-list > button {
+    font-size: 10px;
+    padding: 9px 12px;
+  }
+  .index-work-grid {
+    gap: 40px;
+  }
+  .case-visual .workflow-visual {
+    padding: 20px;
+  }
+  .case-visual .workflow-canvas {
+    padding: 25px 0;
+  }
+  .case-visual .workflow-node {
+    padding: 13px;
+  }
+  .case-visual .workflow-node strong {
+    font-size: 12px;
+  }
+  .case-visual .workflow-node span {
+    font-size: 8px;
+  }
+  .case-visual .workflow-source,
+  .case-visual .workflow-output {
+    font-size: 10px;
+  }
+  .case-visual .terminal-body {
+    padding: 25px;
+  }
+  .case-visual .terminal-logo {
+    font-size: 75px;
+  }
+  .case-visual .terminal-command {
+    font-size: 11px;
+  }
+  .case-description {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding-block: 40px;
+  }
+  .case-sidebar .tag-list {
+    flex-direction: row;
+  }
+  .case-narrative h2 {
+    font-size: 24px;
+  }
+  .case-next {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+  }
+  .case-next h2 {
+    font-size: 28px;
+  }
+  .service-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .large-deliverables li {
+    font-size: 16px;
+  }
+  .service-detail-section p {
+    font-size: 13px;
+  }
+  .policy-content p {
+    font-size: 13px;
+  }
+  .policy-content h2 {
+    font-size: 26px;
+  }
+}
