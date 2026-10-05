@@ -386,3 +386,65 @@ h2 {
 .service-tabs > button[aria-selected="true"] .service-preview-initial {
   color: var(--accent);
 }
+.process-grid {
+  max-width: 850px;
+  margin: 0 auto;
+  border: 0;
+}
+.milestone {
+  display: block;
+  border: 0;
+  padding: 28px 0;
+}
+.milestone details {
+  margin: 0;
+}
+.milestone summary {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  text-align: center;
+  padding: 15px 0;
+}
+.milestone-top {
+  display: block;
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.milestone summary h3 {
+  font-size: clamp(29px, 3.2vw, 44px);
+  text-transform: uppercase;
+  line-height: 1.15;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 3px;
+}
+.milestone summary > svg {
+  display: none;
+}
+.milestone details[open] summary {
+  color: var(--accent);
+}
+.milestone details p {
+  max-width: 460px;
+  font-size: 14px;
+  line-height: 1.8;
+  margin: 22px auto 0;
+}
+.milestone details .milestone-description {
+  color: var(--ink);
+}
+.process-note {
+  justify-content: center;
+  margin-top: 65px;
+}
+.engineering-nodes > button > :nth-child(2) {
+  font-family: var(--font-cormorant), Georgia, serif;
+}
+.price-pill {
+  border-color: var(--line);
+}
