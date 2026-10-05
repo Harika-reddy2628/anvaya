@@ -1299,3 +1299,109 @@ summary::-webkit-details-marker {
   margin-top: 24px;
 }
 
+/* Pricing is a comparison, not a technical calculator. */
+.pricing-section {
+  border-top: 1px solid var(--line);
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.price-card {
+  display: flex;
+  flex-direction: column;
+  padding: 28px 25px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+}
+.price-featured {
+  background: #eee1cc;
+  border-color: #c8ad78;
+}
+.price-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 25px;
+  margin-bottom: 20px;
+}
+.price-top .eyebrow {
+  font-size: 8px;
+}
+.price-pill {
+  background: var(--accent);
+  color: white;
+  border-radius: 2px;
+  font-size: 7px;
+  padding: 4px 6px;
+  white-space: nowrap;
+}
+.price-card h3 {
+  font-size: 25px;
+  letter-spacing: -0.035em;
+}
+.price-audience {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+  margin-top: 13px;
+  min-height: 36px;
+}
+.price-value {
+  font-size: clamp(26px, 2.6vw, 38px);
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  line-height: 1.2;
+  margin-top: 23px;
+  white-space: nowrap;
+}
+.price-value > span {
+  display: block;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.price-local {
+  display: block;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 9px;
+  color: var(--muted);
+  margin-top: 10px;
+}
+.price-time {
+  font-size: 10px;
+  margin-top: 23px;
+  border-block: 1px solid var(--line);
+  padding-block: 14px;
+}
+.price-card .deliverables {
+  margin-block: 24px;
+}
+.price-card .deliverables > li {
+  font-size: 11px;
+}
+.price-note {
+  font-size: 10px;
+  line-height: 1.65;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+.price-card > .button {
+  margin-top: auto;
+  font-size: 10px;
+  gap: 10px;
+}
+.pricing-terms {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  margin-top: 27px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.8;
+}
+
