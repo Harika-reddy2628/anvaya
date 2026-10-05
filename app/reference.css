@@ -615,3 +615,17 @@ h2 {
 .footer-meaning {
   font-family: var(--font-hind), Arial, sans-serif;
 }
+@media (max-width: 1100px) {
+  .header-actions {
+    margin-left: 28px;
+  }
+  .work-scene-inner {
+    gap: 6%;
+  }
+  .work-story .work-preview {
+    min-height: 380px;
+  }
+  .service-tabs {
+    gap: 25px;
+  }
+}
