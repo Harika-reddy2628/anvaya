@@ -2986,3 +2986,34 @@ summary::-webkit-details-marker {
     font-size: 26px;
   }
 }
+@media (max-width: 370px) {
+  .container {
+    width: calc(100% - 32px);
+  }
+  .header-cta {
+    gap: 7px;
+    padding-inline: 10px;
+  }
+  .hero-headline {
+    font-size: 10.65vw;
+  }
+  .hero-actions {
+    gap: 13px;
+  }
+  .hero-work-link {
+    font-size: 10px;
+  }
+  .hero-visual-caption > :last-child {
+    display: none;
+  }
+  .hero-copy > .eyebrow {
+    font-size: 7px;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  .studio-mantra {
+    font-size: 17px;
+    gap: 10px;
+  }
+}
