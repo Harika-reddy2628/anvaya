@@ -1,0 +1,73 @@
+/* The client-first editorial layer applies to every route, not just the hero. */
+body {
+  font-size: 16px;
+}
+.container {
+  width: min(1440px, calc(100% - 96px));
+}
+.section {
+  padding-block: 140px;
+}
+h2 {
+  font-size: clamp(43px, 4.7vw, 76px);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.055em;
+}
+.section-kicker {
+  margin-bottom: 36px;
+}
+.section-heading {
+  margin-bottom: 70px;
+  gap: 50px;
+}
+.section-heading-aside {
+  max-width: 360px;
+}
+.section-heading-aside p {
+  font-size: 15px;
+}
+.text-link {
+  min-height: 38px;
+  font-size: 13px;
+  gap: 18px;
+}
+.button {
+  border-radius: 0;
+  font-size: 13px;
+  min-height: 48px;
+}
+.button-outline {
+  border-color: var(--ink);
+}
+.site-header {
+  background: rgb(246 243 235 / 94%);
+  backdrop-filter: blur(12px);
+}
+.header-inner {
+  height: 88px;
+  border-bottom: 0;
+}
+.brand {
+  font-size: 31px;
+}
+.desktop-nav {
+  gap: 40px;
+  font-size: 13px;
+}
+.header-cta {
+  color: var(--ink);
+  background: transparent;
+  padding: 8px 0;
+  min-height: 38px;
+  border-bottom: 1px solid var(--ink);
+}
+.header-cta:hover {
+  color: var(--accent);
+  background: transparent;
+  border-color: var(--accent);
+}
+
