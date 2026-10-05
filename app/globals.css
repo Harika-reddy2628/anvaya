@@ -1529,3 +1529,229 @@ summary::-webkit-details-marker {
   padding: 0 25px 25px 36px;
 }
 
+/* Brief builder: service selections stay connected to the scope. */
+.project-section {
+  background: var(--surface);
+}
+.brief-builder {
+  display: grid;
+  grid-template-columns: 1.35fr 0.85fr;
+  gap: 30px;
+  align-items: start;
+}
+.brief-form {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 30px;
+}
+.form-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 25px;
+}
+.form-heading > :last-child {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 8px;
+  color: var(--muted);
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 19px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 21px;
+  min-width: 0;
+}
+.field > label {
+  font-size: 10px;
+  font-weight: 500;
+}
+.field > label > span {
+  color: var(--accent);
+}
+.field .optional {
+  color: var(--muted);
+  font-size: 8px;
+  margin-left: 3px;
+  font-weight: 400;
+}
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 43px;
+  background: #f9f7f1;
+  padding: 12px;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.field textarea {
+  resize: vertical;
+}
+.field input::placeholder,
+.field textarea::placeholder {
+  color: #72736c;
+}
+.field input[aria-invalid="true"],
+.field textarea[aria-invalid="true"] {
+  border-color: #a32b23;
+}
+.field-error {
+  color: #a32b23;
+  font-size: 10px;
+}
+.brief-more {
+  border-block: 1px solid var(--line);
+  margin: 2px 0 22px;
+}
+.brief-more > summary {
+  display: flex;
+  justify-content: space-between;
+  padding: 13px 0;
+  font-size: 10px;
+}
+.brief-more[open] > summary {
+  margin-bottom: 8px;
+}
+.brief-more[open] > summary > span {
+  transform: rotate(45deg);
+}
+.retainer-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--muted);
+  font-size: 10px;
+  margin-bottom: 23px;
+}
+.retainer-checkbox input {
+  accent-color: var(--accent);
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+.form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.form-actions > span {
+  color: var(--muted);
+  font-size: 8px;
+}
+.form-actions .button {
+  gap: 20px;
+  font-size: 10px;
+}
+.brief-summary {
+  padding: 28px;
+  border: 1px solid #c9c7bd;
+  border-radius: 3px;
+}
+.brief-summary > .eyebrow {
+  color: var(--muted);
+  font-size: 8px;
+}
+.brief-summary h3 {
+  font-size: 32px;
+  margin-top: 20px;
+}
+.brief-summary > p {
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin-top: 17px;
+}
+.estimate {
+  border-block: 1px solid #ceccc2;
+  margin-top: 26px;
+  padding: 22px 0;
+}
+.estimate > span {
+  display: block;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 7px;
+  color: var(--muted);
+}
+.estimate > strong {
+  display: block;
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  margin-top: 9px;
+  line-height: 1.3;
+}
+.estimate > small {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+  margin-top: 9px;
+}
+.brief-summary .deliverables > li {
+  font-size: 10px;
+}
+.estimate-assumptions {
+  padding-top: 18px;
+  border-top: 1px solid #ceccc2;
+}
+.estimate-assumptions .eyebrow {
+  font-size: 7px;
+}
+.estimate-assumptions p {
+  font-size: 9px;
+  color: var(--muted);
+  line-height: 1.75;
+  margin-top: 11px;
+}
+.brief-result {
+  grid-column: 1 / -1;
+  background: var(--paper);
+  border: 1px solid #c8ad78;
+  border-radius: 3px;
+  padding: 32px;
+  scroll-margin-top: 110px;
+}
+.brief-result > .eyebrow {
+  color: var(--accent);
+}
+.brief-result h3 {
+  font-size: 35px;
+  margin: 15px 0;
+}
+.brief-result > p {
+  font-size: 12px;
+  color: var(--muted);
+}
+.brief-result pre {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 10px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 250px;
+  overflow-y: auto;
+  background: var(--surface);
+  padding: 22px;
+  margin-block: 25px;
+}
+.result-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.brief-feedback {
+  margin-top: 17px;
+  min-height: 20px;
+}
+
