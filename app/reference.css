@@ -273,3 +273,116 @@ h2 {
   color: var(--muted);
   margin-left: 8px;
 }
+.services-section {
+  background: var(--paper);
+}
+.service-explorer {
+  display: flex;
+  flex-direction: column;
+  border: 0;
+  gap: 70px;
+}
+.service-panel {
+  display: grid;
+  grid-template-columns: 0.55fr 1fr;
+  column-gap: 55px;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  order: 0;
+}
+.service-initial {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(180px, 24vw, 330px);
+  font-weight: 400;
+  letter-spacing: -0.07em;
+  line-height: 1;
+  text-align: right;
+  color: #76504d;
+  padding-top: 35px;
+}
+.service-copy {
+  padding-left: 55px;
+  border-left: 1px solid var(--line);
+}
+.service-copy > .eyebrow {
+  color: var(--accent);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 15px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.service-copy h3 {
+  font-size: clamp(35px, 3.4vw, 49px);
+  line-height: 1.05;
+  margin-block: 28px;
+}
+.service-description {
+  font-size: 14px;
+  line-height: 1.75;
+  max-width: 440px;
+}
+.service-copy .deliverables {
+  margin-block: 27px;
+  gap: 10px;
+}
+.service-copy .deliverables li {
+  font-size: 12px;
+}
+.service-bottom {
+  flex-wrap: wrap;
+  border-color: var(--line);
+}
+.service-price {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 31px;
+}
+.service-price > small {
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.service-copy > .text-link {
+  font-size: 11px;
+  margin-top: 24px;
+}
+.service-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 45px;
+  order: 1;
+}
+.service-tabs > button {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-content: start;
+  gap: 12px;
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 0;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.service-tabs > button .service-preview-initial {
+  grid-column: 1 / -1;
+  font-size: 54px;
+  line-height: 1;
+  color: #d0beb7;
+}
+.service-tabs > button .service-number {
+  grid-column: 1 / -1;
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: 9px;
+  margin: 0;
+}
+.service-tabs > button > svg {
+  width: 17px;
+  height: 17px;
+}
+.service-tabs > button[aria-selected="true"] .service-preview-initial {
+  color: var(--accent);
+}
