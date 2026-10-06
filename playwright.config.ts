@@ -16,7 +16,6 @@ export default defineConfig({
   timeout: 30_000,
   use: {
     baseURL: "http://127.0.0.1:3107",
-    launchOptions: { executablePath },
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },
@@ -25,16 +24,25 @@ export default defineConfig({
       name: "desktop",
       use: {
         ...devices["Desktop Chrome"],
+        launchOptions: { executablePath },
         viewport: { width: 1440, height: 1000 },
       },
     },
     {
       name: "mobile",
-      use: { ...devices["iPhone 13"], defaultBrowserType: "chromium" },
+      use: { ...devices["iPhone 13"], defaultBrowserType: "chromium", launchOptions: { executablePath } },
     },
     {
       name: "reduced-motion",
-      use: { ...devices["Desktop Chrome"], reducedMotion: "reduce" },
+      use: { ...devices["Desktop Chrome"], reducedMotion: "reduce", launchOptions: { executablePath } },
+    },
+    {
+      name: "webkit-desktop",
+      use: { ...devices["Desktop Safari"], viewport: { width: 1440, height: 1000 } },
+    },
+    {
+      name: "webkit-mobile",
+      use: { ...devices["iPhone 13"] },
     },
   ],
   webServer: {

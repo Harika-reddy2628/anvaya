@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { animate, createScope } from "animejs";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./HeroBackdrop.module.css";
@@ -30,29 +29,12 @@ export default function HeroBackdrop({
     const cursor = container.querySelector<HTMLElement>("[data-water-cursor]");
     if (!hero || !scene || !drift || !surface || !image || !cursor) return;
 
-    const scope = createScope({
-      root: hero,
-      mediaQueries: { reduce: "(prefers-reduced-motion: reduce)" },
-    }).add((self) => {
-      if (!self || self.matches.reduce) return;
-      // Anime.js owns only the inner image's finite entrance.
-      const entrance = animate(image, {
-        y: [14, 0],
-        scale: [1.025, 1],
-        duration: 1800,
-        ease: "outCubic",
-      });
-      const visibility = () => {
-        if (document.hidden) entrance.pause();
-        else if (!entrance.completed) entrance.resume();
-      };
-      document.addEventListener("visibilitychange", visibility);
-      return () => document.removeEventListener("visibilitychange", visibility);
-    });
-
-    // Each engine owns a distinct element: entrance, ambient drift, pointer, scroll.
+    // GSAP owns image, ambient drift, pointer and scroll transforms.
     const media = gsap.matchMedia();
     media.add("(prefers-reduced-motion: no-preference)", () => {
+      const entrance = gsap.fromTo(image, { y: 14, scale: 1.025 }, {
+        y: 0, scale: 1, duration: 1.8, ease: "power2.out",
+      });
       const float = gsap.fromTo(
         drift,
         { x: -5, y: -3, scale: 1.025 },
@@ -68,8 +50,13 @@ export default function HeroBackdrop({
       );
       let inView = true;
       const visibility = () => {
-        if (!inView || document.hidden) float.pause();
-        else float.resume();
+        if (!inView || document.hidden) {
+          float.pause();
+          entrance.pause();
+        } else {
+          float.resume();
+          entrance.resume();
+        }
       };
       const observer = new IntersectionObserver(([entry]) => {
         inView = entry.isIntersecting;
@@ -158,7 +145,6 @@ export default function HeroBackdrop({
 
     return () => {
       media.revert();
-      scope.revert();
     };
   }, [ready, paused]);
 

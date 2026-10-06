@@ -21,7 +21,13 @@ export function BriefBuilder({
   const service = services.find((item) => item.id === chosen)!;
   const [monthly, setMonthly] = useState(retainer);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [brief, setBrief] = useState("");
+  const [prepared, setPrepared] = useState<{
+    text: string;
+    service: ServiceId;
+    monthly: boolean;
+  } | null>(null);
+  const brief = prepared?.service === chosen && prepared.monthly === monthly
+    ? prepared.text : "";
   const [feedback, setFeedback] = useState("");
   const result = useRef<HTMLDivElement>(null);
   const form = useRef<HTMLFormElement>(null);
@@ -81,7 +87,7 @@ export function BriefBuilder({
       "",
       "This brief has been prepared locally. It has not been submitted or sent.",
     ].join("\n");
-    setBrief(text);
+    setPrepared({ text, service: chosen, monthly });
     setFeedback("");
     requestAnimationFrame(() => result.current?.focus());
   }
@@ -173,7 +179,7 @@ export function BriefBuilder({
                 const value = event.target.value as ServiceId;
                 setOverride(value);
                 select(value);
-                setBrief("");
+                setPrepared(null);
               }}
             >
               {services.map((item) => (
@@ -267,7 +273,7 @@ export function BriefBuilder({
             checked={monthly}
             onChange={(event) => {
               setMonthly(event.target.checked);
-              setBrief("");
+              setPrepared(null);
             }}
           />{" "}
           I’m looking for an ongoing engineering partner.
@@ -358,7 +364,7 @@ export function BriefBuilder({
               type="button"
               className="text-link"
               onClick={() => {
-                setBrief("");
+                setPrepared(null);
                 form.current?.querySelector<HTMLInputElement>("input")?.focus();
               }}
             >

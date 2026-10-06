@@ -12,13 +12,13 @@ test("dreamy hero retains readable HTML and responsive original artwork", async 
   await page.goto("/");
   await expect(page.locator("[data-studio-intro]")).toBeHidden();
   await expect(page.locator("#hero-heading")).toContainText(
-    "Considered engineering.",
+    "Connected engineering.",
   );
   const hero = page.locator("[data-cinematic-hero]");
   await expect(hero).toContainText("founders and CTOs");
   await expect(page.locator("[data-hero-poster] img")).toHaveJSProperty(
     "naturalWidth",
-    testInfo.project.name === "mobile" ? 720 : 1672,
+    testInfo.project.name.includes("mobile") ? 720 : 1672,
   );
   if (testInfo.project.name === "desktop") {
     await expect(hero.locator("[data-water-canvas]")).toHaveCount(1);
@@ -26,7 +26,7 @@ test("dreamy hero retains readable HTML and responsive original artwork", async 
       "data-state",
       "live",
     );
-  } else {
+  } else if (testInfo.project.name !== "webkit-desktop") {
     await expect(page.locator("[data-water-canvas]")).toHaveCount(0);
   }
   await expect(page.locator("[data-hero-word]").last()).toHaveCSS(
@@ -56,7 +56,7 @@ test("missing background leaves the ivory hero and project action usable", async
   await expect(page.locator("[data-studio-intro]")).toBeHidden();
   await expect(page.locator("[data-cinematic-hero]")).toHaveCSS(
     "background-color",
-    "rgb(248, 244, 238)",
+    "rgb(238, 239, 245)",
   );
   await expect(page.locator("#hero-heading")).toBeVisible();
   await page
@@ -65,7 +65,7 @@ test("missing background leaves the ivory hero and project action usable", async
     .click();
   await expect(page).toHaveURL(/\/project$/);
   await expect(
-    page.getByRole("button", { name: "Create project brief" }),
+    page.getByRole("button", { name: "Prepare brief" }),
   ).toBeVisible();
 });
 

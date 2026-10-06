@@ -16,38 +16,38 @@
   max-width: 360px;
 }
 .text-link {
-  min-height: 38px;
+  min-height: 44px;
   gap: 18px;
 }
 .button {
-  border-radius: 0;
-  min-height: 48px;
+  border-radius: 9999px;
+  min-height: 44px;
 }
 .button-outline {
-  border-color: var(--ink);
+  border-color: var(--border);
 }
 .site-header {
-  background: rgb(246 243 235 / 94%);
-  backdrop-filter: blur(12px);
+  background: rgba(238, 239, 245, 0.9);
+  backdrop-filter: blur(16px);
 }
 .header-inner {
-  height: 88px;
+  height: 76px;
   border-bottom: 0;
 }
 .desktop-nav {
-  gap: 40px;
+  gap: 32px;
 }
 .header-cta {
-  color: var(--ink);
-  background: transparent;
-  padding: 8px 0;
-  min-height: 38px;
-  border-bottom: 1px solid var(--ink);
+  color: #ffffff;
+  background: var(--accent);
+  padding: 8px 18px;
+  min-height: 40px;
+  border-radius: 9999px;
+  border: none;
 }
 .header-cta:hover {
-  color: var(--accent);
-  background: transparent;
-  border-color: var(--accent);
+  color: #ffffff;
+  background: var(--accent-hover);
 }
 
 /* A staggered portfolio, with enough space to read the work's provenance. */
@@ -507,6 +507,13 @@
 }
 .case-narrative > section {
   margin-bottom: 50px;
+}
+.case-narrative h2 {
+  margin-top: 16px;
+}
+.case-narrative p {
+  margin-top: 20px;
+  max-width: 65ch;
 }
 .evidence-note {
   border-radius: 0;

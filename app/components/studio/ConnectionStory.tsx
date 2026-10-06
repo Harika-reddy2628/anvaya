@@ -5,44 +5,42 @@ export function ConnectionStory() {
       aria-label="Ideas connected to working systems"
     >
       <div className="connection-filament" aria-hidden="true">
-        <svg viewBox="0 0 160 320" fill="none">
+        <svg viewBox="0 0 200 320" fill="none">
+          {/* Modern Kinetic Connector Vector Pathway */}
           <path
-            d="M78 300C112 220 37 168 81 89"
-            stroke="currentColor"
-            strokeWidth="0.7"
+            d="M100 20 V160 H180 V300"
+            stroke="var(--accent)"
+            strokeWidth="1.5"
+            strokeDasharray="4 6"
+            opacity="0.4"
           />
           <path
-            d="M81 89C53 88 25 63 32 24C58 36 80 48 81 89Z"
-            stroke="currentColor"
-            strokeWidth="0.6"
+            d="M100 160 H20 V260"
+            stroke="var(--ink)"
+            strokeWidth="1"
+            opacity="0.25"
           />
-          <path
-            d="M81 89C112 76 135 48 125 13C98 31 81 59 81 89Z"
-            stroke="currentColor"
-            strokeWidth="0.6"
-          />
-          <path
-            d="M81 89C70 64 68 27 81 4C94 37 95 65 81 89Z"
-            stroke="currentColor"
-            strokeWidth="0.6"
-          />
+          <circle cx="100" cy="160" r="6" fill="var(--accent)" />
+          <circle cx="180" cy="300" r="4" fill="var(--ink)" />
+          <circle cx="20" cy="260" r="4" fill="var(--accent)" />
+          <circle cx="100" cy="20" r="4" fill="var(--ink)" />
         </svg>
       </div>
       <div className="connection-copy">
         <span className="eyebrow" data-reveal>
-          ANVAYA / THE CONNECTION
+          ANVAYA // THE CONNECTION
         </span>
         <h2 data-reveal>
           The engineering your idea needs.
         </h2>
         <p data-reveal>
-          We’re a Bengaluru engineering collective bringing product engineering,
-          AI workflows, spatial 3D, and interface design together around your
-          project.
+          We’re an independent Bengaluru engineering collective bringing software engineering,
+          autonomous AI workflows, spatial 3D, and interface architecture together around your
+          product.
         </p>
       </div>
-      <span className="connection-caption" aria-hidden="true">
-        IDEA · SYSTEM · EXPERIENCE
+      <span className="connection-caption font-mono" aria-hidden="true">
+        SOFTWARE · AI · SPATIAL 3D
       </span>
     </section>
   );

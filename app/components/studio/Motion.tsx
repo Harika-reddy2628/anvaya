@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { animate, svg, type JSAnimation } from "animejs";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -16,7 +15,6 @@ export function Motion({ children }: { children: ReactNode }) {
   useGSAP(
     () => {
       const media = gsap.matchMedia();
-      const drawings: JSAnimation[] = [];
       let disposed = false;
       media.add("(prefers-reduced-motion: no-preference)", () => {
         const context = root.current;
@@ -38,13 +36,12 @@ export function Motion({ children }: { children: ReactNode }) {
               },
             },
           );
-        // The hero and intro have their own anime.js scopes. Do not double-animate them.
+        // Text remains visible; GSAP owns only the progressive section movement.
         context
           .querySelectorAll<HTMLElement>("[data-reveal]")
           .forEach((element) => {
             gsap.from(element, {
               y: 12,
-              opacity: 0,
               duration: 0.45,
               ease: "power2.out",
               scrollTrigger: { trigger: element, start: "top 94%", once: true },
@@ -69,28 +66,6 @@ export function Motion({ children }: { children: ReactNode }) {
             },
           );
 
-        context
-          .querySelectorAll<SVGPathElement>("[data-draw]")
-          .forEach((line) => {
-            ScrollTrigger.create({
-              trigger: line.closest("section") ?? line,
-              start: "top 90%",
-              once: true,
-              onEnter: () => {
-                drawings.push(
-                  animate(svg.createDrawable(line), {
-                    draw: ["0 0", "0 1"],
-                    duration: 650,
-                    ease: "outCubic",
-                  }),
-                );
-              },
-            });
-          });
-
-        return () => {
-          drawings.forEach((animation) => animation.revert());
-        };
       });
       document.fonts.ready.then(() => {
         if (!disposed) ScrollTrigger.refresh();

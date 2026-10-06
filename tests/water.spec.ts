@@ -159,7 +159,7 @@ test("touch and reduced-motion views keep the native cursor and readable artwork
   page,
 }, testInfo) => {
   test.skip(
-    testInfo.project.name === "desktop",
+    ["desktop", "webkit-desktop"].includes(testInfo.project.name),
     "Non-desktop presentations cover this fallback",
   );
   await page.goto("/");
@@ -167,7 +167,7 @@ test("touch and reduced-motion views keep the native cursor and readable artwork
   await expect(page.locator("[data-water-canvas]")).toBeHidden();
   await expect(page.locator("[data-water-cursor]")).toBeHidden();
   await expect(page.locator("[data-hero-poster] img")).toBeVisible();
-  if (testInfo.project.name === "mobile") {
+  if (testInfo.project.name.includes("mobile")) {
     await page.getByRole("button", { name: "Pause background motion" }).tap();
     await expect(page.locator("[data-hero-drift]")).toHaveCSS(
       "transform",

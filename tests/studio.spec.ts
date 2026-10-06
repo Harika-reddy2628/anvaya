@@ -13,13 +13,13 @@ test("homepage, spatial controls, and keyboard service selection", async ({
   const demo = page.locator(".featured-work-grid .spatial-demo").first();
   await expect(page.locator("header .brand svg")).toHaveCount(0);
   await expect(page.locator("[data-seal-trace], [data-indic]")).toHaveCount(0);
-  await expect(page.locator("#hero-heading")).toHaveCSS("font-weight", "400");
+  await expect(page.locator("#hero-heading")).toHaveCSS("font-weight", "550");
   await expect(page.locator("[data-hero-poster] img")).toBeVisible();
   await expect(
     page.locator(".featured-work-grid .work-title").first(),
-  ).toContainText("Oppy CLI");
+  ).toContainText("Spatial Web Engine");
   await page.screenshot({ path: testInfo.outputPath("homepage.png") });
-  if (testInfo.project.name === "mobile") {
+  if (testInfo.project.name.includes("mobile")) {
     await page
       .locator("#hero-heading")
       .screenshot({ path: testInfo.outputPath("hero-type.png") });
@@ -92,7 +92,7 @@ test("brief validates, carries service context, and downloads without submitting
   });
   await page.goto("/project?service=spatial");
   await expect(page.locator("#brief-service")).toHaveValue("spatial");
-  await page.getByRole("button", { name: "Create project brief" }).click();
+  await page.getByRole("button", { name: "Prepare brief" }).click();
   await expect(page.locator("#name-error")).toBeVisible();
   await expect(page.locator("#email-error")).toBeVisible();
   await expect(page.locator("#goal-error")).toBeVisible();
@@ -101,7 +101,7 @@ test("brief validates, carries service context, and downloads without submitting
   await page
     .getByLabel("What would success look like?", { exact: false })
     .fill("An interactive product configurator for our furniture collection.");
-  await page.getByRole("button", { name: "Create project brief" }).click();
+  await page.getByRole("button", { name: "Prepare brief" }).click();
   const result = page.getByRole("region", { name: "Prepared project brief" });
   await expect(result).toBeVisible();
   await expect(result).toContainText("It has not been submitted or sent.");
@@ -166,7 +166,7 @@ test("mobile navigation opens, closes on Escape, and follows links", async ({
   page,
 }, testInfo) => {
   test.skip(
-    testInfo.project.name !== "mobile",
+    !testInfo.project.name.includes("mobile"),
     "Compact navigation is specific to mobile",
   );
   await page.goto("/");

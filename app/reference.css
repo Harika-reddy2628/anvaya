@@ -2,7 +2,7 @@
 .site-header {
   position: fixed;
   inset: 0 0 auto;
-  background: rgb(248 244 238 / 87%);
+  background: color-mix(in srgb, var(--hero-paper) 94%, transparent);
   backdrop-filter: blur(10px);
 }
 .header-inner {
@@ -17,6 +17,14 @@
 }
 .header-actions {
   margin-left: 65px;
+}
+.header-cta-short {
+  display: none;
+}
+.desktop-nav a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
 }
 .rolling-label {
   position: relative;
@@ -70,13 +78,13 @@
 .connection-story {
   position: relative;
   overflow: clip;
-  padding: 130px 24px 110px;
+  padding: 100px 24px;
   text-align: center;
   background: var(--hero-paper);
 }
 .connection-copy {
   position: relative;
-  max-width: 540px;
+  max-width: 760px;
   margin-inline: auto;
 }
 .connection-copy > .eyebrow {
@@ -86,7 +94,8 @@
   margin-top: 35px;
 }
 .connection-copy p {
-  max-width: 355px;
+  max-width: 58ch;
+  margin-top: 28px;
   margin-inline: auto;
 }
 .connection-arrow {
@@ -125,7 +134,7 @@
 }
 .connection-caption {
   display: block;
-  margin-top: 85px;
+  margin-top: 48px;
   color: var(--muted);
 }
 .work-section {
@@ -141,23 +150,22 @@
 }
 .work-scene {
   position: relative;
-  min-height: min(850px, calc(100svh - 76px));
-  padding-block: 80px;
+  padding-block: 64px;
 }
 .work-tone-0 {
-  background: #fefbfb;
+  background: var(--surface);
 }
 .work-tone-1 {
-  background: #f1ebe7;
+  background: var(--paper);
 }
 .work-tone-2 {
-  background: #e9e3df;
+  background: var(--surface-soft, var(--surface));
 }
 .work-tone-3 {
-  background: #e7dad5;
+  background: var(--paper);
 }
 .work-tone-4 {
-  background: #ded2cf;
+  background: var(--surface);
 }
 .work-scene-inner {
   position: relative;
@@ -165,13 +173,12 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
   gap: 9%;
-  min-height: min(660px, calc(100svh - 236px));
 }
 .work-story .work-preview {
   height: auto;
   min-height: 420px;
   margin: 0;
-  border-radius: 0;
+  border-radius: 24px;
   min-width: 0;
 }
 .work-story .work-narrative {
@@ -200,8 +207,8 @@
   overflow-wrap: anywhere;
 }
 .work-story-statement {
-  color: #725653;
-  margin-top: 42px;
+  color: var(--accent);
+  margin-top: 24px;
 }
 .work-story-description {
   max-width: 370px;
@@ -228,26 +235,21 @@
   display: flex;
   flex-direction: column;
   border: 0;
-  gap: 70px;
+  gap: 32px;
 }
 .service-panel {
   display: grid;
-  grid-template-columns: 0.55fr 1fr;
-  column-gap: 55px;
+  grid-template-columns: 1fr;
   max-width: 1000px;
   width: 100%;
   margin: 0 auto;
-  padding: 0;
-  order: 0;
-}
-.service-initial {
-  text-align: right;
-  color: #76504d;
-  padding-top: 35px;
+  padding: 32px;
+  background: var(--surface);
+  border-radius: 24px;
+  order: 1;
 }
 .service-copy {
-  padding-left: 55px;
-  border-left: 1px solid var(--line);
+  padding: 0;
 }
 .service-copy > .eyebrow {
   color: var(--accent);
@@ -256,7 +258,7 @@
   margin-block: 28px;
 }
 .service-description {
-  max-width: 440px;
+  max-width: 62ch;
 }
 .service-copy .deliverables {
   margin-block: 27px;
@@ -272,8 +274,8 @@
 .service-tabs {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 45px;
-  order: 1;
+  gap: 24px;
+  order: 0;
 }
 .service-tabs > button {
   position: relative;
@@ -285,10 +287,6 @@
   border-top: 1px solid var(--line);
   border-bottom: 0;
 }
-.service-tabs > button .service-preview-initial {
-  grid-column: 1 / -1;
-  color: #d0beb7;
-}
 .service-tabs > button .service-number {
   grid-column: 1 / -1;
   margin: 0;
@@ -297,17 +295,14 @@
   width: 17px;
   height: 17px;
 }
-.service-tabs > button[aria-selected="true"] .service-preview-initial {
-  color: var(--accent);
-}
 .process-grid {
   max-width: 850px;
   margin: 0 auto;
-  border: 0;
+  border-bottom: 1px solid var(--line);
 }
 .milestone {
   display: block;
-  border: 0;
+  border-bottom: 1px solid var(--line);
   padding: 28px 0;
 }
 .milestone details {
@@ -316,11 +311,10 @@
 .milestone summary {
   display: flex;
   position: relative;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 15px;
-  text-align: center;
+  justify-content: space-between;
+  gap: 24px;
+  text-align: left;
   padding: 15px 0;
 }
 .milestone-top {
@@ -328,18 +322,17 @@
   color: var(--muted);
 }
 .milestone summary h3 {
-  border-bottom: 1px solid currentColor;
-  padding-bottom: 3px;
+  flex: 1;
 }
 .milestone summary > svg {
-  display: none;
+  display: block;
 }
 .milestone details[open] summary {
   color: var(--accent);
 }
 .milestone details p {
-  max-width: 460px;
-  margin: 22px auto 0;
+  max-width: 62ch;
+  margin: 18px 0 0;
 }
 .milestone details .milestone-description {
   color: var(--ink);
@@ -396,36 +389,34 @@
   transition: background 250ms;
 }
 .studio-circle:hover {
-  background: #795956;
+  background: var(--accent-hover, var(--accent));
 }
 .faq-layout {
   grid-template-columns: 1fr;
-  gap: 65px;
+  gap: 40px;
 }
 .faq-layout > div:first-child {
-  text-align: center;
+  text-align: left;
 }
 .faq-list {
   width: min(760px, 100%);
-  margin-inline: auto;
+  margin: 0;
 }
 .faq-item,
 .faq-item:last-child {
-  border: 0;
-  margin-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+  margin: 0;
 }
 .faq-item summary {
-  justify-content: center;
-  text-align: center;
+  justify-content: space-between;
+  text-align: left;
   padding-block: 25px;
 }
 .faq-item summary > span:nth-child(2) {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 8px;
+  flex: 1;
 }
 .faq-item summary > svg {
-  display: none;
+  display: block;
 }
 .faq-index {
   display: none;
@@ -434,12 +425,15 @@
   color: var(--accent);
 }
 .faq-item > p {
-  max-width: 480px;
+  max-width: 65ch;
   padding: 10px 0 30px;
-  margin-inline: auto;
+  margin: 0;
 }
 .site-footer {
   background: var(--footer);
+  color: var(--on-dark, var(--ink));
+  --muted: var(--on-dark-secondary, #555967);
+  --accent: var(--on-dark, #73504f);
 }
 .footer-invitation {
   padding-block: 85px;
@@ -517,13 +511,6 @@
   .work-story .work-narrative {
     padding-block: 30px;
   }
-  .service-panel {
-    grid-template-columns: 0.35fr 1fr;
-    gap: 30px;
-  }
-  .service-copy {
-    padding-left: 30px;
-  }
 }
 @media (max-width: 680px) {
   .header-inner {
@@ -533,7 +520,17 @@
     margin-left: auto;
   }
   .header-cta {
+    display: inline-flex;
+    gap: 6px;
+  }
+  .header-cta-full {
     display: none;
+  }
+  .header-cta-short {
+    display: inline;
+  }
+  .header-actions {
+    gap: 16px;
   }
   .mobile-toggle {
     min-width: 45px;
@@ -558,7 +555,7 @@
     padding: 90px 24px 75px;
   }
   .connection-copy p {
-    max-width: 295px;
+    max-width: 58ch;
   }
   .connection-arrow {
     height: 85px;
@@ -571,7 +568,7 @@
     opacity: 0.25;
   }
   .connection-caption {
-    margin-top: 60px;
+    margin-top: 40px;
   }
   .work-scene {
     padding-block: 65px;
@@ -604,26 +601,21 @@
     bottom: -30px;
   }
   .service-explorer {
-    gap: 50px;
+    gap: 24px;
   }
   .service-panel {
     grid-template-columns: 1fr;
-    gap: 0;
-  }
-  .service-initial {
-    text-align: left;
-    padding: 0;
-    margin-bottom: 25px;
+    padding: 24px;
   }
   .service-copy {
-    padding-left: 24px;
+    padding: 0;
   }
   .service-copy h3 {
     margin-block: 23px;
   }
   .service-tabs {
     grid-template-columns: 1fr 1fr;
-    gap: 30px;
+    gap: 16px;
   }
   .service-tabs > button {
     padding-block: 20px;
@@ -643,7 +635,7 @@
     gap: 40px;
   }
   .faq-item > p {
-    padding-inline: 10px;
+    padding-inline: 0;
   }
   .footer-invitation {
     padding-block: 70px;

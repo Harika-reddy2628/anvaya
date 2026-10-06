@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { useId, useRef } from "react";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
 import { services } from "../../lib/studio";
 import { useProject } from "./ProjectContext";
-import { animate, createScope } from "animejs";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 export function ServiceExplorer() {
   const { selected, select } = useProject();
@@ -13,23 +14,13 @@ export function ServiceExplorer() {
   const tabs = useRef<Array<HTMLButtonElement | null>>([]);
   const panel = useRef<HTMLDivElement>(null);
   const service = services.find((item) => item.id === selected)!;
-  const initials = ["P", "A", "S", "I"];
-
-  useEffect(() => {
-    const scope = createScope({
-      root: panel.current!,
-      mediaQueries: { reduce: "(prefers-reduced-motion: reduce)" },
-    }).add((self) => {
-      if (!self || self.matches.reduce) return;
-      animate("[data-service-copy]", {
-        opacity: [0, 1],
-        y: [10, 0],
-        duration: 550,
-        ease: "outCubic",
-      });
+  useGSAP(() => {
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      gsap.from("[data-service-copy]", { y: 6, duration: 0.25, ease: "power2.out" });
     });
-    return () => scope.revert();
-  }, [selected]);
+    return () => media.revert();
+  }, { scope: panel, dependencies: [selected], revertOnUpdate: true });
 
   return (
     <div className="service-explorer" data-reveal>
@@ -79,9 +70,6 @@ export function ServiceExplorer() {
               tabs.current[next]?.focus();
             }}
           >
-            <span className="service-preview-initial" aria-hidden="true">
-              {initials[index]}
-            </span>
             <span className="service-number">{item.number}</span>
             <span>{item.title}</span>
             <ArrowUpRight size={22} strokeWidth={1.5} aria-hidden="true" />
@@ -96,9 +84,6 @@ export function ServiceExplorer() {
         aria-labelledby={`${id}-tab-${service.id}`}
         tabIndex={0}
       >
-        <span className="service-initial" aria-hidden="true">
-          {initials[services.findIndex((item) => item.id === selected)]}
-        </span>
         <div className="service-copy" data-service-copy>
           <span className="eyebrow">{service.name}</span>
           <h3>{service.title}</h3>
