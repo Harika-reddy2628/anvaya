@@ -9,11 +9,9 @@ import { BriefBuilder } from "./components/studio/BriefBuilder";
 import { projects, packages, faqs } from "./lib/studio";
 
 const selectedWork = [
-  "oppy",
-  "guild",
   "spatial-engine",
-  "architectural-walkthrough",
-  "quality-harness",
+  "guild",
+  "oppy",
 ].map((slug) => projects.find((project) => project.slug === slug)!);
 const engagements = [packages[1], packages[0], packages[2]];
 
@@ -63,16 +61,13 @@ export default function HomePage() {
               <span>01</span> SELECTED WORK
             </span>
             <h2>
-              The thinking.
-              <br />
-              And the things we build<span className="accent">.</span>
+              Products, tools, and systems we’ve built<span className="accent">.</span>
             </h2>
           </div>
           <div className="section-heading-aside">
             <p>
-              Tools that work. Workflows that connect.
-              <br />
-              Experiences that make complex ideas tangible.
+              Explore the problem, our approach, and the evidence behind each
+              project.
             </p>
             <Link className="text-link" href="/work">
               Explore all projects <ArrowUpRight size={16} aria-hidden="true" />
@@ -89,16 +84,13 @@ export default function HomePage() {
                 <span>02</span> WHAT WE DO
               </span>
               <h2>
-                One collective.
-                <br />
-                Four ways forward<span className="accent">.</span>
+                Four disciplines. One engineering team<span className="accent">.</span>
               </h2>
             </div>
             <div className="section-heading-aside">
               <p>
-                Senior engineering for founders and CTOs.
-                <br />
-                Specialist thinking for products, workflows, and spaces.
+                Product engineering, AI workflows, spatial 3D, and interface
+                design—scoped around what you need to build.
               </p>
             </div>
           </div>
@@ -112,14 +104,13 @@ export default function HomePage() {
               <span>03</span> HOW WE BUILD
             </span>
             <h2>
-              Clarity at every step<span className="accent">.</span>
+              From agreed scope to source handover<span className="accent">.</span>
             </h2>
           </div>
           <div className="section-heading-aside">
             <p>
-              A shared plan from the first conversation
-              <br />
-              to the moment the work becomes yours.
+              Agree the deliverables, review working previews, and receive the
+              source and documentation after final payment.
             </p>
           </div>
         </div>
@@ -157,16 +148,13 @@ export default function HomePage() {
                 <span>04</span> UNDER THE SURFACE
               </span>
               <h2>
-                Every layer.
-                <br />
-                Built with intention<span className="accent">.</span>
+                Inside the engineering<span className="accent">.</span>
               </h2>
             </div>
             <div className="section-heading-aside">
               <p>
-                Good engineering makes a complicated system
-                <br />
-                feel simple. Explore the pieces behind a product.
+                Explore how the interface, APIs, data, and deployment fit
+                together.
               </p>
             </div>
           </div>
@@ -180,15 +168,13 @@ export default function HomePage() {
               <span>05</span> WORKING TOGETHER
             </span>
             <h2>
-              A defined scope.
-              <br />A clear investment<span className="accent">.</span>
+              Choose how we work together<span className="accent">.</span>
             </h2>
           </div>
           <div className="section-heading-aside">
             <p>
-              Start with a focused project.
-              <br />
-              Stay for the next chapter.
+              A fixed-scope sprint, a spatial project, or an ongoing engineering
+              partnership.
             </p>
           </div>
         </div>
@@ -277,20 +263,17 @@ export default function HomePage() {
           </div>
           <div data-reveal>
             <h2>
-              Different disciplines.
-              <br />A connected way
-              <br />
-              of thinking<span className="accent">.</span>
+              An engineering collective in Bengaluru<span className="accent">.</span>
             </h2>
             <p>
-              We’re a Bengaluru-based engineering collective spanning full-stack
-              systems, AI infrastructure, spatial 3D, and robotics. Every
-              specialist has a voice in the work.
+              Our collective brings specialists in full-stack systems, AI
+              infrastructure, spatial 3D, and robotics into the same project.
+              We work remotely with founders and teams across the world.
             </p>
             <p>
-              Our name reflects what we do: connect physical spaces to digital
-              experiences, agents to business workflows, and ambitious ideas to
-              working systems.
+              अन्वय means connection, continuity, and systematic order. It
+              reflects how we bring the disciplines a project needs into a
+              shared plan, from the first scope to the final handover.
             </p>
             <div className="studio-mantra">
               <span>Learn.</span>
@@ -305,7 +288,7 @@ export default function HomePage() {
               BENGALURU, INDIA · WORKING GLOBALLY
             </span>
             <Link href="/project" className="studio-circle">
-              Let’s build{" "}
+              Start a project{" "}
               <ArrowUpRight size={19} strokeWidth={1} aria-hidden="true" />
             </Link>
           </div>
@@ -318,14 +301,10 @@ export default function HomePage() {
               <span>07</span> GOOD QUESTIONS
             </span>
             <h2>
-              Before we
-              <br />
-              begin<span className="accent">.</span>
+              Scope, payment, and handover<span className="accent">.</span>
             </h2>
             <p>
-              The practical details
-              <br />
-              behind the partnership.
+              The practical details of working with Anvaya.
             </p>
           </div>
           <div className="faq-list" data-reveal>
@@ -347,19 +326,16 @@ export default function HomePage() {
           <div className="section-heading" data-reveal>
             <div>
               <span className="eyebrow section-kicker">
-                <span>08</span> LET’S MAKE IT REAL
+                <span>08</span> YOUR PROJECT
               </span>
               <h2>
-                What are you
-                <br />
-                thinking of building<span className="accent">?</span>
+                Prepare your project brief<span className="accent">.</span>
               </h2>
             </div>
             <div className="section-heading-aside">
               <p>
-                A rough idea is a good place to start.
-                <br />
-                Turn it into a brief we can build around.
+                Outline your project, budget, and timeline. Prepare a brief you
+                can copy or download; nothing is sent from this site.
               </p>
             </div>
           </div>

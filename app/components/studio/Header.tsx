@@ -48,8 +48,10 @@ export function Header() {
           ))}
         </nav>
         <div className="header-actions">
-          <Link className="button button-ink header-cta" href="/project">
-            Start a project <ArrowUpRight size={16} aria-hidden="true" />
+          <Link className="button button-ink header-cta" href="/project" aria-label="Start a project">
+            <span className="header-cta-full">Start a project</span>
+            <span className="header-cta-short" aria-hidden="true">Project</span>
+            <ArrowUpRight size={16} aria-hidden="true" />
           </Link>
           <button
             ref={toggle}

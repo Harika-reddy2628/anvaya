@@ -16,7 +16,8 @@ export function BriefBuilder({
   const [override, setOverride] = useState<ServiceId | undefined>(
     initialService,
   );
-  const chosen = override ?? selected;
+  // Homepage controls share selection; a route-seeded brief owns its local choice.
+  const chosen = initialService ? override ?? initialService : selected;
   const service = services.find((item) => item.id === chosen)!;
   const [monthly, setMonthly] = useState(retainer);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -273,12 +274,10 @@ export function BriefBuilder({
         </label>
         <div className="form-actions">
           <button className="button button-accent magnetic" type="submit">
-            Create project brief <ArrowUpRight size={17} aria-hidden="true" />
+            Prepare brief <ArrowUpRight size={17} aria-hidden="true" />
           </button>
           <span>
-            Your details stay in your browser
-            <br />
-            until you choose to share the brief.
+            Prepared in your browser. Nothing is sent.
           </span>
         </div>
       </form>
@@ -334,7 +333,7 @@ export function BriefBuilder({
           <span className="eyebrow">
             <Check size={15} aria-hidden="true" /> BRIEF PREPARED
           </span>
-          <h3>A clear starting point.</h3>
+          <h3>Your project brief is ready.</h3>
           <p>
             Your brief is ready to download or copy. It has not been submitted
             or sent.

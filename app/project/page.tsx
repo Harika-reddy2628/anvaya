@@ -21,12 +21,11 @@ export default async function ProjectPage({
           <span>BRIEF</span> LET’S MAKE IT REAL
         </span>
         <h1>
-          Start with the idea<span className="accent">.</span>
+          Prepare your project brief<span className="accent">.</span>
         </h1>
         <p>
-          Tell us what you want to make possible.
-          <br />
-          Create a clear brief, with scope and investment assumptions up front.
+          Outline your project, budget, and timeline. Prepare a brief you can
+          copy or download; nothing is sent from this site.
         </p>
       </div>
       <BriefBuilder

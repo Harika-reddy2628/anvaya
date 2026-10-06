@@ -4,10 +4,10 @@ import { Header } from "./components/studio/Header";
 import { Footer } from "./components/studio/Footer";
 import { Motion } from "./components/studio/Motion";
 import { ProjectProvider } from "./components/studio/ProjectContext";
-import { StudioIntro } from "./components/studio/StudioIntro";
 import "./globals.css";
 import "./editorial.css";
 import "./reference.css";
+import "./typography.css";
 
 const sahitya = localFont({
   src: [
@@ -28,13 +28,6 @@ const hind = localFont({
   display: "swap",
   preload: false,
 });
-const cormorant = localFont({
-  src: "./fonts/Cormorant-Latin.woff2",
-  variable: "--font-cormorant",
-  weight: "300 700",
-  display: "swap",
-  adjustFontFallback: "Times New Roman",
-});
 const inter = localFont({
   src: "./fonts/Inter-Latin.woff2",
   variable: "--font-inter",
@@ -54,7 +47,7 @@ export const metadata: Metadata = {
     template: "%s — Anvaya",
   },
   description:
-    "A Bengaluru engineering collective building software, agentic AI workflows, and spatial 3D experiences. Focused 14-day sprints. Global delivery.",
+    "A Bengaluru engineering collective building software, AI workflows, and spatial 3D experiences. Focused 14-day sprints. Working globally.",
   icons: { icon: "/icon.svg" },
 };
 
@@ -64,20 +57,18 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${inter.variable} ${sahitya.variable} ${hind.variable} ${geistMono.variable}`}
+      className={`${inter.variable} ${sahitya.variable} ${hind.variable} ${geistMono.variable}`}
     >
       <body>
         <ProjectProvider>
-          <StudioIntro>
-            <a href="#main-content" className="skip-link">
-              Skip to content
-            </a>
-            <Motion>
-              <Header />
-              {children}
-              <Footer />
-            </Motion>
-          </StudioIntro>
+          <a href="#main-content" className="skip-link">
+            Skip to content
+          </a>
+          <Motion>
+            <Header />
+            {children}
+            <Footer />
+          </Motion>
         </ProjectProvider>
       </body>
     </html>

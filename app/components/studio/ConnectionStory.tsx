@@ -1,5 +1,3 @@
-import { ArrowDown } from "lucide-react";
-
 export function ConnectionStory() {
   return (
     <section
@@ -35,24 +33,12 @@ export function ConnectionStory() {
           ANVAYA / THE CONNECTION
         </span>
         <h2 data-reveal>
-          Between an idea
-          <br />
-          and its place in the world.
+          The engineering your idea needs.
         </h2>
-        <span className="connection-arrow" aria-hidden="true">
-          <ArrowDown size={16} strokeWidth={1} />
-        </span>
         <p data-reveal>
-          We connect the disciplines your project needs: product engineering,
-          autonomous AI, and spatial 3D. One considered system, built around a
-          real problem.
-        </p>
-        <span className="connection-arrow" aria-hidden="true">
-          <ArrowDown size={16} strokeWidth={1} />
-        </span>
-        <p data-reveal>
-          From a founder’s first release to an experience you can step inside.
-          The outcome is always something you can use.
+          We’re a Bengaluru engineering collective bringing product engineering,
+          AI workflows, spatial 3D, and interface design together around your
+          project.
         </p>
       </div>
       <span className="connection-caption" aria-hidden="true">

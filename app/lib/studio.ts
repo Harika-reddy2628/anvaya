@@ -14,7 +14,7 @@ export const services = [
     title: "Launch a product.",
     name: "Product engineering",
     description:
-      "Turn a focused idea into a production-ready web or mobile product, with the engineering to keep growing.",
+      "Build a focused web or mobile product, from interface and backend to deployment and source handover.",
     deliverables: [
       "Product flows and a custom interface",
       "Backend APIs and data architecture",
@@ -34,7 +34,7 @@ export const services = [
     title: "Put workflows to work.",
     name: "Agentic AI & automation",
     description:
-      "Connect the tools, documents, and decisions your business relies on. Build automation around a real operational need.",
+      "Connect your tools and documents in an AI workflow built around a defined operational task.",
     deliverables: [
       "Multi-agent workflow orchestration",
       "Document retrieval and RAG pipelines",
@@ -54,7 +54,7 @@ export const services = [
     title: "Make spaces tangible.",
     name: "Spatial 3D & digital twins",
     description:
-      "Let people explore a property, configure a product, or navigate a space before they ever step inside.",
+      "Create browser-based experiences for exploring properties, configuring products, and understanding spaces.",
     deliverables: [
       "Interactive web viewers and digital twins",
       "Architectural visualization and 4K walkthroughs",
@@ -74,7 +74,7 @@ export const services = [
     title: "Give your product an edge.",
     name: "Performance & interface design",
     description:
-      "Replace a cumbersome frontend with a considered interface. Improve the experience, loading performance, and path to conversion.",
+      "Improve an existing product’s interface and frontend performance, with scope based on a product review.",
     deliverables: [
       "Product UX and interface redesign",
       "Reusable frontend components",
@@ -113,7 +113,7 @@ export const projects = [
       "Product and property use cases",
     ],
     evidence:
-      "The viewer below is an interactive illustration built for this website. The production component and its asset-size and load-time benchmarks are not demonstrated here.",
+      "This interactive illustration is built for this website. It does not demonstrate the production component or its asset-size and load-time benchmarks.",
     external: "",
   },
   {

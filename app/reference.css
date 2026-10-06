@@ -1,10 +1,4 @@
 /* Original Anvaya adaptation of the reference's editorial rhythm. */
-body {
-  font-size: 14px;
-}
-h2 {
-  font-size: clamp(40px, 4.4vw, 68px);
-}
 .site-header {
   position: fixed;
   inset: 0 0 auto;
@@ -14,31 +8,20 @@ h2 {
 .header-inner {
   height: 76px;
 }
-.brand {
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: 33px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-}
 .brand-period {
   color: var(--ink);
 }
 .desktop-nav {
   margin-left: auto;
   gap: 46px;
-  font-size: 11px;
 }
 .header-actions {
   margin-left: 65px;
-}
-.header-cta {
-  font-size: 11px;
 }
 .rolling-label {
   position: relative;
   display: block;
   overflow: hidden;
-  line-height: 1.5;
 }
 .rolling-label > span {
   display: block;
@@ -62,8 +45,6 @@ h2 {
 }
 .mobile-toggle {
   width: auto;
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: 17px;
   text-decoration: underline;
   text-underline-offset: 5px;
 }
@@ -71,9 +52,6 @@ h2 {
   padding-top: 145px;
 }
 .section-kicker {
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: 21px;
-  letter-spacing: -0.015em;
   gap: 22px;
 }
 .section-kicker > span {
@@ -81,8 +59,6 @@ h2 {
   align-items: center;
   gap: 10px;
   color: var(--muted);
-  font-family: var(--font-inter), Arial, sans-serif;
-  font-size: 9px;
 }
 .section-kicker::before {
   content: "";
@@ -104,21 +80,14 @@ h2 {
   margin-inline: auto;
 }
 .connection-copy > .eyebrow {
-  font-family: var(--font-inter), Arial, sans-serif;
-  font-size: 9px;
-  letter-spacing: 0.13em;
   color: var(--accent);
 }
 .connection-copy h2 {
-  font-size: clamp(32px, 3vw, 45px);
-  line-height: 1.12;
   margin-top: 35px;
 }
 .connection-copy p {
   max-width: 355px;
   margin-inline: auto;
-  font-size: 14px;
-  line-height: 1.7;
 }
 .connection-arrow {
   position: relative;
@@ -157,9 +126,7 @@ h2 {
 .connection-caption {
   display: block;
   margin-top: 85px;
-  font-size: 8px;
   color: var(--muted);
-  letter-spacing: 0.14em;
 }
 .work-section {
   padding-bottom: 0;
@@ -218,43 +185,27 @@ h2 {
   z-index: -1;
   top: -125px;
   left: -24px;
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: clamp(270px, 31vw, 460px);
-  line-height: 1;
-  font-weight: 300;
-  letter-spacing: -0.09em;
   color: rgb(255 255 255 / 52%);
   pointer-events: none;
 }
 .work-story .work-meta {
   margin-top: 0;
-  font-family: var(--font-inter), Arial, sans-serif;
-  font-size: 9px;
-  letter-spacing: 0.03em;
 }
 .work-story .work-title {
   gap: 16px;
   margin-top: 28px;
 }
 .work-story .work-title h3 {
-  font-size: clamp(34px, 3.1vw, 48px);
-  line-height: 1.05;
-  text-transform: uppercase;
   min-width: 0;
   overflow-wrap: anywhere;
 }
 .work-story-statement {
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: 25px;
   color: #725653;
   margin-top: 42px;
-  line-height: 1.25;
 }
 .work-story-description {
   max-width: 370px;
   margin-top: 22px;
-  font-size: 13px;
-  line-height: 1.8;
   color: var(--muted);
 }
 .work-narrative > .text-link {
@@ -265,11 +216,8 @@ h2 {
   position: absolute;
   bottom: -40px;
   right: 0;
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: 19px;
 }
 .story-position > span {
-  font-size: 12px;
   color: var(--muted);
   margin-left: 8px;
 }
@@ -293,11 +241,6 @@ h2 {
   order: 0;
 }
 .service-initial {
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: clamp(180px, 24vw, 330px);
-  font-weight: 400;
-  letter-spacing: -0.07em;
-  line-height: 1;
   text-align: right;
   color: #76504d;
   padding-top: 35px;
@@ -308,43 +251,22 @@ h2 {
 }
 .service-copy > .eyebrow {
   color: var(--accent);
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: 15px;
-  text-transform: none;
-  letter-spacing: 0;
 }
 .service-copy h3 {
-  font-size: clamp(35px, 3.4vw, 49px);
-  line-height: 1.05;
   margin-block: 28px;
 }
 .service-description {
-  font-size: 14px;
-  line-height: 1.75;
   max-width: 440px;
 }
 .service-copy .deliverables {
   margin-block: 27px;
   gap: 10px;
 }
-.service-copy .deliverables li {
-  font-size: 12px;
-}
 .service-bottom {
   flex-wrap: wrap;
   border-color: var(--line);
 }
-.service-price {
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: 31px;
-}
-.service-price > small {
-  font-family: var(--font-inter), Arial, sans-serif;
-  font-size: 11px;
-  line-height: 1.5;
-}
 .service-copy > .text-link {
-  font-size: 11px;
   margin-top: 24px;
 }
 .service-tabs {
@@ -362,21 +284,13 @@ h2 {
   padding: 24px 0;
   border-top: 1px solid var(--line);
   border-bottom: 0;
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: 22px;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
 }
 .service-tabs > button .service-preview-initial {
   grid-column: 1 / -1;
-  font-size: 54px;
-  line-height: 1;
   color: #d0beb7;
 }
 .service-tabs > button .service-number {
   grid-column: 1 / -1;
-  font-family: var(--font-inter), Arial, sans-serif;
-  font-size: 9px;
   margin: 0;
 }
 .service-tabs > button > svg {
@@ -411,15 +325,9 @@ h2 {
 }
 .milestone-top {
   display: block;
-  font-family: var(--font-inter), Arial, sans-serif;
-  font-size: 9px;
-  letter-spacing: 0.08em;
   color: var(--muted);
 }
 .milestone summary h3 {
-  font-size: clamp(29px, 3.2vw, 44px);
-  text-transform: uppercase;
-  line-height: 1.15;
   border-bottom: 1px solid currentColor;
   padding-bottom: 3px;
 }
@@ -431,8 +339,6 @@ h2 {
 }
 .milestone details p {
   max-width: 460px;
-  font-size: 14px;
-  line-height: 1.8;
   margin: 22px auto 0;
 }
 .milestone details .milestone-description {
@@ -441,9 +347,6 @@ h2 {
 .process-note {
   justify-content: center;
   margin-top: 65px;
-}
-.engineering-nodes > button > :nth-child(2) {
-  font-family: var(--font-cormorant), Georgia, serif;
 }
 .price-pill {
   border-color: var(--line);
@@ -457,19 +360,13 @@ h2 {
 }
 .studio-sanskrit {
   color: var(--accent);
-  font-family: var(--font-sahitya), Georgia, serif;
 }
 .studio-definition {
   color: var(--muted);
   border-color: var(--line);
-  font-family: var(--font-inter), Arial, sans-serif;
-  font-size: 11px;
 }
 .studio-grid {
   align-items: center;
-}
-.studio-grid h2 {
-  font-size: clamp(43px, 4.8vw, 70px);
 }
 .studio-grid .accent,
 .studio-mantra svg {
@@ -477,17 +374,12 @@ h2 {
 }
 .studio-grid p {
   color: var(--muted);
-  font-size: 14px;
 }
 .studio-mantra {
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: 30px;
   border-color: var(--line);
 }
 .studio-global {
   color: var(--muted);
-  font-family: var(--font-inter), Arial, sans-serif;
-  font-size: 9px;
 }
 .studio-circle {
   display: flex;
@@ -500,7 +392,6 @@ h2 {
   justify-content: center;
   flex-direction: column;
   gap: 12px;
-  font-size: 11px;
   margin: 38px 0 0 auto;
   transition: background 250ms;
 }
@@ -526,9 +417,6 @@ h2 {
 .faq-item summary {
   justify-content: center;
   text-align: center;
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: clamp(25px, 2.5vw, 35px);
-  line-height: 1.25;
   padding-block: 25px;
 }
 .faq-item summary > span:nth-child(2) {
@@ -549,7 +437,6 @@ h2 {
   max-width: 480px;
   padding: 10px 0 30px;
   margin-inline: auto;
-  font-size: 14px;
 }
 .site-footer {
   background: var(--footer);
@@ -561,16 +448,11 @@ h2 {
 }
 .footer-invitation > a {
   justify-content: center;
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: clamp(43px, 5vw, 70px);
   gap: 24px;
 }
 .footer-invitation > a svg {
   width: 36px;
   height: 36px;
-}
-.footer-invitation > p {
-  font-size: 13px;
 }
 .footer-top {
   display: flex;
@@ -580,12 +462,8 @@ h2 {
   padding: 0 0 70px;
   text-align: center;
 }
-.footer-top .brand {
-  font-size: clamp(42px, 5vw, 64px);
-}
 .footer-top .footer-description {
   margin: 0;
-  font-size: 11px;
 }
 .footer-links {
   flex-direction: row;
@@ -594,7 +472,6 @@ h2 {
   flex-wrap: wrap;
   gap: 35px;
   padding: 0;
-  font-size: 11px;
 }
 .footer-location {
   text-align: center;
@@ -604,16 +481,10 @@ h2 {
   display: none;
 }
 .footer-location p {
-  font-size: 10px;
   margin: 0;
 }
 .footer-bottom {
-  font-family: var(--font-inter), Arial, sans-serif;
-  font-size: 10px;
   border-color: #ccbcb4;
-}
-.footer-meaning {
-  font-family: var(--font-hind), Arial, sans-serif;
 }
 @media (max-width: 1100px) {
   .header-actions {
@@ -638,17 +509,10 @@ h2 {
     min-height: 0;
   }
   .story-number {
-    font-size: 260px;
     top: -70px;
   }
   .work-story .work-preview {
     min-height: 350px;
-  }
-  .work-story .work-title h3 {
-    font-size: 32px;
-  }
-  .work-story-statement {
-    font-size: 22px;
   }
   .work-story .work-narrative {
     padding-block: 30px;
@@ -660,16 +524,10 @@ h2 {
   .service-copy {
     padding-left: 30px;
   }
-  .service-initial {
-    font-size: 180px;
-  }
 }
 @media (max-width: 680px) {
   .header-inner {
     height: 64px;
-  }
-  .brand {
-    font-size: 24px;
   }
   .header-actions {
     margin-left: auto;
@@ -685,15 +543,12 @@ h2 {
     padding-bottom: 24px;
   }
   .mobile-nav > a {
-    font-family: var(--font-cormorant), Georgia, serif;
-    font-size: 24px;
     padding-block: 15px;
   }
   .inner-page {
     padding-top: 115px;
   }
   .section-kicker {
-    font-size: 17px;
     gap: 14px;
   }
   .section-kicker::before {
@@ -704,7 +559,6 @@ h2 {
   }
   .connection-copy p {
     max-width: 295px;
-    font-size: 12px;
   }
   .connection-arrow {
     height: 85px;
@@ -718,7 +572,6 @@ h2 {
   }
   .connection-caption {
     margin-top: 60px;
-    font-size: 7px;
   }
   .work-scene {
     padding-block: 65px;
@@ -738,23 +591,17 @@ h2 {
     padding-block: 15px 20px;
   }
   .story-number {
-    font-size: 240px;
     left: 30%;
     top: -20px;
-  }
-  .work-story .work-title h3 {
-    font-size: clamp(28px, 8.7vw, 36px);
   }
   .work-story-statement {
     margin-top: 27px;
   }
   .work-story-description {
-    font-size: 12px;
     margin-top: 18px;
   }
   .story-position {
     bottom: -30px;
-    font-size: 16px;
   }
   .service-explorer {
     gap: 50px;
@@ -764,7 +611,6 @@ h2 {
     gap: 0;
   }
   .service-initial {
-    font-size: 90px;
     text-align: left;
     padding: 0;
     margin-bottom: 25px;
@@ -773,39 +619,21 @@ h2 {
     padding-left: 24px;
   }
   .service-copy h3 {
-    font-size: 37px;
     margin-block: 23px;
-  }
-  .service-description {
-    font-size: 13px;
   }
   .service-tabs {
     grid-template-columns: 1fr 1fr;
     gap: 30px;
   }
   .service-tabs > button {
-    font-size: 20px;
     padding-block: 20px;
     gap: 10px;
-  }
-  .service-tabs > button .service-preview-initial {
-    font-size: 42px;
   }
   .milestone {
     padding-block: 18px;
   }
-  .milestone details p {
-    font-size: 13px;
-  }
-  .studio-grid h2 {
-    font-size: 46px;
-  }
   .studio-mantra {
     gap: 10px;
-    font-size: 26px;
-  }
-  .studio-sanskrit {
-    font-size: 65px;
   }
   .studio-circle {
     width: 110px;
@@ -815,7 +643,6 @@ h2 {
     gap: 40px;
   }
   .faq-item > p {
-    font-size: 13px;
     padding-inline: 10px;
   }
   .footer-invitation {
@@ -829,10 +656,6 @@ h2 {
   }
   .footer-links {
     gap: 18px;
-    font-size: 10px;
-  }
-  .footer-bottom {
-    font-size: 9px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

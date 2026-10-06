@@ -14,15 +14,12 @@ export default function WorkPage() {
           <span>INDEX</span> OUR WORK
         </span>
         <h1>
-          Different problems.
-          <br />
-          Connected thinking<span className="accent">.</span>
+          Products, tools, and systems we’ve built<span className="accent">.</span>
         </h1>
         <p>
-          Internal products, technical showcases, and an anonymous case study.
-          <br />
-          Explore the problem, the engineering, and what each project makes
-          possible.
+          Public and internal products, technical showcases, and an anonymous
+          case study. Explore the problem, our approach, and the evidence behind
+          each project.
         </p>
       </div>
       <WorkGallery />

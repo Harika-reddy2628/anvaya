@@ -10,15 +10,15 @@ export function Footer() {
         <div className="footer-invitation">
           <span className="eyebrow">THE NEXT CONNECTION</span>
           <Link href="/project">
-            <span>Something in mind?</span>
+            <span>Start with a project brief.</span>
             <ArrowUpRight size={58} strokeWidth={1} aria-hidden="true" />
           </Link>
-          <p>Let’s turn it into something that works.</p>
+          <p>Outline the idea. We’ll help define the engineering.</p>
         </div>
         <div className="footer-top">
           <Brand />
           <p className="footer-description">
-            An engineering collective. Connected by craft.
+            Software, AI workflows, and spatial experiences.
           </p>
           <div className="footer-links">
             <Link href="/work">Selected work</Link>

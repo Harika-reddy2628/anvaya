@@ -1,0 +1,329 @@
+/* Shared type roles. Layout stylesheets deliberately contain no type overrides. */
+:root {
+  --text-meta: 0.75rem;
+  --text-small: 0.875rem;
+  --text-body: 1rem;
+  --text-lead: clamp(1rem, 1.25vw, 1.125rem);
+  --text-display: clamp(2.625rem, 6.4vw, 6rem);
+  --text-section: clamp(2rem, 4.3vw, 4rem);
+  --text-card: clamp(1.5rem, 2.3vw, 2.25rem);
+}
+
+body {
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: var(--text-body);
+  font-weight: 400;
+  line-height: 1.55;
+  letter-spacing: normal;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-weight: 550;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+h1, .page-heading h1, .not-found-page h1 {
+  font-size: var(--text-display);
+  line-height: 1.05;
+}
+h2 {
+  font-size: var(--text-section);
+  line-height: 1.08;
+}
+h3 {
+  font-size: var(--text-card);
+  line-height: 1.15;
+}
+.section-heading h2 {
+  max-width: 19ch;
+}
+.page-heading h1 {
+  max-width: 20ch;
+}
+.section-heading-aside p, .page-heading p,
+.connection-copy p, .studio-grid p {
+  font-size: var(--text-lead);
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+.page-heading p {
+  max-width: 62ch;
+}
+.eyebrow, .section-kicker, .work-meta, .service-number,
+.milestone-top, .engineering-index, .price-top .eyebrow,
+.price-pill, .studio-definition, .studio-global, .faq-index,
+.form-heading > :last-child, .estimate > span,
+.estimate-assumptions .eyebrow, .connection-caption,
+.story-position, .story-position > span {
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: var(--text-meta);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+}
+.section-kicker {
+  font-weight: 600;
+}
+.section-kicker > span {
+  font-size: var(--text-meta);
+  letter-spacing: normal;
+}
+.brand {
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+.brand small, .indic-signature, .indic-label {
+  font-family: var(--font-sahitya), Georgia, serif;
+  font-size: 1.125rem;
+  letter-spacing: normal;
+}
+.button, .text-link, .desktop-nav, .header-cta, .mobile-toggle,
+.filter-list > button, .studio-circle {
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: var(--text-small);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: normal;
+}
+.rolling-label {
+  line-height: 1.3;
+}
+.mobile-nav > a {
+  font-size: 1.25rem;
+  font-weight: 550;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+.work-title h3, .work-story .work-title h3 {
+  font-size: var(--text-card);
+}
+.work-card > p, .work-story-description, .service-description,
+.deliverables > li, .milestone details p, .engineering-detail p,
+.studio-grid p, .faq-item > p, .brief-summary > p,
+.brief-summary .deliverables > li, .brief-result > p,
+.case-role p, .service-detail-section p, .policy-content p {
+  font-size: var(--text-body);
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+.work-story-statement {
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+}
+.story-number {
+  font-size: 10rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.07em;
+}
+.service-tabs > button {
+  font-size: 1.125rem;
+  font-weight: 550;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+}
+.service-copy h3, .engineering-detail h3, .brief-summary h3 {
+  font-size: var(--text-card);
+}
+.service-copy > .eyebrow {
+  font-size: var(--text-meta);
+  font-weight: 600;
+}
+.service-price {
+  font-size: 1.75rem;
+  font-weight: 550;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.service-price > small, .process-note p, .tag-list > span,
+.price-local, .price-time, .price-note, .pricing-terms,
+.estimate > small, .estimate-assumptions p {
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: var(--text-small);
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: normal;
+}
+.milestone summary h3 {
+  font-size: clamp(1.375rem, 2.5vw, 2rem);
+}
+.engineering-nodes > button > :nth-child(2) {
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 550;
+  line-height: 1.3;
+}
+.price-card h3 {
+  font-size: clamp(1.5rem, 2.3vw, 2rem);
+}
+.price-audience, .price-card .deliverables > li {
+  font-size: var(--text-body);
+  line-height: 1.6;
+}
+.price-value, .estimate > strong {
+  font-size: clamp(1.875rem, 3vw, 2.75rem);
+  font-weight: 550;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.price-value > span {
+  font-size: var(--text-small);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: normal;
+}
+.price-local {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.studio-sanskrit {
+  font-family: var(--font-sahitya), Georgia, serif;
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: normal;
+}
+.studio-mantra {
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+}
+.faq-layout > div > p {
+  font-size: var(--text-body);
+  line-height: 1.6;
+}
+.faq-item summary {
+  font-size: 1.125rem;
+  font-weight: 550;
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+}
+.field > label {
+  font-size: var(--text-small);
+  font-weight: 550;
+  line-height: 1.4;
+}
+.field .optional {
+  font-size: var(--text-meta);
+  font-weight: 400;
+}
+.field input, .field select, .field textarea {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.field-error, .retainer-checkbox, .brief-more > summary,
+.form-actions > span {
+  font-size: var(--text-small);
+  line-height: 1.6;
+}
+.brief-result pre, code {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  letter-spacing: normal;
+}
+.brief-result pre {
+  overflow-wrap: anywhere;
+}
+.footer-invitation > a {
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 550;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.footer-invitation > p, .footer-top p, .footer-links {
+  font-size: var(--text-body);
+  line-height: 1.6;
+}
+.footer-top .brand {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+}
+.footer-location p, .footer-bottom {
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: var(--text-small);
+  line-height: 1.6;
+}
+.footer-meaning {
+  font-family: var(--font-hind), Arial, sans-serif;
+  font-size: 1rem;
+}
+.case-narrative h2, .policy-content h2 {
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  line-height: 1.2;
+}
+.case-narrative p {
+  max-width: 66ch;
+  font-size: var(--text-lead);
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+.evidence-note p {
+  font-size: var(--text-body);
+  line-height: 1.65;
+}
+.case-next h2 {
+  font-size: var(--text-card);
+}
+.large-deliverables li {
+  font-size: var(--text-lead);
+  line-height: 1.5;
+}
+.service-detail-section h2 {
+  font-size: var(--text-card);
+}
+
+/* Technical previews remain legible at their displayed size. */
+.demo-topline, .diagram-coordinate, .rotation-control,
+.workflow-top, .visual-note, .terminal-top, .terminal-eyebrow,
+.terminal-command, .terminal-body > p, .terminal-tags,
+.terminal-bottom, .robotics-labels, .connection-motif > span {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--text-meta);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: normal;
+}
+.diagram-coordinate, .rotation-control, .visual-note {
+  color: var(--muted);
+}
+.room-selector button, .view-controls > button,
+.workflow-source, .workflow-node span, .workflow-output,
+.verification-rows > div > span {
+  font-size: var(--text-meta);
+  line-height: 1.5;
+}
+.workflow-node strong, .verification-rows > div {
+  font-size: var(--text-small);
+  font-weight: 550;
+  line-height: 1.4;
+}
+.terminal-logo {
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: clamp(3.5rem, 7vw, 6rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.06em;
+}
+.terminal-command {
+  font-size: 0.8125rem;
+}
+
+@media (max-width: 679px) {
+  .brand { font-size: 1.5rem; }
+  .story-number { font-size: 6rem; }
+  .service-price { font-size: 1.5rem; }
+  .service-tabs > button { font-size: 1rem; }
+  .engineering-nodes > button > :nth-child(2) { font-size: var(--text-small); }
+  .price-value, .estimate > strong { font-size: 1.875rem; }
+  .footer-invitation > a { font-size: 2rem; }
+}

@@ -76,13 +76,21 @@ export default async function CaseStudy({ params }: Props) {
         </div>
         <div className="case-narrative">
           {[
-            ["01 / THE PROBLEM", project.problem],
-            ["02 / THE APPROACH", project.solution],
-            ["03 / THE PRACTICAL OUTCOME", project.outcome],
-          ].map(([label, text]) => (
+            ["The problem", project.problem],
+            ["Our approach", project.solution],
+            ["The outcome", project.outcome],
+          ].map(([label, text], index) => (
             <section key={label} data-reveal>
-              <span className="eyebrow">{label}</span>
-              <h2>{text}</h2>
+              <span className="eyebrow" aria-hidden="true">0{index + 1}</span>
+              <h2>{label}</h2>
+              <p>
+                {text.split("<anvaya-viewer>").map((part, partIndex) => (
+                  <span key={partIndex}>
+                    {partIndex > 0 && <code>{"<anvaya-viewer>"}</code>}
+                    {part}
+                  </span>
+                ))}
+              </p>
             </section>
           ))}
           <div className="evidence-note">
