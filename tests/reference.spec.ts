@@ -1,106 +1,73 @@
 import { expect, test } from "@playwright/test";
-
-test("reference typography, native pointer, and five work chapters", async ({
-  page,
-}, testInfo) => {
-  const errors: string[] = [];
-  page.on("pageerror", (error) => errors.push(error.message));
+const pages = [
+  ["/", "MAKE.MOVE.MATTER."],
+  ["/services", "The right work rarely sits in one box."],
+  ["/services/digital-presence", "Make the first impression useful."],
+  ["/services/digital-products", "Turn a complex idea into something people can use."],
+  ["/services/intelligent-operations", "Make repeated work move with more clarity."],
+  ["/services/spatial-visuals", "Make the unbuilt feel understandable."],
+  ["/studio", "Connection, with intent."],
+  ["/project", "What are you trying to move?"],
+];
+test.beforeEach(async ({ page }) => { await page.addInitScript(() => sessionStorage.setItem("anvaya-intention-intro", "1")); });
+for (const [path, title] of pages) {
+  test(`launch page ${path} has readable content and navigation`, async ({ page }) => {
+    const errors: string[] = []; page.on("pageerror", e => errors.push(e.message));
+    const response = await page.goto(path);
+    expect(response?.status()).toBe(200);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(title);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    const nav = page.getByRole("navigation", { name: "Main navigation" });
+    await expect(nav.getByRole("link", { name: "Services", exact: true })).toBeVisible();
+    await expect(nav.getByRole("link", { name: "Studio", exact: true })).toBeVisible();
+    await expect(page.locator("header").getByRole("link", { name: "Start a Project" })).toBeVisible();
+    await expect(page.locator("header").getByRole("link", { name: "Home", exact: true })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: /menu|navigation/i })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: "Work", exact: true })).toHaveCount(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
+    expect(errors).toEqual([]);
+  });
+}
+test("legacy service URLs resolve to named practices and Work stays unpublished", async ({ page }) => {
+  for (const [old, next] of [["interface","digital-presence"],["product","digital-products"],["automation","intelligent-operations"],["spatial","spatial-visuals"]]) {
+    await page.goto(`/services/${old}`); await expect(page).toHaveURL(new RegExp(`/services/${next}$`));
+  }
+  await page.goto("/about"); await expect(page).toHaveURL(/\/studio$/);
+  for (const path of ["/work", "/work/oppy", "/not-a-page"]) {
+    const response = await page.goto(path); expect(response?.status()).toBe(404);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("This page has not found its connection yet.");
+    await expect(page.getByRole("link", { name: "Go Home" })).toBeVisible();
+  }
+});
+test("native navigation, history, skip link and anchors remain usable", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator("[data-studio-intro]")).toBeHidden();
-  const fonts = await page.evaluate(() => ({
-    heading: getComputedStyle(document.querySelector("h1")!).fontFamily,
-    body: getComputedStyle(document.body).fontFamily,
-    paper: getComputedStyle(document.body).backgroundColor,
-    cursor: getComputedStyle(document.body).cursor,
-    header: getComputedStyle(document.querySelector("header")!).position,
-  }));
-  expect(fonts.heading.toLowerCase()).toContain("cormorant");
-  expect(fonts.body.toLowerCase()).toContain("inter");
-  expect(fonts.paper).toBe("rgb(250, 245, 238)");
-  expect(fonts.cursor).not.toBe("none");
-  expect(fonts.header).toBe("fixed");
-  await expect(page.locator("[data-work-chapter]")).toHaveCount(5);
-  await expect(page.locator("header .brand")).toHaveText("ANVAYA.");
-  await expect(page.locator("#hero-heading [data-hero-word]")).toHaveCount(4);
-  await expect(page.locator(".connection-story")).toContainText(
-    "One considered system",
-  );
-  const pinCount = await page.locator(".work-story .pin-spacer").count();
-  expect(pinCount).toBe(testInfo.project.name === "desktop" ? 5 : 0);
-  await page.locator("#services").scrollIntoViewIfNeeded();
-  const tabs = page.getByRole("tablist", { name: "Choose your project goal" });
-  await tabs.getByRole("tab").first().click();
-  await page.keyboard.press("ArrowRight");
+  await page.keyboard.press("Tab"); await expect(page.getByRole("link", { name: "Skip to content" })).toBeFocused();
+  await page.keyboard.press("Enter"); await expect(page.locator("main")).toBeFocused();
+  await page.getByRole("link", { name: "Explore what we build" }).click();
+  await expect(page).toHaveURL(/#what-we-build$/);
+  expect(await page.locator("#what-we-build").evaluate(e => Math.abs(e.getBoundingClientRect().top) < 140)).toBeTruthy();
+  await page.getByRole("navigation", { name: "Footer navigation" }).getByRole("link", { name: "Studio", exact: true }).click();
+  await expect(page).toHaveURL(/\/studio$/); await page.goBack(); await expect(page).toHaveURL(/#what-we-build$/);
+  expect(await page.evaluate(() => document.body.style.overflow)).not.toBe("hidden");
+});
+test("service worlds have keyboard and touch equivalents", async ({ page }) => {
+  await page.goto("/"); const tabs = page.getByRole("tablist", { name: "Four connected practices" });
+  await tabs.getByRole("tab").first().focus(); await page.keyboard.press("ArrowDown");
   await expect(tabs.getByRole("tab").nth(1)).toBeFocused();
-  await expect(page.locator(".service-initial")).toHaveText("A");
-  await expect(page.locator("#brief-service")).toHaveValue("automation");
-  await expect(page.locator(".service-copy")).toHaveCSS("opacity", "1");
-  await page.screenshot({ path: testInfo.outputPath("outcome-panel.png") });
-  await page.locator("#process").scrollIntoViewIfNeeded();
-  const second = page.locator(".milestone").nth(1).locator("details");
-  await second.locator("summary").click();
-  await expect(second).toHaveAttribute("open", "");
-  await expect(second).toContainText("working environment");
-  await expect(page.locator("footer")).toHaveCSS(
-    "background-color",
-    "rgb(229, 218, 212)",
-  );
-  await page.locator("footer .footer-top .brand").scrollIntoViewIfNeeded();
-  await page.screenshot({ path: testInfo.outputPath("editorial-footer.png") });
-  expect(errors).toEqual([]);
+  await expect(tabs.getByRole("tab").nth(1)).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tabpanel")).toHaveCount(1);
+  await tabs.getByRole("tab").nth(3).click();
+  await page.getByRole("tabpanel").getByRole("link", { name: "Explore Spatial Visuals" }).click();
+  await expect(page).toHaveURL(/\/services\/spatial-visuals$/);
+  await page.getByRole("link", { name: "Visualise a space" }).click();
+  await expect(page.getByRole("checkbox", { name: "Spatial Visuals", exact: true })).toBeChecked();
 });
-
-test("desktop work pins are released when motion is reduced or the viewport narrows", async ({
-  page,
-}, testInfo) => {
-  test.skip(
-    testInfo.project.name !== "desktop",
-    "Desktop owns the optional work pinning",
-  );
-  await page.goto("/");
-  await expect(page.locator(".work-story .pin-spacer")).toHaveCount(5);
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await expect(page.locator(".work-story .pin-spacer")).toHaveCount(0);
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  await expect(page.locator(".work-story .pin-spacer")).toHaveCount(5);
-  await page.setViewportSize({ width: 768, height: 900 });
-  await expect(page.locator(".work-story .pin-spacer")).toHaveCount(0);
-  await page
-    .locator("header")
-    .getByRole("link", { name: "Work", exact: true })
-    .click();
-  await expect(page).toHaveURL(/\/work$/);
-  await expect(page.locator(".pin-spacer")).toHaveCount(0);
-});
-
-test("home and supporting pages fit narrow, tablet, and compact desktop widths", async ({
-  page,
-}, testInfo) => {
-  test.skip(
-    testInfo.project.name !== "desktop",
-    "One cross-viewport sweep is sufficient",
-  );
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  for (const width of [320, 768, 1024]) {
-    await page.setViewportSize({ width, height: 900 });
-    for (const path of [
-      "/",
-      "/work",
-      "/services/product",
-      "/project",
-      "/terms",
-    ]) {
-      await page.goto(path);
-      await page.evaluate(() => document.fonts.ready);
-      await expect
-        .poll(
-          () =>
-            page.evaluate(
-              () => document.documentElement.scrollWidth <= innerWidth,
-            ),
-          { message: `${path} fits ${width}px` },
-        )
-        .toBe(true);
+test("legal pages remain readable and narrow layouts do not overflow", async ({ page }) => {
+  for (const path of ["/privacy", "/terms"]) { expect((await page.goto(path))?.status()).toBe(200); await expect(page.getByRole("heading", { level: 1 })).toBeVisible(); }
+  for (const width of [320, 390, 1024]) {
+    await page.setViewportSize({ width, height: 740 });
+    for (const path of ["/", "/services", "/studio", "/project", "/services/intelligent-operations"]) {
+      await page.goto(path); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${path} at ${width}px`).toBeTruthy();
     }
   }
 });

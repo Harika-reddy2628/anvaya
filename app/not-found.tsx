@@ -1,19 +1,4 @@
-import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
-
+import { Action, PageHero } from "./components/connected/Shared";
 export default function NotFound() {
-  return (
-    <main id="main-content" className="container inner-page not-found-page">
-      <span className="eyebrow">404 / A MISSING CONNECTION</span>
-      <h1>
-        This page hasn’t
-        <br />
-        come together<span className="accent">.</span>
-      </h1>
-      <p>Let’s get you back to something we’ve built.</p>
-      <Link href="/" className="button button-accent">
-        Back to Anvaya <ArrowUpRight size={17} aria-hidden="true" />
-      </Link>
-    </main>
-  );
+  return <main id="main-content" className="not-found-page" tabIndex={-1}><PageHero eyebrow="404" title="This page has not found its connection yet."><p>The link may have moved, changed or never existed. Let’s take you somewhere useful.</p><div className="not-found-actions"><Action href="/">Go Home</Action><Action href="/services" text>Explore Services</Action></div></PageHero></main>;
 }

@@ -1,3 +1,5 @@
+> Historical specification. The owner’s 8 October complete website script and [connected-studio plan](anvaya-connected-studio-plan.md) supersede this direction. See current [DESIGN.md](../DESIGN.md).
+
 # Anvaya — Lusion-inspired implementation plan and Mac handoff
 
 Approved direction: 5 October 2026. Status: implementation specification; the redesign is not yet built. Visual authority: [DESIGN.md](../DESIGN.md). Agent entry point: [AGENTS.md](../AGENTS.md).

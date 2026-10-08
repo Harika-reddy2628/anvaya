@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 export default function TermsPage() {
   return (
-    <main id="main-content" className="container inner-page policy-page">
+    <main id="main-content" tabIndex={-1} className="container inner-page policy-page">
       <div className="page-heading">
         <span className="eyebrow">WORKING WITH ANVAYA</span>
         <h1>

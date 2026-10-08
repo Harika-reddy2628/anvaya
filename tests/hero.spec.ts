@@ -1,212 +1,49 @@
 import { expect, test } from "@playwright/test";
-
-test("dreamy hero retains readable HTML and responsive original artwork", async ({
-  page,
-}, testInfo) => {
-  const errors: string[] = [];
-  const modelRequests: string[] = [];
-  page.on("pageerror", (error) => errors.push(error.message));
-  page.on("request", (request) => {
-    if (request.url().includes("palash")) modelRequests.push(request.url());
-  });
+test.beforeEach(async ({ page }) => { await page.addInitScript(() => sessionStorage.setItem("anvaya-intention-intro", "1")); });
+test("hero has a local matching poster and a usable scene or fallback", async ({ page }) => {
+  const requests: string[] = []; page.on("request", r => requests.push(r.url()));
   await page.goto("/");
-  await expect(page.locator("[data-studio-intro]")).toBeHidden();
-  await expect(page.locator("#hero-heading")).toContainText(
-    "Considered engineering.",
-  );
-  const hero = page.locator("[data-cinematic-hero]");
-  await expect(hero).toContainText("founders and CTOs");
-  await expect(page.locator("[data-hero-poster] img")).toHaveJSProperty(
-    "naturalWidth",
-    testInfo.project.name === "mobile" ? 720 : 1672,
-  );
-  if (testInfo.project.name === "desktop") {
-    await expect(hero.locator("[data-water-canvas]")).toHaveCount(1);
-    await expect(page.locator("[data-hero-motion]")).toHaveAttribute(
-      "data-state",
-      "live",
-    );
-  } else {
-    await expect(page.locator("[data-water-canvas]")).toHaveCount(0);
+  await expect(page.locator(".hero-poster img")).toBeVisible();
+  await expect.poll(() => page.locator(".hero-poster img").evaluate((e: HTMLImageElement) => e.complete && e.naturalWidth > 0)).toBeTruthy();
+  if (test.info().project.name === "reduced-motion") await expect(page.locator(".live-scene")).toHaveCount(0);
+  else {
+    await expect(page.locator(".live-scene")).toHaveAttribute("data-scene", /ready|failed/);
+    if (await page.locator(".live-scene").getAttribute("data-scene") === "ready") await expect(page.locator(".live-scene canvas")).toBeVisible();
   }
-  await expect(page.locator("[data-hero-word]").last()).toHaveCSS(
-    "opacity",
-    "1",
-  );
-  await page.waitForTimeout(1900);
-  expect(
-    await page.evaluate(
-      () => document.documentElement.scrollWidth <= innerWidth,
-    ),
-  ).toBeTruthy();
-  await page.screenshot({ path: testInfo.outputPath("dreamy-lotus-hero.png") });
-  await page
-    .getByRole("link", { name: "Explore our work", exact: true })
-    .click();
-  await expect(page).toHaveURL(/#work$/);
-  expect(modelRequests).toEqual([]);
-  expect(errors).toEqual([]);
+  await expect(page.locator(".hero").getByRole("link", { name: "Start a Project" })).toBeVisible();
+  expect(requests.some(url => /lotus|palash|water/.test(url))).toBeFalsy();
 });
-
-test("missing background leaves the ivory hero and project action usable", async ({
-  page,
-}) => {
-  await page.route("**/art/dreamy-lotus-*.webp", (route) => route.abort());
-  await page.goto("/");
-  await expect(page.locator("[data-studio-intro]")).toBeHidden();
-  await expect(page.locator("[data-cinematic-hero]")).toHaveCSS(
-    "background-color",
-    "rgb(248, 244, 238)",
-  );
-  await expect(page.locator("#hero-heading")).toBeVisible();
-  await page
-    .locator("[data-cinematic-hero]")
-    .getByRole("link", { name: "Start a project", exact: true })
-    .click();
-  await expect(page).toHaveURL(/\/project$/);
-  await expect(
-    page.getByRole("button", { name: "Create project brief" }),
-  ).toBeVisible();
-});
-
-test("missing WebGL does not affect the botanical hero", async ({
-  page,
-}, testInfo) => {
-  test.skip(
-    testInfo.project.name !== "desktop",
-    "Desktop covers graphics availability",
-  );
-  await page.addInitScript(() => {
-    const original = HTMLCanvasElement.prototype.getContext;
-    HTMLCanvasElement.prototype.getContext = function (
-      this: HTMLCanvasElement,
-      kind: string,
-      options?: unknown,
-    ) {
-      if (kind === "webgl" || kind === "webgl2") return null;
-      return original.call(this, kind, options);
-    } as typeof original;
-  });
-  await page.goto("/");
-  await expect(page.locator("[data-studio-intro]")).toBeHidden();
-  await expect(page.locator("[data-hero-poster] img")).toHaveJSProperty(
-    "naturalWidth",
-    1672,
-  );
-  await expect(page.locator("[data-hero-motion]")).toHaveAttribute(
-    "data-state",
-    "poster",
-  );
-  await expect(page.locator("#hero-heading")).toBeVisible();
-});
-
-test("late artwork never replays the headline or traps navigation", async ({
-  page,
-}, testInfo) => {
-  test.skip(
-    testInfo.project.name !== "desktop",
-    "One controlled image delay is sufficient",
-  );
-  let release!: () => void;
-  const pending = new Promise<void>((resolve) => {
-    release = resolve;
-  });
-  await page.route("**/art/dreamy-lotus-desktop.webp", async (route) => {
-    await pending;
-    await route.continue();
-  });
-  await page.goto("/", { waitUntil: "domcontentloaded" });
-  await expect(page.locator("[data-studio-intro]")).toBeHidden();
-  await expect(page.locator("[data-hero-word]").last()).toHaveCSS(
-    "opacity",
-    "1",
-  );
-  await expect(page.locator("[data-hero-poster] img")).toHaveJSProperty(
-    "naturalWidth",
-    0,
-  );
-  release();
-  await expect(page.locator("[data-hero-poster] img")).toHaveJSProperty(
-    "naturalWidth",
-    1672,
-  );
-  await expect(page.locator("[data-hero-word]").last()).toHaveCSS(
-    "opacity",
-    "1",
-  );
-  await page
-    .locator("header")
-    .getByRole("link", { name: "Work", exact: true })
-    .click();
-  await expect(page.locator("[data-hero-motion]")).toHaveCount(0);
-  await page.locator("header .brand").click();
-  await expect(page.locator("[data-studio-intro]")).toBeHidden();
-  await expect(page.locator("[data-hero-poster] img")).toHaveJSProperty(
-    "naturalWidth",
-    1672,
-  );
-});
-
-test("changed motion preference restores static artwork and cleans up scroll drift", async ({
-  page,
-}, testInfo) => {
-  test.skip(
-    testInfo.project.name !== "desktop",
-    "Desktop owns optional background drift",
-  );
-  await page.goto("/");
-  await expect(page.locator("[data-studio-intro]")).toBeHidden();
-  await expect(page.locator("[data-hero-motion]")).toHaveCount(1);
-  await page.waitForTimeout(1900);
-  await page.evaluate(() => scrollTo(0, 300));
-  await expect
-    .poll(() =>
-      page.locator("[data-hero-scene]").evaluate((element) => {
-        const transform = getComputedStyle(element).transform;
-        return transform === "none" ? 0 : new DOMMatrixReadOnly(transform).m42;
-      }),
-    )
-    .toBeGreaterThan(0);
+test("thread pauses and a live reduced-motion change removes animated rendering", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" }); await page.goto("/");
+  const pause = page.getByRole("button", { name: "Pause thread" }); await pause.click();
+  await expect(page.getByRole("button", { name: "Resume thread" })).toHaveAttribute("aria-pressed", "true");
+  const point = page.locator(".hero-thread circle"); const before = await point.getAttribute("cx");
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  expect(await point.getAttribute("cx")).toBe(before);
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await expect(page.locator("[data-hero-scene]")).toHaveCSS(
-    "transform",
-    "none",
-  );
-  await expect(page.locator("[data-hero-poster] img")).toHaveCSS(
-    "transform",
-    "none",
-  );
-  await expect(page.locator("#hero-heading")).toBeVisible();
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.setViewportSize({ width: 390, height: 844 });
-  await expect(page.locator("[data-hero-scene]")).toHaveCSS(
-    "transform",
-    "none",
-  );
+  await expect(page.locator(".live-scene")).toHaveCount(0); await expect(page.getByRole("button", { name: /thread/ })).toHaveCount(0);
+  await page.locator(".hero").getByRole("link", { name: "Start a Project" }).click(); await expect(page).toHaveURL(/\/project$/);
 });
-
-test("the botanical entrance settles instead of looping", async ({
-  page,
-}, testInfo) => {
-  test.skip(
-    testInfo.project.name !== "desktop",
-    "One animation lifecycle check is sufficient",
-  );
+test("WebGL failure keeps content and project navigation available", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.addInitScript(() => { const original = HTMLCanvasElement.prototype.getContext; HTMLCanvasElement.prototype.getContext = function(this: HTMLCanvasElement, type: string, ...args: unknown[]) { if (/webgl/i.test(type)) return null; return Reflect.apply(original, this, [type, ...args]); } as typeof original; });
+  await page.goto("/"); await expect(page.locator(".live-scene")).toHaveAttribute("data-scene", "failed");
+  await expect(page.locator(".hero-poster img")).toBeVisible();
+  await page.locator(".hero").getByRole("link", { name: "Start a Project" }).click(); await expect(page).toHaveURL(/\/project$/);
+});
+test("server-rendered content works without JavaScript", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, baseURL: "http://127.0.0.1:3107" }); const page = await context.newPage();
+  await page.goto("/"); await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(page.locator(".intro-screen")).toBeHidden(); await expect(page.locator(".hero-poster img")).toBeVisible();
+  await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Services" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("The right work rarely sits in one box."); await context.close();
+});
+test("unavailable artwork never blocks the main message or enquiry action", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.route(/\/_next\/image\?/, route => route.abort());
   await page.goto("/");
-  await expect(page.locator("[data-studio-intro]")).toBeHidden();
-  await expect(page.locator("[data-hero-motion]")).toHaveCount(1);
-  await page.waitForTimeout(2100);
-  const image = page.locator("[data-hero-poster] img");
-  const settled = await image.evaluate(
-    (element) => getComputedStyle(element).transform,
-  );
-  await page.waitForTimeout(400);
-  expect(
-    await image.evaluate((element) => getComputedStyle(element).transform),
-  ).toBe(settled);
-  await page.locator("#pricing").scrollIntoViewIfNeeded();
-  await page.waitForTimeout(700);
-  expect(
-    await image.evaluate((element) => getComputedStyle(element).transform),
-  ).toBe(settled);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(page.locator(".live-scene")).toHaveCount(0);
+  await page.locator(".hero").getByRole("link", { name: "Start a Project" }).click();
+  await expect(page).toHaveURL(/\/project$/);
 });

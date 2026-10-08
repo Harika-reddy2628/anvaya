@@ -2,23 +2,23 @@
 
 ## Required plan and design
 
-The approved next task is the Lusion-inspired Anvaya redesign. **Follow [the implementation plan](docs/lusion-anvaya-implementation-plan.md) in phase order and [DESIGN.md](DESIGN.md) for the visual system and interaction requirements.** Read both completely before changing the application. Then read the installed Next.js guides relevant to the change, as required below.
+The current task is the owner's **ANVAYA — COMPLETE WEBSITE SCRIPT**, supplied 8 October 2026. Follow [the connected-studio implementation plan](docs/anvaya-connected-studio-plan.md) and [DESIGN.md](DESIGN.md). The complete script supersedes the previous Lusion/cobalt direction, former homepage composition, public Work launch and local-only enquiry restriction. The older [Lusion plan](docs/lusion-anvaya-implementation-plan.md) is historical.
 
-This handoff publishes documents only. The committed application is still the glass-lotus baseline; the previous uncommitted Indic professional iteration and its fixes/screenshots are not available in this checkout. Inspect the actual code rather than assuming that earlier work is present.
-
-Current explicit user instructions take precedence. Otherwise, these two handoff documents supersede old theme directions in README, the historical glass-lotus art notes, and former Kinetic Yantra specifications. Do not merge the old gold/floral styling into the new direction.
+Read relevant installed Next.js guides before changing code. Inspect the actual checkout. The earlier Oura iteration is preserved separately in `stash@{0}`; do not apply or discard it as part of this build.
 
 ## Build requirements
 
-- Use an abstract, original Three.js connector scene with cobalt/white/dark materials. No character or mascot in this iteration.
-- Use cool pale surfaces, black Inter typography, rounded media stages, and subtle Indic identity through **अन्वय** and connection geometry.
-- Complete the reference audit and live hero/poster quality checkpoint before extending the visual treatment across all pages. Capture desktop/mobile evidence, compare it visually, and refine it; lint/build success does not establish visual quality.
-- Keep immediate HTML content and useful actions, native scrolling, accessible navigation, keyboard/touch equivalents, reduced-motion handling, and WebGL/poster failure behavior.
-- Preserve existing routes, service IDs, pricing/commercial terms, accurate project provenance, and the local brief workflow. Do not invent testimonials, benchmarks, client identities, contact addresses, or successful submission messages.
-- Repair service-selection synchronization and replace legacy intro/pinning/water behavior as described in the plan. These changes are not already present in the published baseline.
-- Keep animation ownership explicit: GSAP for site timelines, Three.js for the scene loop. Do not double-animate elements with Anime.js and GSAP. Clean up owned resources on navigation/unmount.
-- Record third-party asset/code sources and licenses independently. Keep runtime assets local and preserve reproducible scene source or documented Blender source provenance.
-- Do not add backend sending, booking, newsletters, or cloud publication merely to imitate a reference component. Use `/project` for the existing project action.
+- Eight launch pages: Home, Services, four named practice pages, Studio and Start a Project (`/project`). Privacy and Terms are supporting pages.
+- Use the owner's supplied copy, warm ivory, espresso, restrained terracotta, spacious editorial layouts and subtle **अन्वय** identity. No blue gradients, robots, stock coding imagery, invented client proof or project counts.
+- Desktop navigation: brand → Home, Services, Studio, Start a Project. No separate Home link or Menu button. Keep the same destinations accessible on mobile without an overlay.
+- Keep Work and all case-study URLs unpublished until 2–3 genuine case studies are ready. Preserve historical project data in source.
+- Use original architectural Three.js geometry and matching local posters. Only the thread/bindu moves; no object drift, camera orbit or scroll pinning. Reduced-motion and WebGL failures keep the poster and HTML actions usable.
+- The owner's loading transition runs once per session on Home, lasts under three seconds, is skippable and bypassed for reduced motion and deep links. Never hide content without JavaScript.
+- GSAP owns site motion; Three.js owns scene rendering. Clean up owned resources. Do not double-animate with Anime.js.
+- Keep existing service IDs as compatibility keys and redirect legacy service URLs to named practices. Preserve existing commercial terms at `/terms`, without inserting old price packages into the new marketing copy.
+- The owner explicitly selected **real email delivery through Resend** and **INR enquiry budget ranges**. Keep keys server-side, validate on the server and show success only when Resend returns an accepted message ID. Missing configuration or delivery failure must report an unsent enquiry. Retain copy/download as explicitly local backups.
+- Use only owner-confirmed public contact details. Unconfigured email, WhatsApp and social links remain absent. Do not invent contact addresses or publish placeholder links.
+- Do not deploy, add booking/newsletters or send messages to third parties beyond the authorized enquiry integration. Record asset provenance and reproducible poster preparation.
 
 ## Mac environment
 
