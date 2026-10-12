@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anvaya — Bioluminescent Living Fluid & Cosmic Singularity</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- GSAP 3.12 CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700,600,500&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      background-color: #030408;
+      color: #F8FAFC;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+    
+    #fluid-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .font-clash {
+      font-family: 'Clash Display', sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Architectural Frosted Glass */
+    .glass-surface {
+      background: rgba(10, 14, 22, 0.6);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.85);
+    }
+  </style>
+</head>
+<body class="bg-[#030408] selection:bg-[#00F5D4] selection:text-black">
+
+  <!-- LIVING BIOLUMINESCENT FLUID & PARTICLE CANVAS -->
+  <canvas id="fluid-canvas"></canvas>
+
+  <!-- FLOATING NOTCH NAVBAR -->
+  <header class="fixed top-6 inset-x-0 z-50 flex justify-center px-4 pointer-events-none">
+    <nav class="pointer-events-auto h-12 px-6 rounded-full bg-[#090C14]/85 backdrop-blur-xl border border-white/10 flex items-center gap-8 shadow-2xl">
+      <div class="flex items-center gap-2.5">
+        <span class="w-2 h-2 rounded-full bg-[#00F5D4] animate-pulse"></span>
+        <span class="font-clash font-bold tracking-tight text-white text-base">ANVAYA</span>
+        <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-neutral-400">STUDIO</span>
+      </div>
+
+      <div class="hidden md:flex items-center gap-6 text-xs text-neutral-400 font-medium">
+        <a href="#services" class="hover:text-white transition-colors">Services</a>
+        <a href="#protocols" class="hover:text-[#00F5D4] transition-colors flex items-center gap-1">
+          <span class="text-[#00F5D4]">✦</span> 14-Day Sprint
+        </a>
+        <a href="#telemetry" class="hover:text-white transition-colors">Telemetry</a>
+        <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="#intake" class="px-4 py-1.5 rounded-full bg-white hover:bg-neutral-200 text-black text-xs font-semibold tracking-wide transition-all shadow-lg">
+          Schedule Sprint →
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN VIEWPORT -->
+  <main class="relative z-10 min-h-screen flex flex-col justify-between max-w-7xl mx-auto px-6 sm:px-12 pt-32 pb-16">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center my-auto">
+      
+      <!-- Headline & Value Prop -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-neutral-300 font-mono text-[11px] uppercase tracking-wider">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#00F5D4] animate-ping"></span>
+          <span>AUTONOMOUS SYSTEMS // 14-DAY PRODUCTION CADENCE</span>
+        </div>
+
+        <h1 class="font-clash text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-[0.98]">
+          FROM VOID <br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-[#00F5D4]">
+            INTO MATTER.
+          </span>
+        </h1>
+
+        <p class="text-neutral-300 text-base sm:text-lg leading-relaxed max-w-xl font-normal drop-shadow">
+          We engineer production-grade web applications, deterministic AI systems, and 3D spatial pipelines in <strong class="text-white font-semibold">14 days</strong>. Zero agency slop. 100% Day-1 IP ownership.
+        </p>
+
+        <!-- Metric Badges -->
+        <div class="grid grid-cols-3 gap-6 pt-4 border-t border-white/10 max-w-lg font-mono text-xs">
+          <div>
+            <div class="text-2xl sm:text-3xl font-bold text-white font-sans">14 Days</div>
+            <div class="text-[10px] text-neutral-500 uppercase pt-1">Fixed Turnaround</div>
+          </div>
+          <div>
+            <div class="text-2xl sm:text-3xl font-bold text-[#00F5D4] font-sans">100%</div>
+            <div class="text-[10px] text-neutral-500 uppercase pt-1">Day-1 IP Rights</div>
+          </div>
+          <div>
+            <div class="text-2xl sm:text-3xl font-bold text-white font-sans">&lt;12ms</div>
+            <div class="text-[10px] text-neutral-500 uppercase pt-1">p99 Edge Latency</div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap items-center gap-4 pt-4">
+          <a href="#intake" class="px-7 py-3.5 rounded-full bg-[#00F5D4] hover:bg-[#00D0B4] text-black font-semibold text-sm transition-all shadow-[0_0_25px_rgba(0,245,212,0.35)]">
+            Schedule 14-Day Sprint →
+          </a>
+          <a href="#cockpit" class="px-6 py-3.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/15 text-neutral-300 font-medium text-sm transition-all">
+            Inspect Architecture
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: Minimalist Telemetry Cockpit -->
+      <div id="cockpit" class="lg:col-span-5">
+        <div class="glass-surface rounded-2xl p-6 space-y-5 font-mono text-xs text-neutral-300">
+          <div class="flex justify-between items-center pb-3 border-b border-white/10">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-[#00F5D4]"></span>
+              <span class="text-white font-semibold">ANVAYA_FLIGHT_DECK</span>
+            </div>
+            <span class="text-[10px] text-neutral-500">60 FPS // SUB-12ms</span>
+          </div>
+
+          <div class="space-y-2.5">
+            <div class="flex justify-between text-neutral-400">
+              <span>Stack:</span>
+              <span class="text-white font-medium">Next.js 16 + Tailwind v4</span>
+            </div>
+            <div class="flex justify-between text-neutral-400">
+              <span>Neural Index:</span>
+              <span class="text-[#00F5D4] font-medium">pgvector (1536-dim)</span>
+            </div>
+            <div class="flex justify-between text-neutral-400">
+              <span>3D Pipeline:</span>
+              <span class="text-white font-medium">Headless Blender + Draco</span>
+            </div>
+            <div class="flex justify-between text-neutral-400">
+              <span>IP Handover:</span>
+              <span class="text-emerald-400 font-medium">100% Day 1 Direct Transfer</span>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-black/60 border border-white/10 text-[11px] space-y-1">
+            <div class="text-neutral-400"><span class="text-[#00F5D4]">$</span> anvaya sprint --target="Enterprise AI System"</div>
+            <div class="text-neutral-500">[INFO] Provisioning autonomous multi-agent workers...</div>
+            <div class="text-[#00F5D4]">[OK] Architecture verified with zero agency slop.</div>
+            <div class="text-white font-semibold pt-1">[STATUS] Handover ready in 14 days.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM BAR -->
+    <footer class="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center text-xs font-mono text-neutral-500 gap-4">
+      <div>© 2026 ANVAYA // IDEAS TO IMPACT. SYSTEMS OVER SLOP.</div>
+      <div class="flex items-center gap-6">
+        <span>MOVE CURSOR: SWIRL LIVING BIOLUMINESCENCE</span>
+        <span>100% DAY-1 IP</span>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- INTERACTIVE BIOLUMINESCENT SIMULATION ENGINE -->
+  <script>
+    const canvas = document.getElementById('fluid-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let width, height;
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Particle Swarm
+    const PARTICLE_COUNT = 320;
+    const particles = [];
+    const colors = [
+      { r: 0, g: 245, b: 212 },   // Bioluminescent Cyan
+      { r: 139, g: 92, b: 246 },  // Violet
+      { r: 255, g: 42, b: 85 },   // Crimson
+      { r: 255, g: 183, b: 3 },   // Starlight Gold
+    ];
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.6,
+        vy: (Math.random() - 0.5) * 0.6,
+        radius: Math.random() * 2.2 + 0.8,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        alpha: Math.random() * 0.7 + 0.3,
+        pulseSpeed: Math.random() * 0.03 + 0.01,
+        pulseVal: Math.random() * Math.PI,
+      });
+    }
+
+    // Cursor Gravitational Interaction
+    let mouse = { x: width * 0.7, y: height * 0.5, vx: 0, vy: 0, lastX: width * 0.7, lastY: height * 0.5 };
+    window.addEventListener('mousemove', (e) => {
+      mouse.vx = e.clientX - mouse.lastX;
+      mouse.vy = e.clientY - mouse.lastY;
+      mouse.lastX = e.clientX;
+      mouse.lastY = e.clientY;
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    // Singularity Point (Gravitational Well on the right)
+    const singularity = {
+      x: width * 0.68,
+      y: height * 0.45,
+      radius: 38,
+      eventHorizon: 24,
+    };
+
+    function draw() {
+      // Gentle fade for liquid motion blur trails
+      ctx.fillStyle = 'rgba(3, 4, 8, 0.28)';
+      ctx.fillRect(0, 0, width, height);
+
+      // 1. Draw Singularity Event Horizon Glow
+      const grad = ctx.createRadialGradient(
+        singularity.x, singularity.y, singularity.eventHorizon * 0.5,
+        singularity.x, singularity.y, singularity.radius * 4.5
+      );
+      grad.addColorStop(0, 'rgba(0, 0, 0, 1)');
+      grad.addColorStop(0.2, 'rgba(0, 245, 212, 0.25)');
+      grad.addColorStop(0.5, 'rgba(139, 92, 246, 0.12)');
+      grad.addColorStop(1, 'rgba(3, 4, 8, 0)');
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(singularity.x, singularity.y, singularity.radius * 4.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Sharp Photon Ring
+      ctx.strokeStyle = 'rgba(0, 245, 212, 0.7)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(singularity.x, singularity.y, singularity.radius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Event Horizon Black Hole
+      ctx.fillStyle = '#020306';
+      ctx.beginPath();
+      ctx.arc(singularity.x, singularity.y, singularity.eventHorizon, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 2. Update & Draw Particles with Gravitational Lensing
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+
+        // Gravitational pull toward singularity
+        const dx = singularity.x - p.x;
+        const dy = singularity.y - p.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist > singularity.eventHorizon) {
+          // Orbital angular velocity + inward gravitational pull
+          const force = 45 / (dist * dist + 100);
+          p.vx += (dx / dist) * force;
+          p.vy += (dy / dist) * force;
+
+          // Tangential orbital spin
+          p.vx += (-dy / dist) * (force * 1.8);
+          p.vy += (dx / dist) * (force * 1.8);
+        } else {
+          // Reset particle if swallowed by event horizon
+          p.x = Math.random() * width;
+          p.y = Math.random() * height;
+          p.vx = (Math.random() - 0.5) * 0.8;
+          p.vy = (Math.random() - 0.5) * 0.8;
+        }
+
+        // Mouse fluid push
+        const mdx = p.x - mouse.x;
+        const mdy = p.y - mouse.y;
+        const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+        if (mdist < 140) {
+          const mforce = (1 - mdist / 140) * 2.2;
+          p.vx += (mdx / mdist) * mforce + mouse.vx * 0.05;
+          p.vy += (mdy / mdist) * mforce + mouse.vy * 0.05;
+        }
+
+        // Friction damping
+        p.vx *= 0.96;
+        p.vy *= 0.96;
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Wrap around borders
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
+
+        // Draw particle
+        p.pulseVal += p.pulseSpeed;
+        const curAlpha = p.alpha * (Math.sin(p.pulseVal) * 0.3 + 0.7);
+
+        ctx.fillStyle = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${curAlpha})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Connect nearby particles with bioluminescent filaments
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const cdx = p.x - p2.x;
+          const cdy = p.y - p2.y;
+          const cdist = Math.sqrt(cdx * cdx + cdy * cdy);
+
+          if (cdist < 65) {
+            const lineAlpha = (1 - cdist / 65) * 0.22;
+            ctx.strokeStyle = `rgba(0, 245, 212, ${lineAlpha})`;
+            ctx.lineWidth = 0.8;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+    requestAnimationFrame(draw);
+  </script>
+
+</body>
+</html>
