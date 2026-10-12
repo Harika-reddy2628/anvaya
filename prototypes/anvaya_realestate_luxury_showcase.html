@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anvaya Spatial Architecture • CREDAI Luxury Showcase</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Three.js & Plugins -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #060709;
+      color: #E2E8F0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    
+    .font-serif {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Glassmorphism Classes */
+    .glass-panel {
+      background: rgba(13, 16, 23, 0.75);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    
+    .glass-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .glass-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .glass-btn.active {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: #F59E0B;
+      color: #FBBF24;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.25);
+    }
+
+    /* Cinematic Crosshair & HUD Lines */
+    .hud-line {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.05);
+      pointer-events: none;
+    }
+
+    /* Pulse animation */
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.9; }
+    }
+    .pulse-glow {
+      animation: pulseGlow 3s infinite ease-in-out;
+    }
+
+    canvas {
+      outline: none;
+    }
+  </style>
+</head>
+<body class="w-screen h-screen relative bg-[#060709] overflow-hidden select-none">
+
+  <!-- 3D WebGL Canvas Container -->
+  <div id="webgl-container" class="absolute inset-0 z-0"></div>
+
+  <!-- HUD Decorative Grid Lines -->
+  <div class="hud-line top-16 left-0 right-0 h-[1px]"></div>
+  <div class="hud-line bottom-24 left-0 right-0 h-[1px]"></div>
+  <div class="hud-line top-0 bottom-0 left-16 w-[1px]"></div>
+  <div class="hud-line top-0 bottom-0 right-16 w-[1px]"></div>
+
+  <!-- TOP HEADER HUD -->
+  <header class="absolute top-0 left-0 right-0 h-16 px-6 z-20 flex items-center justify-between pointer-events-auto">
+    <!-- Brand & Project Lockup -->
+    <div class="flex items-center gap-4">
+      <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500/20 to-amber-600/5 border border-amber-500/30 flex items-center justify-center shadow-lg shadow-amber-500/10">
+        <span class="font-serif italic text-amber-400 font-bold text-lg">अ</span>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-mono tracking-widest text-white/50 uppercase">ANVAYA SPATIAL</span>
+          <span class="w-1 h-1 rounded-full bg-amber-400"></span>
+          <span class="text-xs font-mono text-amber-400 tracking-wider font-semibold">CREDAI APEX PROTOTYPE</span>
+        </div>
+        <h1 class="text-sm font-semibold tracking-wide text-white flex items-center gap-2">
+          THE VAYU HORIZON • SKY VILLA 4BHK
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/60">EST. ₹4.25 CR</span>
+        </h1>
+      </div>
+    </div>
+
+    <!-- Live Performance & Status Telemetry -->
+    <div class="hidden md:flex items-center gap-6">
+      <div class="flex items-center gap-2 text-xs font-mono text-white/60">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>60.0 FPS</span>
+      </div>
+      <div class="h-4 w-[1px] bg-white/10"></div>
+      <div class="text-xs font-mono text-white/60">
+        <span>DRAW CALLS: <strong id="telemetry-draws" class="text-white">48</strong></span>
+      </div>
+      <div class="h-4 w-[1px] bg-white/10"></div>
+      <div class="text-xs font-mono text-white/60">
+        <span>LIGHTING: <strong id="telemetry-lighting" class="text-amber-400">NOON (5500K)</strong></span>
+      </div>
+    </div>
+
+    <!-- Actions & Pitch Deck Trigger -->
+    <div class="flex items-center gap-3">
+      <button id="btn-roi-calculator" class="glass-btn px-3.5 py-1.5 rounded-lg text-xs font-medium text-white/80 flex items-center gap-2">
+        <i data-lucide="calculator" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span>Builder ROI</span>
+      </button>
+
+      <button id="btn-cinematic-tour" class="glass-btn px-3.5 py-1.5 rounded-lg text-xs font-medium text-white/80 flex items-center gap-2">
+        <i data-lucide="play" class="w-3.5 h-3.5 text-emerald-400"></i>
+        <span>Auto-Tour</span>
+      </button>
+
+      <button id="btn-fullscreen" class="glass-btn w-8 h-8 rounded-lg flex items-center justify-center text-white/70">
+        <i data-lucide="maximize" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- LEFT HUD: SPATIAL SPECIFICATIONS & UNIT DETAILS -->
+  <aside class="absolute left-6 top-24 bottom-28 w-80 z-20 pointer-events-none hidden lg:flex flex-col justify-between">
+    <!-- Property Specs Glass Card -->
+    <div class="glass-panel rounded-2xl p-5 pointer-events-auto transition-all">
+      <div class="flex items-center justify-between pb-3 border-b border-white/5">
+        <span class="text-[11px] font-mono uppercase tracking-wider text-white/40">Architectural Unit</span>
+        <span class="text-xs font-mono text-amber-400">UNIT #1802</span>
+      </div>
+
+      <div class="mt-4 space-y-3">
+        <div class="flex justify-between items-baseline">
+          <span class="text-xs text-white/60">Super Built-Up Area</span>
+          <span class="text-sm font-semibold font-mono text-white">4,850 SQ.FT</span>
+        </div>
+        <div class="flex justify-between items-baseline">
+          <span class="text-xs text-white/60">Private Balcony Deck</span>
+          <span class="text-sm font-semibold font-mono text-white">720 SQ.FT</span>
+        </div>
+        <div class="flex justify-between items-baseline">
+          <span class="text-xs text-white/60">Private Cantilever Pool</span>
+          <span class="text-sm font-semibold font-mono text-cyan-400">32' × 12' INFINITY</span>
+        </div>
+        <div class="flex justify-between items-baseline">
+          <span class="text-xs text-white/60">Ceiling Clear Height</span>
+          <span class="text-sm font-semibold font-mono text-white">12.5 FT (3.8M)</span>
+        </div>
+      </div>
+
+      <!-- Live Price Estimation -->
+      <div class="mt-5 p-3 rounded-xl bg-white/[0.03] border border-white/5">
+        <div class="text-[10px] font-mono uppercase text-white/40">CREDAI Standard Rate</div>
+        <div class="flex items-baseline justify-between mt-1">
+          <span class="text-base font-bold font-mono text-amber-400">₹8,750 / SQ.FT</span>
+          <span class="text-xs text-emerald-400 font-mono">✦ RERA APPROVED</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Navigation Hints -->
+    <div class="glass-panel rounded-2xl p-4 pointer-events-auto">
+      <div class="text-[11px] font-mono text-white/40 uppercase mb-2 flex items-center gap-1.5">
+        <i data-lucide="mouse-pointer" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span>Interactive Controls</span>
+      </div>
+      <div class="text-xs text-white/60 space-y-1 font-mono">
+        <div>• <strong>Left Click + Drag:</strong> Orbit Architectural Elevation</div>
+        <div>• <strong>Scroll Wheel:</strong> Zoom In / Explore Interstices</div>
+        <div>• <strong>Right Click + Drag:</strong> Pan Elevation Panoramas</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- RIGHT HUD: REAL-TIME MATERIAL & FINISH SELECTOR -->
+  <aside class="absolute right-6 top-24 bottom-28 w-80 z-20 pointer-events-none hidden md:flex flex-col justify-start">
+    <div class="glass-panel rounded-2xl p-5 pointer-events-auto space-y-5">
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-semibold text-white tracking-wide">PBR Finish Swatches</span>
+          <span class="text-[10px] font-mono text-amber-400 uppercase">Live Shader Swap</span>
+        </div>
+        <p class="text-xs text-white/50">Allow buyers to customize interior and facade materials in real-time.</p>
+      </div>
+
+      <!-- Facade Cladding Options -->
+      <div class="space-y-2">
+        <label class="text-[11px] font-mono uppercase tracking-wider text-white/40">Facade Cladding</label>
+        <div class="grid grid-cols-3 gap-2">
+          <button class="material-btn glass-btn active py-2 px-1.5 rounded-lg text-center" data-type="facade" data-material="travertine">
+            <div class="w-4 h-4 rounded-full bg-[#E5DFD3] mx-auto mb-1 border border-white/20"></div>
+            <span class="text-[10px] font-mono block text-white/90">Travertine</span>
+          </button>
+          <button class="material-btn glass-btn py-2 px-1.5 rounded-lg text-center" data-type="facade" data-material="basalt">
+            <div class="w-4 h-4 rounded-full bg-[#2A2B30] mx-auto mb-1 border border-white/20"></div>
+            <span class="text-[10px] font-mono block text-white/70">Basalt</span>
+          </button>
+          <button class="material-btn glass-btn py-2 px-1.5 rounded-lg text-center" data-type="facade" data-material="limewash">
+            <div class="w-4 h-4 rounded-full bg-[#F3F0E6] mx-auto mb-1 border border-white/20"></div>
+            <span class="text-[10px] font-mono block text-white/70">Limewash</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Millwork / Louvers Options -->
+      <div class="space-y-2">
+        <label class="text-[11px] font-mono uppercase tracking-wider text-white/40">Architectural Millwork</label>
+        <div class="grid grid-cols-3 gap-2">
+          <button class="material-btn glass-btn active py-2 px-1.5 rounded-lg text-center" data-type="wood" data-material="teak">
+            <div class="w-4 h-4 rounded-full bg-[#8E5629] mx-auto mb-1 border border-white/20"></div>
+            <span class="text-[10px] font-mono block text-white/90">Honey Teak</span>
+          </button>
+          <button class="material-btn glass-btn py-2 px-1.5 rounded-lg text-center" data-type="wood" data-material="walnut">
+            <div class="w-4 h-4 rounded-full bg-[#3B2F2F] mx-auto mb-1 border border-white/20"></div>
+            <span class="text-[10px] font-mono block text-white/70">Dark Walnut</span>
+          </button>
+          <button class="material-btn glass-btn py-2 px-1.5 rounded-lg text-center" data-type="wood" data-material="bronze">
+            <div class="w-4 h-4 rounded-full bg-[#A38252] mx-auto mb-1 border border-white/20"></div>
+            <span class="text-[10px] font-mono block text-white/70">Bronze Alu</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Flooring Options -->
+      <div class="space-y-2">
+        <label class="text-[11px] font-mono uppercase tracking-wider text-white/40">Interior & Deck Flooring</label>
+        <div class="grid grid-cols-3 gap-2">
+          <button class="material-btn glass-btn active py-2 px-1.5 rounded-lg text-center" data-type="floor" data-material="marble">
+            <div class="w-4 h-4 rounded-full bg-[#ECEEEF] mx-auto mb-1 border border-white/20"></div>
+            <span class="text-[10px] font-mono block text-white/90">Makrana</span>
+          </button>
+          <button class="material-btn glass-btn py-2 px-1.5 rounded-lg text-center" data-type="floor" data-material="oak">
+            <div class="w-4 h-4 rounded-full bg-[#B8976C] mx-auto mb-1 border border-white/20"></div>
+            <span class="text-[10px] font-mono block text-white/70">Smoked Oak</span>
+          </button>
+          <button class="material-btn glass-btn py-2 px-1.5 rounded-lg text-center" data-type="floor" data-material="granite">
+            <div class="w-4 h-4 rounded-full bg-[#1C1E24] mx-auto mb-1 border border-white/20"></div>
+            <span class="text-[10px] font-mono block text-white/70">Flamed Jet</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- BOTTOM FLOATING COCKPIT DOCK (Primary Navigation & Lighting Control) -->
+  <footer class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-auto">
+    <div class="glass-panel rounded-2xl px-5 py-3 flex items-center gap-6 shadow-2xl">
+      
+      <!-- Lighting Environment Group -->
+      <div class="flex items-center gap-2">
+        <span class="text-[11px] font-mono uppercase tracking-wider text-white/40 mr-1 hidden sm:inline">Sun Position</span>
+        <button id="btn-light-day" class="light-mode-btn glass-btn active px-3 py-1.5 rounded-xl text-xs font-mono flex items-center gap-1.5">
+          <i data-lucide="sun" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>12:00 PM</span>
+        </button>
+        <button id="btn-light-sunset" class="light-mode-btn glass-btn px-3 py-1.5 rounded-xl text-xs font-mono flex items-center gap-1.5">
+          <i data-lucide="sunset" class="w-3.5 h-3.5 text-orange-400"></i>
+          <span>05:30 PM</span>
+        </button>
+        <button id="btn-light-night" class="light-mode-btn glass-btn px-3 py-1.5 rounded-xl text-xs font-mono flex items-center gap-1.5">
+          <i data-lucide="moon" class="w-3.5 h-3.5 text-indigo-400"></i>
+          <span>09:00 PM</span>
+        </button>
+      </div>
+
+      <div class="h-6 w-[1px] bg-white/10 hidden sm:block"></div>
+
+      <!-- Floor / Level Cutaway Focus Group -->
+      <div class="flex items-center gap-2">
+        <span class="text-[11px] font-mono uppercase tracking-wider text-white/40 mr-1 hidden md:inline">Elevation View</span>
+        <button class="view-level-btn glass-btn active px-3 py-1.5 rounded-xl text-xs font-mono" data-level="all">
+          Overview
+        </button>
+        <button class="view-level-btn glass-btn px-3 py-1.5 rounded-xl text-xs font-mono" data-level="pool">
+          Infinity Pool
+        </button>
+        <button class="view-level-btn glass-btn px-3 py-1.5 rounded-xl text-xs font-mono" data-level="penthouse">
+          Master Suite
+        </button>
+        <button class="view-level-btn glass-btn px-3 py-1.5 rounded-xl text-xs font-mono" data-level="terrace">
+          Sky Terrace
+        </button>
+      </div>
+
+      <div class="h-6 w-[1px] bg-white/10 hidden lg:block"></div>
+
+      <!-- Pitch CTA -->
+      <button id="btn-pitch-cta" class="hidden lg:flex items-center gap-2 px-4 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-semibold text-xs shadow-lg shadow-amber-500/20 hover:scale-105 transition-transform">
+        <i data-lucide="briefcase" class="w-3.5 h-3.5"></i>
+        <span>Pitch Anvaya</span>
+      </button>
+
+    </div>
+  </footer>
+
+  <!-- MODAL: CREDAI BUILDER ROI & VALUE CALCULATOR -->
+  <div id="modal-roi" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="glass-panel max-w-xl w-full rounded-3xl p-8 border border-white/15 relative">
+      <button id="btn-close-roi" class="absolute top-6 right-6 text-white/60 hover:text-white">
+        <i data-lucide="x" class="w-6 h-6"></i>
+      </button>
+
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
+          <i data-lucide="trending-up" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-xs font-mono uppercase tracking-widest text-amber-400">CREDAI Vizianagaram Pitch Thesis</span>
+          <h2 class="text-xl font-bold text-white">Why Real Estate Builders Choose Anvaya</h2>
+        </div>
+      </div>
+
+      <div class="mt-6 grid grid-cols-2 gap-4">
+        <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+          <div class="text-2xl font-bold font-mono text-emerald-400">₹3,50,000+</div>
+          <div class="text-xs text-white/70 mt-1 font-semibold">Physical Model Cost Eliminated</div>
+          <p class="text-[11px] text-white/40 mt-1">Zero physical scale acrylic models required. 100% interactive across phones, iPads & LED screens.</p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+          <div class="text-2xl font-bold font-mono text-amber-400">+340%</div>
+          <div class="text-xs text-white/70 mt-1 font-semibold">Buyer Engagement Time</div>
+          <p class="text-[11px] text-white/40 mt-1">Interactive material customization and lighting changes increase average site visit duration from 45s to 4.2 mins.</p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+          <div class="text-2xl font-bold font-mono text-cyan-400">68%</div>
+          <div class="text-xs text-white/70 mt-1 font-semibold">NRI & Remote Conversions</div>
+          <p class="text-[11px] text-white/40 mt-1">NRI buyers in the US/Gulf can tour the villa before foundation completion, closing unit deposits remotely.</p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+          <div class="text-2xl font-bold font-mono text-purple-400">14 Days</div>
+          <div class="text-xs text-white/70 mt-1 font-semibold">Anvaya Turnaround Guarantee</div>
+          <p class="text-[11px] text-white/40 mt-1">From architectural AutoCAD / Revit drawings to high-converting 60fps web experience ready for launch.</p>
+        </div>
+      </div>
+
+      <div class="mt-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-between">
+        <div>
+          <div class="text-xs font-semibold text-amber-300">Dussehra Launch Package for Builders</div>
+          <div class="text-[11px] text-white/60">Includes full 3D interactive web app, customized branding, & mobile optimization.</div>
+        </div>
+        <a href="mailto:kilanisainikhil@gmail.com?subject=CREDAI%20Real%20Estate%20Visualization%20Inquiry" class="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs hover:bg-amber-400 transition-colors">
+          Lock Project
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- THREE.JS ARCHITECTURAL ENGINE -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // -------------------------------------------------------------------------
+    // 1. SCENE, CAMERA, RENDERER SETUP
+    // -------------------------------------------------------------------------
+    const container = document.getElementById('webgl-container');
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x08090C);
+    scene.fog = new THREE.FogExp2(0x08090C, 0.015);
+
+    const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(28, 16, 28);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    container.appendChild(renderer.domElement);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.maxPolarAngle = Math.PI / 2 - 0.02; // Don't allow camera below ground
+    controls.minDistance = 8;
+    controls.maxDistance = 65;
+    controls.target.set(0, 4, 0);
+
+    // -------------------------------------------------------------------------
+    // 2. ILLUMINATION & ENVIRONMENT RIG
+    // -------------------------------------------------------------------------
+    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.8);
+    scene.add(ambientLight);
+
+    const sunLight = new THREE.DirectionalLight(0xFFF7E6, 2.2);
+    sunLight.position.set(25, 35, 18);
+    sunLight.castShadow = true;
+    sunLight.shadow.mapSize.width = 2048;
+    sunLight.shadow.mapSize.height = 2048;
+    sunLight.shadow.camera.near = 0.5;
+    sunLight.shadow.camera.far = 120;
+    sunLight.shadow.camera.left = -30;
+    sunLight.shadow.camera.right = 30;
+    sunLight.shadow.camera.top = 30;
+    sunLight.shadow.camera.bottom = -30;
+    sunLight.shadow.bias = -0.0003;
+    scene.add(sunLight);
+
+    // Architectural Interior Warm Pointlights (Tier 1 & Tier 2)
+    const interiorLights = [];
+    const interiorPositions = [
+      [0, 2.5, 0],
+      [4, 2.5, -3],
+      [-3, 6.5, 1],
+      [3, 6.5, -2],
+      [-4, 2.0, 5], // Pool glow
+    ];
+
+    interiorPositions.forEach(([x, y, z], index) => {
+      const pColor = index === 4 ? 0x00E5FF : 0xFFB74D;
+      const intensity = index === 4 ? 1.5 : 2.0;
+      const light = new THREE.PointLight(pColor, intensity, index === 4 ? 12 : 16);
+      light.position.set(x, y, z);
+      scene.add(light);
+      interiorLights.push(light);
+    });
+
+    // -------------------------------------------------------------------------
+    // 3. PBR MATERIALS SYSTEM
+    // -------------------------------------------------------------------------
+    const materials = {
+      // Facade Cladding Materials
+      facade: {
+        travertine: new THREE.MeshStandardMaterial({
+          color: 0xE5DFD3,
+          roughness: 0.55,
+          metalness: 0.02,
+        }),
+        basalt: new THREE.MeshStandardMaterial({
+          color: 0x2A2B30,
+          roughness: 0.70,
+          metalness: 0.05,
+        }),
+        limewash: new THREE.MeshStandardMaterial({
+          color: 0xF3F0E6,
+          roughness: 0.85,
+          metalness: 0.00,
+        })
+      },
+      // Millwork / Louvers
+      wood: {
+        teak: new THREE.MeshStandardMaterial({
+          color: 0x8E5629,
+          roughness: 0.42,
+          metalness: 0.00,
+        }),
+        walnut: new THREE.MeshStandardMaterial({
+          color: 0x382E28,
+          roughness: 0.50,
+          metalness: 0.00,
+        }),
+        bronze: new THREE.MeshStandardMaterial({
+          color: 0xA38252,
+          roughness: 0.28,
+          metalness: 0.85,
+        })
+      },
+      // Flooring Materials
+      floor: {
+        marble: new THREE.MeshStandardMaterial({
+          color: 0xF6F7F9,
+          roughness: 0.12,
+          metalness: 0.05,
+        }),
+        oak: new THREE.MeshStandardMaterial({
+          color: 0xB8976C,
+          roughness: 0.45,
+          metalness: 0.00,
+        }),
+        granite: new THREE.MeshStandardMaterial({
+          color: 0x1C1E24,
+          roughness: 0.25,
+          metalness: 0.08,
+        })
+      },
+      // Architectural Structural Concrete
+      concrete: new THREE.MeshStandardMaterial({
+        color: 0xD3D5DB,
+        roughness: 0.65,
+        metalness: 0.05,
+      }),
+      // Architectural Low-Iron Curtain Glass
+      glass: new THREE.MeshPhysicalMaterial({
+        color: 0xFFFFFF,
+        transparent: true,
+        opacity: 0.35,
+        roughness: 0.08,
+        metalness: 0.1,
+        transmission: 0.75,
+        ior: 1.52,
+      }),
+      // Water Material (Infinity Pool)
+      water: new THREE.MeshPhysicalMaterial({
+        color: 0x00E5FF,
+        transparent: true,
+        opacity: 0.82,
+        roughness: 0.10,
+        transmission: 0.60,
+        ior: 1.333,
+      }),
+      // Ground Landscape
+      ground: new THREE.MeshStandardMaterial({
+        color: 0x12141A,
+        roughness: 0.90,
+        metalness: 0.02,
+      }),
+      // Brass Accent Hardware
+      brass: new THREE.MeshStandardMaterial({
+        color: 0xC5A059,
+        roughness: 0.25,
+        metalness: 0.92,
+      })
+    };
+
+    // Tracking Dynamic Meshes for Material Swapping
+    const dynamicMeshes = {
+      facade: [],
+      wood: [],
+      floor: []
+    };
+
+    // -------------------------------------------------------------------------
+    // 4. ARCHITECTURAL VILLA PROCEDURAL ASSEMBLY
+    // -------------------------------------------------------------------------
+    const villaGroup = new THREE.Group();
+    scene.add(villaGroup);
+
+    // Ground Landscape Base Slab
+    const groundGeo = new THREE.PlaneGeometry(160, 160);
+    const groundMesh = new THREE.Mesh(groundGeo, materials.ground);
+    groundMesh.rotation.x = -Math.PI / 2;
+    groundMesh.receiveShadow = true;
+    scene.add(groundMesh);
+
+    // Decorative Ground Pavers & Pool Plinth
+    const plinthGeo = new THREE.BoxGeometry(26, 0.6, 22);
+    const plinthMesh = new THREE.Mesh(plinthGeo, materials.floor.marble);
+    plinthMesh.position.set(0, 0.3, 0);
+    plinthMesh.receiveShadow = true;
+    plinthMesh.castShadow = true;
+    villaGroup.add(plinthMesh);
+    dynamicMeshes.floor.push(plinthMesh);
+
+    // --- LEVEL 0: GROUND FLOOR LIVING & FOYER ---
+    // Ground Back Wall (Travertine / Facade)
+    const gWallGeo = new THREE.BoxGeometry(20, 4.2, 0.4);
+    const gWallMesh = new THREE.Mesh(gWallGeo, materials.facade.travertine);
+    gWallMesh.position.set(0, 2.4, -9.8);
+    gWallMesh.castShadow = true;
+    gWallMesh.receiveShadow = true;
+    villaGroup.add(gWallMesh);
+    dynamicMeshes.facade.push(gWallMesh);
+
+    // Ground Left Wall with Teak Millwork Inset
+    const gLeftWallGeo = new THREE.BoxGeometry(0.4, 4.2, 16);
+    const gLeftWallMesh = new THREE.Mesh(gLeftWallGeo, materials.facade.travertine);
+    gLeftWallMesh.position.set(-10, 2.4, -1.8);
+    gLeftWallMesh.castShadow = true;
+    gLeftWallMesh.receiveShadow = true;
+    villaGroup.add(gLeftWallMesh);
+    dynamicMeshes.facade.push(gLeftWallMesh);
+
+    // Structural Slim Columns (Architectural Steel)
+    const colGeo = new THREE.CylinderGeometry(0.18, 0.18, 4.2, 16);
+    const colMat = materials.wood.bronze;
+    const colCoords = [
+      [8, 2.4, 8],
+      [8, 2.4, 0],
+      [8, 2.4, -8],
+      [-2, 2.4, 8],
+    ];
+    colCoords.forEach(([cx, cy, cz]) => {
+      const col = new THREE.Mesh(colGeo, colMat);
+      col.position.set(cx, cy, cz);
+      col.castShadow = true;
+      villaGroup.add(col);
+    });
+
+    // Floor-to-Ceiling Ground Glass Curtain Walls
+    const gGlassFrontGeo = new THREE.BoxGeometry(16, 4.0, 0.1);
+    const gGlassFront = new THREE.Mesh(gGlassFrontGeo, materials.glass);
+    gGlassFront.position.set(2, 2.3, 4.5);
+    gGlassFront.castShadow = true;
+    villaGroup.add(gGlassFront);
+
+    // --- LEVEL 1: CANTILEVERED SLAB & MASTER PENTHOUSE ---
+    const slab1Geo = new THREE.BoxGeometry(24, 0.6, 20);
+    const slab1Mesh = new THREE.Mesh(slab1Geo, materials.concrete);
+    slab1Mesh.position.set(1.5, 4.6, 0.5);
+    slab1Mesh.castShadow = true;
+    slab1Mesh.receiveShadow = true;
+    villaGroup.add(slab1Mesh);
+
+    // Master Bedroom Enclosure (Level 1)
+    const l1RoomGeo = new THREE.BoxGeometry(14, 3.8, 12);
+    const l1RoomMesh = new THREE.Mesh(l1RoomGeo, materials.facade.travertine);
+    l1RoomMesh.position.set(-2.5, 6.8, -2.5);
+    l1RoomMesh.castShadow = true;
+    l1RoomMesh.receiveShadow = true;
+    villaGroup.add(l1RoomMesh);
+    dynamicMeshes.facade.push(l1RoomMesh);
+
+    // Master Bedroom Panoramic Glass Front
+    const l1GlassGeo = new THREE.BoxGeometry(11.8, 3.5, 0.1);
+    const l1GlassMesh = new THREE.Mesh(l1GlassGeo, materials.glass);
+    l1GlassMesh.position.set(-2.5, 6.7, 3.5);
+    villaGroup.add(l1GlassMesh);
+
+    // Architectural Vertical Fluted Louvers (Privacy Screen)
+    const louverGeo = new THREE.BoxGeometry(0.12, 3.8, 0.4);
+    for (let i = 0; i < 18; i++) {
+      const louver = new THREE.Mesh(louverGeo, materials.wood.teak);
+      louver.position.set(4.5, 6.8, -4.5 + i * 0.55);
+      louver.castShadow = true;
+      louver.receiveShadow = true;
+      villaGroup.add(louver);
+      dynamicMeshes.wood.push(louver);
+    }
+
+    // --- LEVEL 2: ROOFTOP SKY TERRACE & PERGOLA ---
+    const slab2Geo = new THREE.BoxGeometry(18, 0.5, 16);
+    const slab2Mesh = new THREE.Mesh(slab2Geo, materials.concrete);
+    slab2Mesh.position.set(0, 8.9, -1.0);
+    slab2Mesh.castShadow = true;
+    slab2Mesh.receiveShadow = true;
+    villaGroup.add(slab2Mesh);
+
+    // Architectural Steel Pergola Beams (Rooftop Canopy)
+    const pergolaBeamGeo = new THREE.BoxGeometry(12, 0.25, 0.4);
+    for (let j = 0; j < 8; j++) {
+      const beam = new THREE.Mesh(pergolaBeamGeo, materials.wood.bronze);
+      beam.position.set(1.0, 11.2, -5.0 + j * 1.2);
+      beam.castShadow = true;
+      villaGroup.add(beam);
+    }
+
+    // --- PRIVATE CANTILEVER INFINITY POOL ---
+    const poolBoxGeo = new THREE.BoxGeometry(10, 1.8, 5.5);
+    const poolBoxMesh = new THREE.Mesh(poolBoxGeo, materials.facade.travertine);
+    poolBoxMesh.position.set(5.5, 0.9, 8.5);
+    poolBoxMesh.castShadow = true;
+    poolBoxMesh.receiveShadow = true;
+    villaGroup.add(poolBoxMesh);
+    dynamicMeshes.facade.push(poolBoxMesh);
+
+    // Water Surface
+    const waterGeo = new THREE.BoxGeometry(9.4, 0.1, 4.9);
+    const waterMesh = new THREE.Mesh(waterGeo, materials.water);
+    waterMesh.position.set(5.5, 1.65, 8.5);
+    villaGroup.add(waterMesh);
+
+    // Glass Infinity Edge (Overhanging water edge)
+    const poolGlassGeo = new THREE.BoxGeometry(9.4, 0.8, 0.1);
+    const poolGlassMesh = new THREE.Mesh(poolGlassGeo, materials.glass);
+    poolGlassMesh.position.set(5.5, 1.8, 11.0);
+    villaGroup.add(poolGlassMesh);
+
+    // --- INTERIOR DESIGN ACCENTS (Visible Through Glass) ---
+    // Minimalist Luxury Sectional Sofa
+    const sofaBaseGeo = new THREE.BoxGeometry(4.5, 0.5, 2.2);
+    const sofaMat = new THREE.MeshStandardMaterial({ color: 0xE8E6DF, roughness: 0.8 });
+    const sofaBase = new THREE.Mesh(sofaBaseGeo, sofaMat);
+    sofaBase.position.set(1.5, 0.85, 0);
+    sofaBase.castShadow = true;
+    villaGroup.add(sofaBase);
+
+    // Sculptural Coffee Table (Calacatta Marble)
+    const tableGeo = new THREE.CylinderGeometry(0.9, 0.9, 0.35, 32);
+    const tableMesh = new THREE.Mesh(tableGeo, materials.floor.marble);
+    tableMesh.position.set(1.5, 0.75, 2.2);
+    tableMesh.castShadow = true;
+    villaGroup.add(tableMesh);
+
+    // -------------------------------------------------------------------------
+    // 5. LIGHTING / CIRCADIAN CONTROLLER
+    // -------------------------------------------------------------------------
+    const lightingModes = {
+      day: {
+        bg: 0x0C0E14,
+        sunColor: 0xFFF7E6,
+        sunIntensity: 2.2,
+        sunPos: [25, 35, 18],
+        ambColor: 0xFFFFFF,
+        ambIntensity: 0.85,
+        exposure: 1.05,
+        interiorIntensity: 0.6,
+        label: "NOON (5500K SOLAR)"
+      },
+      sunset: {
+        bg: 0x160B08,
+        sunColor: 0xFF7A33,
+        sunIntensity: 3.2,
+        sunPos: [35, 12, 10],
+        ambColor: 0x4A2518,
+        ambIntensity: 0.5,
+        exposure: 1.15,
+        interiorIntensity: 2.8,
+        label: "GOLDEN HOUR (2400K AMBER)"
+      },
+      night: {
+        bg: 0x040508,
+        sunColor: 0x223355,
+        sunIntensity: 0.25,
+        sunPos: [-20, 25, -20],
+        ambColor: 0x080C16,
+        ambIntensity: 0.3,
+        exposure: 1.25,
+        interiorIntensity: 4.5,
+        label: "MIDNIGHT GALA (ARCHITECTURAL COVE)"
+      }
+    };
+
+    function setLightingMode(modeKey) {
+      const mode = lightingModes[modeKey];
+      if (!mode) return;
+
+      gsap.to(scene.background, {
+        r: ((mode.bg >> 16) & 255) / 255,
+        g: ((mode.bg >> 8) & 255) / 255,
+        b: (mode.bg & 255) / 255,
+        duration: 1.2,
+        ease: 'power2.inOut'
+      });
+
+      gsap.to(sunLight.color, {
+        r: ((mode.sunColor >> 16) & 255) / 255,
+        g: ((mode.sunColor >> 8) & 255) / 255,
+        b: (mode.sunColor & 255) / 255,
+        duration: 1.2
+      });
+
+      gsap.to(sunLight, {
+        intensity: mode.sunIntensity,
+        duration: 1.2
+      });
+
+      gsap.to(sunLight.position, {
+        x: mode.sunPos[0],
+        y: mode.sunPos[1],
+        z: mode.sunPos[2],
+        duration: 1.5,
+        ease: 'power2.inOut'
+      });
+
+      gsap.to(ambientLight, {
+        intensity: mode.ambIntensity,
+        duration: 1.2
+      });
+
+      gsap.to(renderer, {
+        toneMappingExposure: mode.exposure,
+        duration: 1.2
+      });
+
+      interiorLights.forEach((light) => {
+        gsap.to(light, {
+          intensity: mode.interiorIntensity,
+          duration: 1.2
+        });
+      });
+
+      document.getElementById('telemetry-lighting').innerText = mode.label;
+    }
+
+    // -------------------------------------------------------------------------
+    // 6. CAMERA ELEVATION / FOCUS CONTROLLER
+    // -------------------------------------------------------------------------
+    const cameraTargets = {
+      all: {
+        pos: [28, 16, 28],
+        target: [0, 4, 0]
+      },
+      pool: {
+        pos: [14, 4.5, 17],
+        target: [5.5, 1.8, 8.5]
+      },
+      penthouse: {
+        pos: [8, 9.5, 11],
+        target: [-1.0, 7.0, 0.0]
+      },
+      terrace: {
+        pos: [12, 14, 4],
+        target: [1.0, 9.5, -1.0]
+      }
+    };
+
+    function focusCamera(levelKey) {
+      const t = cameraTargets[levelKey];
+      if (!t) return;
+
+      gsap.to(camera.position, {
+        x: t.pos[0],
+        y: t.pos[1],
+        z: t.pos[2],
+        duration: 1.6,
+        ease: 'power3.inOut'
+      });
+
+      gsap.to(controls.target, {
+        x: t.target[0],
+        y: t.target[1],
+        z: t.target[2],
+        duration: 1.6,
+        ease: 'power3.inOut'
+      });
+    }
+
+    // -------------------------------------------------------------------------
+    // 7. CINEMATIC AUTO-TOUR RIG
+    // -------------------------------------------------------------------------
+    let isTourActive = false;
+    let tourTimeline = null;
+
+    function toggleAutoTour() {
+      const btn = document.getElementById('btn-cinematic-tour');
+      isTourActive = !isTourActive;
+
+      if (isTourActive) {
+        btn.classList.add('active');
+        btn.innerHTML = '<i data-lucide="pause" class="w-3.5 h-3.5 text-amber-400"></i><span>Pause Tour</span>';
+        lucide.createIcons();
+
+        // Sequence through key perspectives
+        focusCamera('pool');
+        setTimeout(() => { if (isTourActive) setLightingMode('sunset'); }, 2000);
+        setTimeout(() => { if (isTourActive) focusCamera('penthouse'); }, 5000);
+        setTimeout(() => { if (isTourActive) setLightingMode('night'); }, 8000);
+        setTimeout(() => { if (isTourActive) focusCamera('terrace'); }, 11000);
+        setTimeout(() => { if (isTourActive) { focusCamera('all'); setLightingMode('day'); toggleAutoTour(); } }, 15000);
+
+      } else {
+        btn.classList.remove('active');
+        btn.innerHTML = '<i data-lucide="play" class="w-3.5 h-3.5 text-emerald-400"></i><span>Auto-Tour</span>';
+        lucide.createIcons();
+        focusCamera('all');
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // 8. EVENT LISTENERS & UI WIRING
+    // -------------------------------------------------------------------------
+    // Lighting buttons
+    const lightBtns = document.querySelectorAll('.light-mode-btn');
+    lightBtns.forEach(b => {
+      b.addEventListener('click', () => {
+        lightBtns.forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        if (b.id === 'btn-light-day') setLightingMode('day');
+        if (b.id === 'btn-light-sunset') setLightingMode('sunset');
+        if (b.id === 'btn-light-night') setLightingMode('night');
+      });
+    });
+
+    // Elevation focus buttons
+    const levelBtns = document.querySelectorAll('.view-level-btn');
+    levelBtns.forEach(b => {
+      b.addEventListener('click', () => {
+        levelBtns.forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        focusCamera(b.dataset.level);
+      });
+    });
+
+    // Material Swatch Buttons
+    const matBtns = document.querySelectorAll('.material-btn');
+    matBtns.forEach(b => {
+      b.addEventListener('click', () => {
+        const type = b.dataset.type;
+        const matKey = b.dataset.material;
+        
+        // Update active button state within its group
+        document.querySelectorAll(`.material-btn[data-type="${type}"]`).forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+
+        // Apply new material to tracked meshes
+        const targetMat = materials[type][matKey];
+        if (targetMat && dynamicMeshes[type]) {
+          dynamicMeshes[type].forEach(mesh => {
+            mesh.material = targetMat;
+          });
+        }
+      });
+    });
+
+    // Auto-Tour Button
+    document.getElementById('btn-cinematic-tour').addEventListener('click', toggleAutoTour);
+
+    // Fullscreen Toggle
+    document.getElementById('btn-fullscreen').addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    // CREDAI ROI Modal
+    const roiModal = document.getElementById('modal-roi');
+    document.getElementById('btn-roi-calculator').addEventListener('click', () => {
+      roiModal.classList.remove('hidden');
+      roiModal.classList.add('flex');
+    });
+    document.getElementById('btn-pitch-cta').addEventListener('click', () => {
+      roiModal.classList.remove('hidden');
+      roiModal.classList.add('flex');
+    });
+    document.getElementById('btn-close-roi').addEventListener('click', () => {
+      roiModal.classList.add('hidden');
+      roiModal.classList.remove('flex');
+    });
+
+    // Responsive Resize Handler
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // -------------------------------------------------------------------------
+    // 9. ANIMATION & RENDER LOOP (60 FPS)
+    // -------------------------------------------------------------------------
+    let clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const elapsedTime = clock.getElapsedTime();
+
+      // Water gentle wave refraction shimmer
+      if (waterMesh) {
+        waterMesh.position.y = 1.65 + Math.sin(elapsedTime * 2.0) * 0.015;
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
