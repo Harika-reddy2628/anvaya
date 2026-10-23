@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Lenis from "lenis";
 import { EASE_IN_OUT, EASE_OUT, INTRO_DONE, ScrollTrigger, SplitText, afterIntro, gsap, introWillPlay } from "../../lib/motion";
-import { LogoMark } from "./Logo";
+import { Wordmark } from "./Logo";
 
 const MOTION = "(prefers-reduced-motion: no-preference)";
 const FINE = "(prefers-reduced-motion: no-preference) and (pointer: fine)";
@@ -11,8 +11,8 @@ const WIDE = "(prefers-reduced-motion: no-preference) and (min-width: 1100px)";
 const FADES = [
   ".section-heading > p", ".section-copy > *", ".service-description > *", ".principles article", ".belief-grid article",
   ".working-model > div", ".detail-capabilities article", ".step-list li", ".capabilities-heading p", ".process-intro > p",
-  ".process-intro > .action", ".process-closing", ".cta-layout > div > *", ".form-aside > *", ".policy-content section",
-  ".world-tabs > button", ".thread-section > .container > .action", ".why-section .action", ".studio-note .mini-label", ".studio-note .action",
+  ".process-intro > .action", ".process-closing", ".cta-foot > p", ".cta-foot > div", ".form-aside > *", ".policy-content section",
+  ".world-tabs > button", ".thread-section > .wrap > .action", ".service-index", ".page-hero-meta", ".why-section .action", ".studio-note .mini-label", ".studio-note .action",
 ].join(",");
 
 /** Owns site-wide motion: smooth scrolling, scroll reveals, header state, cursor, magnetic actions and route curtains. */
@@ -50,7 +50,8 @@ export function MotionLayer() {
         last = y;
       };
       window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
-      const progress = ScrollTrigger.create({ start: 0, end: "max", onUpdate: self => gsap.set(bar.current, { scaleX: self.progress }) });
+      // Page depth drives both the top progress line and the header ticker.
+      const progress = ScrollTrigger.create({ start: 0, end: "max", onUpdate: self => { gsap.set(bar.current, { scaleX: self.progress }); header?.style.setProperty("--depth", self.progress.toFixed(4)); } });
 
       const leave = (href: string) => {
         const el = curtain.current;
@@ -60,7 +61,7 @@ export function MotionLayer() {
         gsap.timeline()
           .set(el, { visibility: "visible", clipPath: "inset(100% 0% 0% 0%)" })
           .to(el, { clipPath: "inset(0% 0% 0% 0%)", duration: .62, ease: EASE_IN_OUT })
-          .fromTo(el.querySelectorAll(".logo-arch, .logo-inner, .logo-thread"), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: .5, stagger: .06, ease: "power2.inOut" }, .2)
+          .fromTo(el.querySelector(".curtain-word"), { yPercent: 110 }, { yPercent: 0, duration: .6, ease: EASE_OUT }, .3)
           .add(() => router.push(href));
         fallback.current = setTimeout(() => reveal(), 4500);
       };
@@ -90,6 +91,7 @@ export function MotionLayer() {
         window.removeEventListener("scroll", onScroll);
         window.removeEventListener("click", click, true);
         header?.classList.remove("is-solid", "is-hidden");
+        header?.style.removeProperty("--depth");
         progress.kill();
         gsap.ticker.remove(tick);
         lenis.destroy();
@@ -115,9 +117,11 @@ export function MotionLayer() {
         ringX(event.clientX); ringY(event.clientY); dotX(event.clientX); dotY(event.clientY);
         const target = event.target as Element;
         el.dataset.state = target.closest("input, textarea, select") ? "text"
-          : target.closest(".service-art-link, .world-panels .world-art, .page-hero .world-art") ? "view"
+          : target.closest(".service-art-link, .world-panels .world-art, .plan-frame") ? "view"
+          : target.closest(".hero-art, .hero-copy h1") ? "look"
           : target.closest("a, button, [role=tab], label, summary") ? "link" : "";
-        const next = target.closest<HTMLElement>(".action:not(.action-text), .header-project, .intro-top button");
+        if (label) label.textContent = el.dataset.state === "look" ? "Scroll" : "View";
+        const next = target.closest<HTMLElement>(".action:not(.action-text), .pill");
         if (next !== magnet) release();
         magnet = next;
         if (magnet) {
@@ -159,7 +163,7 @@ export function MotionLayer() {
 
   return <>
     <div className="scroll-progress" ref={bar} aria-hidden="true" />
-    <div className="page-curtain" ref={curtain} aria-hidden="true"><LogoMark /><span>ANVAYA</span></div>
+    <div className="page-curtain" ref={curtain} aria-hidden="true"><span className="curtain-mask"><Wordmark className="curtain-word" /></span><span className="curtain-note">Technology and design studio</span></div>
     <div className="cursor" ref={cursor} aria-hidden="true"><span className="cursor-ring" /><span className="cursor-dot" /><span className="cursor-label">View</span></div>
   </>;
 }
@@ -177,13 +181,13 @@ function buildPage(delay: number) {
     gsap.timeline({ delay, defaults: { ease: EASE_OUT } })
       .from(q(".hero-art"), { scale: 1.14, opacity: 0, duration: 2.2, ease: "power3.out" }, 0)
       .from(q(".hero-line > span"), { yPercent: 112, duration: 1.4, stagger: .1 }, .05)
-      .from(q(".hero-topline > *, .hero-index"), { opacity: 0, y: 14, duration: 1, stagger: .08 }, .3)
+      .from(q(".hero-copy .kicker, .practice-plan, .hero-bar"), { opacity: 0, y: 14, duration: 1, stagger: .1 }, .3)
       .from(q(".hero-description > *"), { opacity: 0, y: 26, duration: 1.1, stagger: .1 }, .55)
       .from(q(".hero-bottom > *"), { opacity: 0, y: 12, duration: .9, stagger: .07 }, .75)
       .fromTo(path, { strokeDasharray: length, strokeDashoffset: length }, { strokeDashoffset: 0, duration: 2.4, ease: "power2.inOut", clearProps: "strokeDasharray,strokeDashoffset" }, .2);
     const scrub = { trigger: hero, start: "top top", end: "bottom top", scrub: true };
-    gsap.to(q(".hero-heading-row"), { yPercent: -28, opacity: .1, ease: "none", scrollTrigger: scrub });
-    gsap.to(q(".hero-description"), { yPercent: -60, ease: "none", scrollTrigger: scrub });
+    gsap.to(q(".hero-copy"), { yPercent: -18, opacity: .15, ease: "none", scrollTrigger: scrub });
+    gsap.to(q(".practice-plan"), { yPercent: -40, ease: "none", scrollTrigger: scrub });
     gsap.to(q(".hero-art"), { yPercent: 14, ease: "none", scrollTrigger: scrub });
   }
 
@@ -191,7 +195,7 @@ function buildPage(delay: number) {
     type: "lines", mask: "lines", linesClass: "split-line", autoSplit: true,
     onSplit: self => gsap.from(self.lines, { yPercent: 112, duration: 1.25, stagger: .09, ease: EASE_OUT, delay }),
   }));
-  gsap.from(q(".page-hero .section-label, .page-intro > *, .page-hero .action, .page-hero .practice-status, .policy-page .section-label"), { opacity: 0, y: 22, duration: 1.1, stagger: .07, ease: EASE_OUT, delay: delay + .35 });
+  gsap.from(q(".page-hero .section-label, .page-intro > *, .page-hero .action, .page-hero .practice-status, .page-hero .plan-head, .page-hero-meta > *, .policy-page .section-label"), { opacity: 0, y: 22, duration: 1.1, stagger: .07, ease: EASE_OUT, delay: delay + .35 });
   q(".page-hero .world-art").forEach(art => gsap.timeline({ delay: delay + .15 })
     .fromTo(art, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.5, ease: EASE_IN_OUT })
     .from(art.querySelector("svg"), { scale: 1.2, duration: 2, ease: EASE_OUT }, 0));
@@ -202,7 +206,7 @@ function buildPage(delay: number) {
   }));
   q(".section-label").filter(label => !label.closest(".page-hero")).forEach(label => gsap.timeline({ scrollTrigger: once(label, "top 92%") })
     .from(label, { opacity: 0, x: -16, duration: 1, ease: EASE_OUT })
-    .from(label.querySelector(".bindu"), { scale: 0, duration: .7, ease: "back.out(3)" }, .15));
+    .from(label.querySelector("b, .bindu"), { opacity: 0, y: 8, duration: .7, ease: EASE_OUT }, .15));
 
   const fades = q(FADES).filter(el => !el.closest(".point-section .section-copy, .page-hero"));
   gsap.set(fades, { opacity: 0, y: 38 });
@@ -221,7 +225,6 @@ function buildPage(delay: number) {
   });
   q(".point-signature, .name-mark, .studio-note-visual .indic, .belief-grid h3").forEach(el => gsap.fromTo(el, { yPercent: 18 }, { yPercent: -18, ease: "none", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true } }));
   q(".marquee-track").forEach((track, index) => gsap.fromTo(track, { xPercent: index % 2 ? -50 : 0 }, { xPercent: index % 2 ? 0 : -50, ease: "none", scrollTrigger: { trigger: track.parentElement, start: "top bottom", end: "bottom top", scrub: .6 } }));
-  q(".cta-thread").forEach(line => gsap.fromTo(line, { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", ease: "none", scrollTrigger: { trigger: line, start: "top 95%", end: "top 55%", scrub: true } }));
 
   const footer = document.querySelector(".site-footer");
   const word = footer?.querySelector(".footer-word");
@@ -229,16 +232,14 @@ function buildPage(delay: number) {
     const chars = SplitText.create(word, { type: "chars", mask: "chars", charsClass: "split-char" }).chars;
     gsap.timeline({ scrollTrigger: once(footer, "top 80%") })
       .from(chars, { yPercent: 110, duration: 1.3, stagger: .05, ease: EASE_OUT })
-      .fromTo(footer.querySelectorAll(".footer-mark path"), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.2, stagger: .1, ease: "power2.inOut" }, 0)
-      .from(footer.querySelector(".footer-mark .logo-bindu"), { scale: 0, transformOrigin: "50% 50%", duration: .6, ease: "back.out(3)" }, .8)
-      .from(footer.querySelectorAll(".footer-top > p, .footer-middle, .footer-bottom"), { opacity: 0, y: 24, duration: 1, stagger: .1, ease: EASE_OUT }, .3);
+      .from(footer.querySelectorAll(".footer-top > *, .footer-bottom"), { opacity: 0, y: 24, duration: 1, stagger: .1, ease: EASE_OUT }, .3);
   }
 }
 
 function buildProcess() {
   const section = document.querySelector<HTMLElement>(".process-section");
   const list = section?.querySelector<HTMLElement>(".step-list");
-  const frame = section?.querySelector<HTMLElement>(".container");
+  const frame = section?.querySelector<HTMLElement>(".wrap");
   if (!section || !list || !frame) return;
   section.classList.add("is-horizontal");
   const distance = () => Math.max(0, list.scrollWidth - frame.clientWidth);

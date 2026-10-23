@@ -1,19 +1,19 @@
 import { expect, test } from "@playwright/test";
 const skipIntro = () => sessionStorage.setItem("anvaya-intention-intro", "1");
 
-test("the loading transition draws the Anvaya mark and releases the page", async ({ page }) => {
+test("the loading transition reveals the Anvaya title and releases the page", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" }); await page.goto("/");
   const intro = page.getByRole("dialog", { name: "Preparing the Anvaya experience" });
-  await expect(intro.locator(".logo-mark")).toBeVisible();
-  await expect(intro.locator(".intro-letter")).toHaveCount(6);
+  await expect(intro.locator(".wordmark")).toBeVisible();
+  await expect(intro.locator(".intro-char")).toHaveCount(6);
   await expect(intro).toBeHidden({ timeout: 2900 });
   await expect(page.locator("html")).toHaveAttribute("data-intro", "done");
 });
 
-test("the header and footer carry the logo mark and the favicon is the mark", async ({ page, request }) => {
+test("the header and footer carry the wordmark and the favicon is the mark", async ({ page, request }) => {
   await page.addInitScript(skipIntro); await page.goto("/studio");
-  await expect(page.locator("header .brand .logo-mark")).toBeVisible();
-  await expect(page.locator("footer .footer-mark")).toHaveCount(1);
+  await expect(page.locator("header .brand .wordmark")).toBeVisible();
+  await expect(page.locator("footer .footer-word")).toHaveCount(1);
   const icon = await request.get("/icon.svg"); expect(await icon.text()).toContain("#c4673f");
 });
 
@@ -49,10 +49,23 @@ test("How We Work pins horizontally only on wide screens with motion", async ({ 
 test("content stays visible without JavaScript", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, baseURL: "http://127.0.0.1:3107" }); const page = await context.newPage();
   await page.goto("/");
-  await expect(page.locator("header .logo-mark")).toBeVisible();
+  await expect(page.locator("header .wordmark")).toBeVisible();
   for (const selector of [".hero-line > span", ".point-section .section-copy p", ".step-list li", ".service-block"]) {
     expect(await page.locator(selector).first().evaluate(e => getComputedStyle(e).opacity)).toBe("1");
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
   await context.close();
+});
+
+test("the section rail indexes page sections and follows the reader", async ({ page }) => {
+  await page.addInitScript(skipIntro); await page.goto("/");
+  const rail = page.getByRole("navigation", { name: "Page sections" });
+  if (!test.info().project.name.endsWith("desktop") && test.info().project.name !== "reduced-motion") { await expect(rail).toBeHidden(); return; }
+  await expect(rail).toBeHidden();
+  await page.locator("#what-we-build").scrollIntoViewIfNeeded();
+  await expect(rail).toBeVisible();
+  await expect(rail.getByRole("link")).toHaveCount(8);
+  await expect(rail.getByRole("link", { name: /What we build/ })).toHaveAttribute("aria-current", "location");
+  await rail.getByRole("link", { name: /How we work/ }).click();
+  await expect(page).toHaveURL(/#process$/);
 });

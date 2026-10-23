@@ -101,3 +101,36 @@ Verification on this Mac (Node v24.15.0, Playwright 1.63.0, installed Google Chr
 - Screenshots were reviewed at 1440×900 and in iPhone 13 emulation.
 
 Not verified: actual Safari, physical phones and frame-time measurements of the new scroll choreography.
+
+## Cinematic redesign — 23 October 2026
+
+Owner request: redesign the whole site from scratch in the language of the West Road residence walkthrough (https://anvaya-westroad-tour.vercel.app/), keeping version control.
+
+Version control:
+
+- The previous state was committed as `02d2290` on `redesign/anvaya-connected-studio`.
+- The redesign is on `redesign/cinematic-studio`.
+- Components moved with `git mv` to `app/components/cinema/`, and the stylesheet to `app/cinema.css`, so file history is kept.
+
+Delivered:
+
+- **Visual system:** a new stylesheet with ink, ivory and `#D27245`, using Instrument Serif, Inter Tight and JetBrains Mono.
+- **Header:** glass-pill navigation and a centre depth ruler.
+- **Section rail:** a numbered rail on every page at 1280px and wider.
+- **Home hero:** tour-style scrims, a kicker, a thread-progress hairline and a practice-map panel whose points link to the four practices.
+- **Page heroes:** inner pages bottom-align their heroes, with plan-framed artwork on practice pages.
+- **Inverted sections:** "Why Anvaya" and "The belief" are ivory paper.
+- **Loader and transitions:** the loader follows the tour's design, and route changes pass through a wordmark curtain.
+- **Cursor and grain:** the cursor inverts what is under it and the grain moves.
+- **Posters:** desktop and mobile posters were re-exported on ink from the same scene (`scripts/capture-connected.mjs --posters`).
+
+Copy, routes, redirects, coming-soon handling, the enquiry form, Resend delivery, local backups, reduced motion, no-JavaScript output and WebGL fallbacks are unchanged in behaviour.
+
+Verification:
+
+- Lint passed and the webpack build succeeded.
+- Full suite: 171 passed. The 3 failures were all the new rail test, which is fixed below.
+- After the rail-test fix, the UI specs (motion, reference, hero and intro) were run twice: 278 passed and 2 skipped by design.
+- The capture matrix (4 viewports × 8 pages) showed no horizontal overflow and no page errors. The scene reported 18,998 triangles and 8 draw calls.
+
+Not verified: actual Safari, physical phones and live Resend delivery.

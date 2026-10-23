@@ -9,7 +9,7 @@ Read relevant installed Next.js guides before changing code. Inspect the actual 
 ## Build requirements
 
 - Eight launch pages: Home, Services, four named practice pages, Studio and Start a Project (`/project`). Privacy and Terms are supporting pages.
-- Use the owner's supplied copy, warm ivory, espresso, restrained terracotta, spacious editorial layouts and subtle **अन्वय** identity. No blue gradients, robots, stock coding imagery, invented client proof or project counts.
+- Use the owner's supplied copy and subtle **अन्वय** identity. Owner direction, 23 October 2026: the visual system is the cinematic ink/ivory/accent language of the West Road residence tour (see DESIGN.md), with ivory paper sections used sparingly. No blue gradients, robots, stock coding imagery, invented client proof or project counts.
 - Desktop navigation: brand → Home, Services, Studio, Start a Project. No separate Home link or Menu button. Keep the same destinations accessible on mobile without an overlay.
 - Keep Work and all case-study URLs unpublished until 2–3 genuine case studies are ready. Preserve historical project data in source.
 - Use original architectural Three.js geometry and matching local posters. Owner update, 23 October 2026: the site uses a full editorial motion layer (see DESIGN.md "Motion") — Lenis smooth scroll, scroll reveals, a pinned horizontal How We Work sequence, scroll/pointer camera drift rendered on demand, route curtains, magnetic actions and a custom cursor. Objects never rotate or orbit and there is still no ambient render loop. Reduced-motion and WebGL failures keep the poster and HTML actions usable and remove all of this motion.

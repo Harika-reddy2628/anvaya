@@ -2,7 +2,7 @@
 
 Technology and design studio. India, working globally.
 
-The site implements the owner's complete website script with warm ivory/espresso/terracotta styling, an original architectural Three.js hero, one continuous thread motif, an original logo mark, Cormorant display typography, an editorial GSAP/Lenis motion layer and eight core pages. [DESIGN.md](DESIGN.md) and the [implementation contract](docs/anvaya-connected-studio-plan.md) are the current authority. Earlier Lusion/lotus components are historical and are not imported by active pages.
+The site implements the owner's complete website script with warm ivory/espresso/terracotta styling, an original architectural Three.js hero, one continuous thread motif, an editorial GSAP/Lenis motion layer and eight core pages. Since 23 October 2026 the visual system follows the West Road residence walkthrough: ink, ivory and a warm accent; Instrument Serif, Inter Tight and JetBrains Mono; glass pills, a numbered section rail and a depth ruler. Branch `redesign/cinematic-studio`; the previous ivory/espresso design is commit `02d2290`. [DESIGN.md](DESIGN.md) and the [implementation contract](docs/anvaya-connected-studio-plan.md) are the current authority. Earlier Lusion/lotus components are historical and are not imported by active pages.
 
 ## Run locally
 
@@ -44,7 +44,7 @@ There is no enquiry database, browser persistence of form contents, analytics or
 
 The one-time Home transition draws the logo mark and reveals the wordmark in about 2.35 seconds, with a 2.7-second safeguard, Skip/Escape, focus restoration and reduced-motion/deep-link bypass. Static HTML stays available without JavaScript. Note: in `next dev`, React Strict Mode double-mounts effects, which marks the intro as seen on first load; check the intro against `npm run build && npm run start`.
 
-The architectural scene never rotates; its camera drifts with hero scroll and the mouse, rendering on demand only. GSAP moves the SVG bindu, with Pause/Resume and visibility suspension. `app/components/connected/MotionLayer.tsx` owns Lenis smooth scrolling, ScrollTrigger/SplitText reveals, the pinned horizontal How We Work sequence (≥1100px), header states, scroll progress, route curtains, the fine-pointer cursor and magnetic actions. Reduced motion loads no WebGL and none of that layer. Context failure retains the matching poster. Four original SVG worlds have keyboard/touch equivalents. No old lotus/water assets or client-evidence illustrations load through active routes.
+The architectural scene never rotates; its camera drifts with hero scroll and the mouse, rendering on demand only. GSAP moves the SVG bindu, with Pause/Resume and visibility suspension. `app/components/cinema/MotionLayer.tsx` owns Lenis smooth scrolling, ScrollTrigger/SplitText reveals, the pinned horizontal How We Work sequence (≥1100px), header states, scroll progress, route curtains, the fine-pointer cursor and magnetic actions. Reduced motion loads no WebGL and none of that layer. Context failure retains the matching poster. Four original SVG worlds have keyboard/touch equivalents. No old lotus/water assets or client-evidence illustrations load through active routes.
 
 Regenerate clean posters and screenshots against a running preview:
 
@@ -53,7 +53,7 @@ node scripts/capture-connected.mjs http://localhost:3000 --posters
 node scripts/measure-connected.mjs http://localhost:3000
 ```
 
-Sources: `app/components/connected/HeroScene.tsx`, the SVG world artwork in Shared, local font license files and [asset manifest](docs/anvaya-connected-art-manifest.md). Screenshot output is ignored under `test-results/connected-studio/`.
+Sources: `app/components/cinema/HeroScene.tsx`, the SVG world artwork in Shared, local font license files and [asset manifest](docs/anvaya-connected-art-manifest.md). Screenshot output is ignored under `test-results/connected-studio/`.
 
 ## Verify
 

@@ -23,7 +23,7 @@ try {
     await page.screenshot({ path: `${folder}/home-${name}.png` });
     await page.screenshot({ path: `${folder}/home-${name}-full.png`, fullPage: true });
     if (posters && ["desktop", "mobile"].includes(name)) {
-      await page.addStyleTag({ content: ".site-header,.hero-content,.hero-thread,.hero-shade{visibility:hidden!important}.hero-art{mask-image:none!important}" });
+      await page.addStyleTag({ content: ".site-header,.hero-content,.hero-thread,.hero-shade,.scrim,.grain,.scroll-progress,.section-rail,.cursor{visibility:hidden!important}.hero-art{mask-image:none!important;-webkit-mask-image:none!important}" });
       const png = await page.locator(".live-scene canvas").screenshot();
       await sharp(png).webp({ quality: 85 }).toFile(`public/art/anvaya-aperture-${name}.webp`);
     }

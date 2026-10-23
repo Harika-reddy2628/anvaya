@@ -19,8 +19,8 @@ export default function HeroScene() {
     renderer.domElement.setAttribute("aria-hidden", "true");
     target.appendChild(renderer.domElement);
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color("#211b17");
-    scene.fog = new THREE.Fog("#211b17", 20, 48);
+    scene.background = new THREE.Color("#0b0a09");
+    scene.fog = new THREE.Fog("#0b0a09", 18, 44);
     const camera = new THREE.PerspectiveCamera(36, 1, .1, 80);
     const geometries: THREE.BufferGeometry[] = [];
     const materials: THREE.Material[] = [];

@@ -4,28 +4,37 @@ Current authority: the owner's complete website script, 8 October 2026. Implemen
 
 ## Character and tokens
 
-Technology and design studio. India, working globally. Quiet confidence: warm, editorial, architectural, clear. Use the supplied script verbatim for the principal headings, body copy and actions.
+Owner direction, 23 October 2026: the whole site is redesigned in the visual language of Anvaya's West Road residence walkthrough (https://anvaya-westroad-tour.vercel.app/). It is a cinematic dark studio, like instrumentation laid over architecture. The owner's script remains the copy authority: use it verbatim for the principal headings, body copy and actions. The earlier warm-ivory/espresso connected-studio styling is preserved in Git (`02d2290`).
 
 | Role | Value |
 | --- | --- |
-| Warm ivory canvas | `#F0EBE5` |
-| Light surface | `#F8F4EE` |
-| Espresso ink/footer | `#3F2419` |
-| Cinematic dark hero | `#211B17` |
-| Restrained terracotta | `#A74F33` |
-| Secondary ink | `#75665B` |
-| Fine rules | `#CEC2B5` |
-| Text on dark | `#F3EDE4` |
+| Ink canvas | `#0B0A09` |
+| Raised ink sections | `#12100E`, `#1A1714` |
+| Ivory text | `#F2ECE3` |
+| Secondary / tertiary text | ivory at 70% / 52% |
+| Hairlines | ivory at 14% / 30% |
+| Warm accent (bindu, thread, numbers, focus) | `#D27245` |
+| Accent on ivory sections | `#A54F2A` |
+| Ivory section ink / muted | `#2A241F` / `#5C5249` |
 
-Ivory and espresso retain the sampled Oura reference palette. Terracotta marks the bindu, thread, active world, small annotations and focus states. No blue, metallic gold, gradients suggesting generic AI, fake logos/testimonials or unsupported numbers. Gradual lighting/shading belongs to the architectural scene.
+Two sections invert to ivory paper (Home "Why Anvaya", Studio "The belief") for rhythm. No blue, metallic gold, generic AI gradients, fake logos/testimonials or unsupported numbers.
 
-Owner update, 23 October 2026: locally hosted Cormorant (upright and italic, OFL) is the display face for H1/H2, practice names, step numbers, the hero headline and marquee, with an italic serif accent on MATTER. Inter 400 remains for body copy, navigation and actions; Hind for Devanagari; Geist Mono for compact numbered labels. Preserve font licenses. Body 16–17px desktop, 14–16px mobile. Hero display scales from 60–75px at narrow widths to roughly 156px at 1440px. Avoid widely tracked body text; compact labels use modest tracking.
+Type, all self-hosted (OFL): Instrument Serif (roman and italic) for H1/H2, practice names, step numbers and the intro title. Inter Tight for text. JetBrains Mono, 11px uppercase at .08em, for kickers, pills, labels and meta rows. Hind for Devanagari. Italic serif marks the second clause of key headings and MATTER.
 
-Maximum content width 1440px. Gutters: 48px desktop, 32px tablet, 20px mobile, 16px below 360px. Sections: 112px desktop, 88px tablet, 72px mobile. Asymmetric two-column introductions, large left-aligned headings, fine rules and rectangular visual fields. No rounded card grid. Reading measure stays around 40–65 characters.
+Grid: `--pad` clamp(20–40px). Full-bleed heroes use `.wrap-full`. Content uses `.wrap`, which reserves a 196px left column for the section rail at 1280px and wider. Sections run 96–168px with hairline separators. Reading measure stays around 40–62 characters.
+
+Components:
+
+- **Glass pills:** 44px+, 999px radius, hairline border, blurred ink. They invert to ivory on hover.
+- **Actions:** pills with an ivory or accent fill sweep and a rotating ↗.
+- **Kickers:** accent number, slash, label.
+- **Plan frames:** a mono head row over hairline-framed artwork.
+- **Practice map:** the hero's floor-plan panel, whose points link to the practices.
+- **Page meta rows:** a progress hairline.
 
 ## Navigation and composition
 
-Brand `ANVAYA / अन्वय` links Home. Desktop right: Services, Studio, Start a Project ↗. No Home text link, second Menu button or Work link. Mobile uses brand/project action in the first row and visible Services/Studio links in the next row. All targets remain accessible without a modal.
+Brand `ANVAYA.` (tracked wordmark, accent full stop) with अन्वय links Home. A centre tick ruler reads page depth like the tour's compass. Desktop right: Services and Studio pills, then the solid Start a Project ↗ pill. At 1280px and wider, a fixed numbered section rail (the tour's room index) lists the page's sections, underlines the current one, switches to ink over ivory sections and steps aside for the footer. No Home text link, second Menu button or Work link. Mobile uses brand/project action in the first row and visible Services/Studio links in the next row. All targets remain accessible without a modal.
 
 Home has eight scrolling sections plus the one-time transition: Hero; The Point of Anvaya; The Anvaya Thread; What We Build; One Connected Studio; How We Work; Studio Note; Final CTA. The transition is an overlay, not an extra empty scroll section.
 
@@ -37,17 +46,17 @@ Reusable final CTA: THE NEXT MOVE / Have something worth building? / supplied bo
 
 ## Logo
 
-Original mark (`app/components/connected/Logo.tsx`, favicon `app/icon.svg`): a stroked architectural arch read as an A, an inner arch at lower weight, and a terracotta thread crossing it to end in the bindu. It sits before the `ANVAYA / अन्वय` wordmark in the header, leads the footer wordmark, and is drawn stroke by stroke in the loader and route curtain. On dark grounds the thread uses `#D07A55`.
+The primary identity is the tracked `ANVAYA.` wordmark, whose full stop is the accent bindu (`Wordmark` in `app/components/cinema/Logo.tsx`). It appears in the header, intro, route curtain and as the full-width footer signature. The original arch/thread/bindu mark (`LogoMark`) remains the favicon (`app/icon.svg`).
 
 ## Bindu, thread and original architecture
 
-The hero is deep espresso with immediate HTML MAKE. MOVE. MATTER. copy, a quiet original three-arch connection study, terracotta SVG thread and a small travelling bindu. Three.js architecture stays still. No orbit, object rotation, water, particles or stock imagery. The camera drifts slightly with hero scroll progress and the mouse; frames render only on load, resize and those changes, with no continuous WebGL loop.
+The hero is ink, with scrims like the tour's. It carries immediate HTML MAKE. MOVE. MATTER. copy (MATTER in italic), a kicker, actions, a meta row with a thread-progress hairline, a practice-map panel, a quiet original three-arch connection study, terracotta SVG thread and a small travelling bindu. Three.js architecture stays still. No orbit, object rotation, water, particles or stock imagery. The camera drifts slightly with hero scroll progress and the mouse; frames render only on load, resize and those changes, with no continuous WebGL loop.
 
 Procedural beveled arches use stone, clay and ivory materials, broad lighting and local matching WebP posters. Scene code is retained as the reproducible source. Reserve dimensions before assets arrive. Poster remains available beneath the live renderer. WebGL creation/render/context failure stays local; reduced motion loads no renderer. Export both desktop and mobile posters directly from the same scene, without interface overlays.
 
 The thread enters the next section through a fine gutter line. Four original SVG worlds represent a browser, product interface, workflow and architectural opening. These are abstract practice illustrations, never client screens. An accessible vertical tablist selects the active world using hover, click/touch or arrow/Home/End keys. Each panel has a real practice-page action.
 
-The introduction is espresso: the logo mark draws (arch, inner arch, thread, bindu), ANVAYA rises letter by letter through masks, अन्वय and BUILDING WITH INTENTION fade in, and a terracotta rule fills while an italic serif counter reaches 100. Progress represents the transition, not a measured download. The screen then wipes upward into the hero, whose headline lines rise. Nominal duration 2.35 seconds with a 2.7-second exit safeguard. Skip and Escape release inert state/scroll and restore focus. Bypass on reduced motion, a seen session, deep links and inner pages. Its default server-rendered state is hidden.
+The introduction follows the tour's loader. On ink, the wordmark and Skip pill sit in the top row. "Anvaya" rises letter by letter in Instrument Serif with अन्वय beneath it. A serif counter reaches 100 over a filling hairline. Progress represents the transition, not a measured download. The letters then lift away and the screen wipes upward into the hero, whose headline lines rise. Nominal duration 2.3 seconds with a 2.7-second exit safeguard. Skip and Escape release inert state/scroll and restore focus. Bypass on reduced motion, a seen session, deep links and inner pages. Its default server-rendered state is hidden.
 
 ## Motion, accessibility and forms
 
@@ -57,10 +66,10 @@ Owner update, 23 October 2026 (Awwwards-style direction). Only bindu/thread moti
 - Headings reveal by masked lines (SplitText), labels by bindu, copy and cards by staggered rise, artwork by clip wipe. Elements skipped by jumps settle immediately.
 - The Point copy fills word by word with scroll; Devanagari marks and belief words have gentle parallax; the Make/Move/Matter and Brand/Product/Systems/Space marquee is scroll-linked, never autoplaying.
 - How We Work pins and scrolls horizontally at 1100px and wider.
-- The header is fixed over the Home hero, sticky elsewhere, turns translucent ivory after the hero, hides while reading downward and returns on upward scroll or focus. A terracotta scroll-progress line runs along the top.
-- Internal route changes pass through an espresso curtain that draws the mark; Next.js Link navigation and history stay intact.
-- Fine pointers get a terracotta ring cursor (grows on links, shows View on artwork, hides over form fields) and magnetic primary actions. Actions fill with terracotta and rotate their arrow on hover.
-- A static grain overlay adds texture.
+- The header is fixed with motion and absolute without it. After the hero it turns to blurred ink with a hairline. It hides while reading downward and returns on upward scroll or focus. An accent scroll-progress line runs along the top, and the header ruler slides with page depth.
+- Internal route changes pass through an ink curtain that raises the wordmark. Next.js Link navigation and history stay intact.
+- Fine pointers get the tour's cursor: white dot and ring with the `difference` blend mode. It becomes a solid dot on links, shows VIEW on artwork and SCROLL on the hero, and hides over form fields. Pills and actions pull magnetically.
+- Film grain shifts in six steps per second, and is static for reduced motion.
 
 Reduced motion removes Lenis, reveals, pinning, curtains, cursor, magnetic pull and live WebGL immediately, including on a live preference change. Without JavaScript all content is visible and the layout is the static editorial page.
 
