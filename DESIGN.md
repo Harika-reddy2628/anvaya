@@ -54,7 +54,31 @@ The hero is ink, with scrims like the tour's. It carries immediate HTML MAKE. MO
 
 Procedural beveled arches use stone, clay and ivory materials, broad lighting and local matching WebP posters. Scene code is retained as the reproducible source. Reserve dimensions before assets arrive. Poster remains available beneath the live renderer. WebGL creation/render/context failure stays local; reduced motion loads no renderer. Export both desktop and mobile posters directly from the same scene, without interface overlays.
 
-The thread enters the next section through a fine gutter line. Four original SVG worlds represent a browser, product interface, workflow and architectural opening. These are abstract practice illustrations, never client screens. An accessible vertical tablist selects the active world using hover, click/touch or arrow/Home/End keys. Each panel has a real practice-page action.
+The thread enters the next section through a fine gutter line.
+
+Owner update, 23 October 2026: sections 02 and 03 on Home use four original rendered practice scenes instead of SVG illustrations. Each scene is rendered from two cameras, and the Anvaya thread glows through each one:
+
+- **Digital Presence:** a gallery wall holding an interface.
+- **Digital Products:** interface layers held in space.
+- **Intelligent Operations:** stations joined by the thread, which forks at a decision arch.
+- **Spatial Visuals:** an interior with light falling through arched openings.
+
+They are abstract studies, never client screens.
+
+**02 One thread, four worlds** is a walkthrough viewer in the tour idiom:
+
+- The wide render fills the frame and crossfades between worlds.
+- The tablist works as the room index: hover, click/touch, or arrow/Home/End keys.
+- The active panel carries a kicker, a large serif title, the summary and the practice action.
+- A plan with a view cone shows which world is active, and a progress hairline sits along the bottom.
+- On phones, the stage sits above a horizontally scrolling index.
+
+**03 What we build** is a stack of full-frame practice cards using the close camera renders:
+
+- Cards are CSS-sticky from 761px, and each one dims and recedes as the next settles over it.
+- On phones they are an unstuck vertical list.
+
+SVG world illustrations remain on practice-page heroes.
 
 The introduction follows the tour's loader. On ink, the wordmark and Skip pill sit in the top row. "Anvaya" rises letter by letter in Instrument Serif with अन्वय beneath it. A serif counter reaches 100 over a filling hairline. Progress represents the transition, not a measured download. The letters then lift away and the screen wipes upward into the hero, whose headline lines rise. Nominal duration 2.3 seconds with a 2.7-second exit safeguard. Skip and Escape release inert state/scroll and restore focus. Bypass on reduced motion, a seen session, deep links and inner pages. Its default server-rendered state is hidden.
 

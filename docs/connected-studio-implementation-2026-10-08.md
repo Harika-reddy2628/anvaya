@@ -134,3 +134,14 @@ Verification:
 - The capture matrix (4 viewports × 8 pages) showed no horizontal overflow and no page errors. The scene reported 18,998 triangles and 8 draw calls.
 
 Not verified: actual Safari, physical phones and live Resend delivery.
+
+### Sections 02 and 03 redesign — 23 October 2026
+
+Owner request: redesign Home sections 02 and 03 completely, using different assets.
+
+- **Assets:** 8 original rendered stills of 4 practice scenes, 2 cameras each (`scripts/worlds/scenes.js` and `scripts/render-worlds.mjs`). Provenance is in the art manifest.
+- **02:** a walkthrough-style viewer with a crossfading render, the tablist as a room index, a large title panel, a plan with a view cone, and a progress hairline.
+- **03:** stacked sticky practice cards that dim and recede as the next card settles over them. On phones they are an unstuck list. Services uses the same cards.
+- **Tests:** the existing tablist, Coming-soon and practice-link coverage was kept unchanged.
+- **Fix found during verification:** the mobile tablist inherited desktop centring and overflowed at 320px.
+- **Result:** the full suite gives 174 passed and 1 skipped (by design).

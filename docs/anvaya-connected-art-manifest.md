@@ -30,6 +30,15 @@ No Blender, image generation service or external model was used for this iterati
 
 These files were already present in the checkout. Exact original download URLs are not recorded here; the table identifies their projects and retained license notices. Other historical font files remain in the repository but are not imported by the current root layout. Fonts are served locally through `next/font/local`.
 
+## Practice scene renders — 23 October 2026
+
+| Assets | Reproducible source | Sizes |
+| --- | --- | --- |
+| `public/art/worlds/{digital-presence,digital-products,intelligent-operations,spatial-visuals}-wide.webp` (section 02 viewer) | `scripts/worlds/scenes.js`, rendered by `node scripts/render-worlds.mjs` | 1920 × 1080; 22–39 KB each |
+| `public/art/worlds/*-frame.webp` (section 03 cards) | same scenes, closer second camera | 1600 × 1200; 20–37 KB each |
+
+The scenes are original procedural Three.js geometry: boxes, cylinders, extruded arches, a tube-geometry thread and a RoomEnvironment for soft reflections, with UnrealBloom on the emissive thread. The script serves the scene and the installed `three` package from a temporary local server. It renders each still at 1.5× in installed Chrome, then downsamples with sharp (Lanczos) to WebP at quality 80. Scene sizes are 15–44k triangles. These stills ship as images; no scene code runs on the page for them.
+
 ## Cinematic redesign fonts — 23 October 2026
 
 Taken from Fontsource npm packages (version 5.3.0, OFL-1.1). Each licence is kept beside its file.

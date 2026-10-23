@@ -215,9 +215,20 @@ function buildPage(delay: number) {
   const settle = (batch: Element[]) => gsap.set(batch, { opacity: 1, y: 0, overwrite: true });
   ScrollTrigger.batch(fades, { start: "top 92%", onEnter: show, onEnterBack: show, onLeave: settle });
 
-  q(".service-block .world-art, .world-panels [role=tabpanel]:not([hidden]) .world-art, .studio-note-visual").forEach(art => gsap.timeline({ scrollTrigger: once(art, "top 85%") })
+  q(".service-art-link, .viewer-stage, .studio-note-visual").forEach(art => gsap.timeline({ scrollTrigger: once(art, "top 85%") })
     .fromTo(art, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.5, ease: EASE_IN_OUT })
-    .from(art.querySelectorAll(":scope > svg, :scope > .indic"), { scale: 1.18, duration: 2, ease: EASE_OUT }, 0));
+    .from(art.querySelectorAll(":scope > svg, :scope > .indic, :scope > img, :scope > .viewer-shot.is-active img"), { scale: 1.18, duration: 2, ease: EASE_OUT }, 0));
+  // Stacked practice cards: each covered card recedes and dims as the next one settles over it.
+  if (matchMedia("(min-width: 761px)").matches) {
+    const cards = q(".service-block");
+    cards.forEach((card, index) => {
+      const next = cards[index + 1];
+      if (!next) return;
+      gsap.timeline({ scrollTrigger: { trigger: next, start: "top bottom", end: `top ${100 + (index + 1) * 18}px`, scrub: true } })
+        .to(card, { scale: .94, ease: "none" }, 0)
+        .to(card.querySelector(".service-shade"), { opacity: .62, ease: "none" }, 0);
+    });
+  }
 
   q(".point-section .section-copy p").forEach(p => {
     const words = SplitText.create(p, { type: "words" }).words;
