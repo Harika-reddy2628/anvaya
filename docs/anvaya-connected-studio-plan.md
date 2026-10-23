@@ -17,6 +17,8 @@ Approved source: owner's ANVAYA — COMPLETE WEBSITE SCRIPT, 8 October 2026. Fur
 
 Legacy `/services/{id}` URLs permanently redirect to their named practice. `/about` redirects to `/studio`. Privacy and existing Terms remain supporting URLs. Work and all case-study URLs are unpublished (custom 404), including cases retained in historical data. Do not enable Work until 2–3 real projects have adequate visuals, provenance and verifiable outcomes.
 
+Owner update, 12 October 2026: Digital Products and Intelligent Operations are **Coming soon**. Keep their routes and original copy as previews, mark their status across practice listings/world tabs/detail pages/form choices, and direct their practice actions to available services. Disable these enquiry choices and reject them on the server; their existing enquiry seeds select Not sure yet with an explanation. Digital Presence and Spatial Visuals remain available.
+
 ## Build sequence
 
 1. Use a new branch from main; preserve the earlier redesign stash. Establish the current design/copy authority and inspect installed Next.js guidance.

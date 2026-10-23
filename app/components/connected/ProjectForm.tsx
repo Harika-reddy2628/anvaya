@@ -4,10 +4,12 @@ import Link from "next/link";
 import { sendEnquiry } from "../../project/actions";
 import { budgetOptions, practices, timelineOptions } from "../../lib/site";
 import { enquiryText, initialEnquiryState, parseEnquiry } from "../../lib/enquiry";
+import { ComingSoon } from "./Shared";
 
 export function ProjectForm({ initialService }: { initialService?: string }) {
   const [state, action, pending] = useActionState(sendEnquiry, initialEnquiryState);
-  const [selection, setSelection] = useState<string[]>(initialService ? [initialService] : ["unsure"]);
+  const initialPractice = practices.find(p => p.id === initialService);
+  const [selection, setSelection] = useState<string[]>(initialPractice && !initialPractice.comingSoon ? [initialPractice.id] : ["unsure"]);
   const [values, setValues] = useState({ name: "", company: "", email: "", phone: "", outcome: "", timeline: "Not sure yet", budget: "Need guidance", context: "" });
   const [copyStatus, setCopyStatus] = useState("");
   const form = useRef<HTMLFormElement>(null);
@@ -45,7 +47,7 @@ export function ProjectForm({ initialService }: { initialService?: string }) {
     <div className="form-field"><label htmlFor="company">Company or project name</label><input id="company" name="company" autoComplete="organization" maxLength={200} {...inputProps("company")} /><small id="company-help">What should we call the work?</small>{error("company")}</div>
     <div className="form-field"><label htmlFor="email">Email address *</label><input id="email" name="email" type="email" autoComplete="email" required maxLength={254} {...inputProps("email")} /><small id="email-help">Where should we reply?</small>{error("email")}</div>
     <div className="form-field"><label htmlFor="phone">Phone or WhatsApp</label><input id="phone" name="phone" type="tel" autoComplete="tel" maxLength={60} {...inputProps("phone")} /><small id="phone-help">Optional, if you prefer a quicker conversation.</small>{error("phone")}</div>
-    <fieldset className="practice-choices" aria-describedby={state.errors?.services ? "services-error" : undefined}><legend>What do you need help with?</legend><div className="choice-grid">{[...practices.map(p => ({ id: p.id as string, name: p.name as string })), { id: "unsure", name: "Not sure yet" }].map(p => <label className="choice" key={p.id}><input type="checkbox" name="services" value={p.id} checked={selection.includes(p.id)} onChange={() => choose(p.id)} /><span>{p.name}</span></label>)}</div>{error("services")}</fieldset>
+    <fieldset className="practice-choices" aria-describedby={`services-help${state.errors?.services ? " services-error" : ""}`}><legend>What do you need help with?</legend><div className="choice-grid">{[...practices.map(p => ({ id: p.id as string, name: p.name as string, comingSoon: p.comingSoon })), { id: "unsure", name: "Not sure yet", comingSoon: false }].map(p => <label className="choice" key={p.id}><input type="checkbox" name="services" value={p.id} disabled={p.comingSoon} checked={selection.includes(p.id)} onChange={() => choose(p.id)} /><span>{p.name}{p.comingSoon && <> <ComingSoon /></>}</span></label>)}</div><p id="services-help" className="practice-help">{initialPractice?.comingSoon ? `${initialPractice.name} is coming soon. Choose an available practice, or leave “Not sure yet” selected.` : "Digital Products and Intelligent Operations are coming soon. Digital Presence and Spatial Visuals are available for new projects."}</p>{error("services")}</fieldset>
     <div className="form-field full"><label htmlFor="outcome">What is the outcome you want? *</label><textarea id="outcome" name="outcome" required minLength={10} maxLength={5000} {...inputProps("outcome")} /><small id="outcome-help">Describe what should be clearer, faster, better or newly possible.</small>{error("outcome")}</div>
     <div className="form-field"><label htmlFor="timeline">Timeline</label><select id="timeline" name="timeline" {...inputProps("timeline")}>{timelineOptions.map(o => <option key={o}>{o}</option>)}</select><small id="timeline-help">When would you like to begin?</small>{error("timeline")}</div>
     <div className="form-field"><label htmlFor="budget">Budget range</label><select id="budget" name="budget" {...inputProps("budget")}>{budgetOptions.map(o => <option key={o}>{o}</option>)}</select><small id="budget-help">Choose a range in INR, or select “Need guidance.”</small>{error("budget")}</div>

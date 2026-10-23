@@ -62,11 +62,41 @@ test("service worlds have keyboard and touch equivalents", async ({ page }) => {
   await page.getByRole("link", { name: "Visualise a space" }).click();
   await expect(page.getByRole("checkbox", { name: "Spatial Visuals", exact: true })).toBeChecked();
 });
+test("coming-soon labels appear in listings, world tabs and practice pages", async ({ page }) => {
+  const upcoming = [["Digital Products", "digital-products"], ["Intelligent Operations", "intelligent-operations"]];
+  for (const path of ["/", "/services"]) {
+    await page.goto(path);
+    for (const [name, slug] of upcoming) {
+      const block = page.locator(".service-block").filter({ has: page.getByRole("heading", { name: `${name} Coming soon`, exact: true }) });
+      await expect(block.getByText("Coming soon", { exact: true })).toBeVisible();
+      await expect(block.getByRole("link", { name: `Preview ${name}`, exact: true })).toHaveAttribute("href", `/services/${slug}`);
+      if (path === "/") {
+        const tab = page.getByRole("tab").filter({ hasText: name });
+        await expect(tab.getByText("Coming soon", { exact: true })).toBeVisible();
+        await tab.click();
+        await expect(page.getByRole("tabpanel").getByRole("link", { name: `Preview ${name}`, exact: true })).toBeVisible();
+      }
+    }
+    for (const name of ["Digital Presence", "Spatial Visuals"]) {
+      const block = page.locator(".service-block").filter({ has: page.getByRole("heading", { name, exact: true }) });
+      await expect(block.getByText("Coming soon", { exact: true })).toHaveCount(0);
+    }
+  }
+  for (const [name, slug] of upcoming) {
+    await page.goto(`/services/${slug}`);
+    await expect(page).toHaveTitle(new RegExp(`${name} — Coming soon`));
+    await expect(page.locator(".page-hero").getByText("Coming soon", { exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Explore available practices", exact: true })).toHaveCount(3);
+    await expect(page.locator('a[href^="/project?service="]')).toHaveCount(0);
+    await page.getByRole("link", { name: "Explore available practices", exact: true }).first().click();
+    await expect(page).toHaveURL(/\/services#practices$/);
+  }
+});
 test("legal pages remain readable and narrow layouts do not overflow", async ({ page }) => {
   for (const path of ["/privacy", "/terms"]) { expect((await page.goto(path))?.status()).toBe(200); await expect(page.getByRole("heading", { level: 1 })).toBeVisible(); }
   for (const width of [320, 390, 1024]) {
     await page.setViewportSize({ width, height: 740 });
-    for (const path of ["/", "/services", "/studio", "/project", "/services/intelligent-operations"]) {
+    for (const path of ["/", "/services", "/studio", "/project", "/services/digital-products", "/services/intelligent-operations"]) {
       await page.goto(path); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${path} at ${width}px`).toBeTruthy();
     }
   }

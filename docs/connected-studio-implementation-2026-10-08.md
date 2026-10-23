@@ -1,18 +1,39 @@
-# Connected studio implementation — 8 October 2026
+# Connected studio implementation — updated 12 October 2026
 
 The owner's complete Anvaya website script is implemented on `redesign/anvaya-connected-studio`. The current warm ivory, espresso and terracotta direction supersedes the historical cobalt/Lusion instructions. This is a local implementation; no deployment, push or live email delivery is claimed.
 
+## Availability update — 12 October 2026
+
+The owner requested **Coming soon** for Digital Products and Intelligent Operations. A shared availability flag now drives the terracotta status labels in the Home world tabs, Home/Services practice listings, practice-page heroes and disabled project-form choices. Listing actions say Preview; existing practice routes, copy and legacy redirects remain accessible. Their detail-page actions lead to available practices. Digital Presence and Spatial Visuals remain open for enquiries.
+
+Legacy and named enquiry seeds for the two upcoming practices show an explanation and select Not sure yet. Server validation rejects either unavailable ID, including tampered submissions mixing available and upcoming practices, before the email provider is contacted. Existing multi-practice selection and local backup coverage now use the available practices.
+
+Latest checks: `npm run lint` and `npm run build -- --webpack` pass; `npm run test:e2e` reports **140 passed, 0 failed, 0 skipped in 41.6 seconds**. The five profiles cover desktop Chromium 1440 × 1000, iPhone 13 Chromium emulation, reduced-motion Chromium, desktop WebKit 1440 × 1000 and iPhone 13 WebKit emulation. Node 22.23.3 ran on arm64 macOS 26.5.2 (25F84). Browser versions recorded during capture: installed Chrome **147.0.7727.56** and Playwright WebKit **26.6**. Provider responses were mocked; no email was sent.
+
+Visual captures of world tabs, both Services listings, both practice heroes and enquiry choices are under ignored `test-results/coming-soon/`. The production build was served temporarily on 127.0.0.1:3108 with sending credentials empty. There are **48 component screenshots**, covering both browser engines at 1440 × 1000, 1024 × 768, 390 × 844 and 320 × 740; `report.json` records zero horizontal-overflow checks or captured page errors. Capture contexts used reduced motion. Representative images reviewed for hierarchy, readable labels, spacing and wrapping:
+
+- [Desktop Digital Products listing](../test-results/coming-soon/chromium-desktop-products-listing.png)
+- [Mobile world tabs](../test-results/coming-soon/chromium-mobile-world-tabs.png)
+- [Narrow Intelligent Operations listing](../test-results/coming-soon/webkit-narrow-operations-listing.png)
+- [Mobile Intelligent Operations hero](../test-results/coming-soon/webkit-mobile-operations-hero.png)
+- [Desktop enquiry choices](../test-results/coming-soon/chromium-desktop-project-choices.png)
+- [Narrow WebKit enquiry choices](../test-results/coming-soon/webkit-narrow-project-choices.png)
+
+Actual Mac Safari **26.5.2** was opened on the updated local Services page. DOM inspection remains blocked because Allow JavaScript from Apple Events is disabled; the setting was not changed. Actual Safari interactions and physical iPhone/Android coverage remain unverified; WebKit and device emulation results do not imply them.
+
+No artwork or scene-rendering code changed. Poster sizes were reconfirmed: desktop **19,080 bytes**, mobile **6,348 bytes**, total **25,428 bytes**. The original frame-cadence and scene-complexity measurements below remain historical measurements; this status update introduces no new performance claim. README, the implementation contract and DESIGN.md now record the owner’s availability update. The development preview continues at http://127.0.0.1:3000.
+
 ## Delivered behavior
 
-Eight core routes are available: Home, Services, four practice pages, Studio and Start a Project. Home contains the loading transition and eight scrolling content sections. The shared header exposes Services, Studio and Start a Project, with the wordmark linking Home and no Menu overlay. Each informational page has a final project action; Project has its specified four sections. Privacy and retained Terms are supporting routes.
+Eight core routes are available: Home, Services, four practice pages, Studio and Start a Project. Home contains the loading transition and eight scrolling content sections. The shared header exposes Services, Studio and Start a Project, with the wordmark linking Home and no Menu overlay. Each informational page has a final action; upcoming practices direct visitors to available services. Project has its specified four sections. Privacy and retained Terms are supporting routes.
 
 The original procedural architectural hero has matching local posters, a moving terracotta thread, Pause/Resume and visibility suspension. Immediate HTML remains useful without JavaScript or artwork. Reduced motion bypasses the transition and WebGL, including changes made while the page is open. The introduction supports Skip and Escape, restores focus and has a 2.7-second safeguard. The four-world selector supports touch, keyboard and pointer interaction. Scrolling is native, with no pinned introduction or water behavior.
 
-Legacy service IDs remain `interface`, `product`, `automation` and `spatial`; legacy URLs permanently redirect to the new practice routes and still seed the enquiry form. `/about` redirects to Studio. Work and historical case URLs return the custom 404 until genuine case studies are ready. No fake proof, client logos, counts or testimonials have been added. Existing commercial terms are retained. The previous Oura changes remain untouched in `stash@{0}`.
+Legacy service IDs remain `interface`, `product`, `automation` and `spatial`; legacy URLs permanently redirect to the new practice routes. Available-practice IDs seed the enquiry form; upcoming-practice IDs show their status and default to Not sure yet. `/about` redirects to Studio. Work and historical case URLs return the custom 404 until genuine case studies are ready. No fake proof, client logos, counts or testimonials have been added. Existing commercial terms are retained. The previous Oura changes remain untouched in `stash@{0}`.
 
 Project enquiries use a validated Next.js Server Action and Resend, with owner-selected INR budget guidance, synchronized practice selection, safe reply-to, a fixed recipient and provider idempotency. Provider rejection, network failure, missing configuration and missing accepted-message IDs show unsent errors while retaining entries. Success is shown only after provider acceptance. Copy and download create explicit local backups and do not send anything. There is no enquiry database, autoresponder or browser storage of form contents.
 
-## Verification results
+## Original verification results — 8 October 2026
 
 | Check | Result |
 | --- | --- |
@@ -54,3 +75,29 @@ Real email sending is implemented but **not configured or inbox-tested**. The ow
 Actual Mac Safari was opened on the local preview, but automated DOM inspection was blocked by Safari's disabled “Allow JavaScript from Apple Events” setting. That setting was not changed. WebKit emulation passed; actual Safari interaction coverage remains unverified. No physical iPhone or Android device was available for verification.
 
 The local development preview is available at http://localhost:3000. Publication and genuine Work case studies remain outside this delivery.
+
+## Premium motion and identity update — 23 October 2026
+
+Owner direction: Awwwards-style experience with full motion, existing palette plus a serif display face, and a new SVG logo mark. DESIGN.md and AGENTS.md record the changed motion rules.
+
+Delivered:
+
+- **Logo:** original arch/thread/bindu mark (`app/components/connected/Logo.tsx`), new favicon (`app/icon.svg`), header and footer lockups.
+- **Loader:** espresso intro draws the mark, raises ANVAYA by letter, fills a terracotta rule with an italic counter and wipes into the hero (`Intro.tsx`). Same once-per-session, skip/Escape, focus, deep-link and reduced-motion rules; 2.7 s safeguard.
+- **Motion layer:** `MotionLayer.tsx` with `app/lib/motion.ts` covers Lenis smooth scroll, SplitText line reveals, batch fades, artwork clip wipes, scroll word-fill, parallax, a scroll-linked marquee, the pinned horizontal How We Work sequence (≥1100px), header hide/solid states, scroll progress, route curtains, cursor and magnetic actions. Hero camera drift renders on demand (`HeroScene.tsx`).
+- **Typography:** Cormorant display for H1/H2, practice names, step numbers and belief words, with italic MATTER.
+
+Dependencies and assets:
+
+- `lenis@1.3.27` (MIT). GSAP ScrollTrigger/SplitText come from the existing `gsap` package.
+- `app/fonts/Cormorant-Italic-Latin.woff2`: 38,140 bytes, SHA-256 `6083e8c70461baccba95129ff8c91624f81b7d29a806a18b5d5916eaa44f03c3`. Taken from `@fontsource-variable/cormorant@5.3.0` (`files/cormorant-latin-wght-italic.woff2`) under OFL-1.1, the same family and licence as `Cormorant-OFL.txt`.
+
+Verification on this Mac (Node v24.15.0, Playwright 1.63.0, installed Google Chrome for the Chromium projects, Playwright WebKit 2359):
+
+- `npm run lint` passed and `npm run build -- --webpack` succeeded.
+- `npm run test:e2e`: 169 passed and 1 skipped. The skip is intended: route curtains do not run in the reduced-motion project.
+- New `tests/motion.spec.ts` covers the loader mark, the logo and favicon, curtain navigation with history, reduced-motion removal, horizontal pinning by width, and no-JavaScript visibility.
+- The reference, motion and intro specs were repeated three times: 327 passed and 3 skipped.
+- Screenshots were reviewed at 1440×900 and in iPhone 13 emulation.
+
+Not verified: actual Safari, physical phones and frame-time measurements of the new scroll choreography.

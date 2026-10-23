@@ -2,7 +2,7 @@
 
 Technology and design studio. India, working globally.
 
-The site implements the owner's complete website script with warm ivory/espresso/terracotta styling, an original architectural Three.js hero, one continuous thread motif and eight core pages. [DESIGN.md](DESIGN.md) and the [implementation contract](docs/anvaya-connected-studio-plan.md) are the current authority. Earlier Lusion/lotus components are historical and are not imported by active pages.
+The site implements the owner's complete website script with warm ivory/espresso/terracotta styling, an original architectural Three.js hero, one continuous thread motif, an original logo mark, Cormorant display typography, an editorial GSAP/Lenis motion layer and eight core pages. [DESIGN.md](DESIGN.md) and the [implementation contract](docs/anvaya-connected-studio-plan.md) are the current authority. Earlier Lusion/lotus components are historical and are not imported by active pages.
 
 ## Run locally
 
@@ -23,6 +23,8 @@ Privacy `/privacy` and retained Terms `/terms` are supporting URLs. `/about` red
 
 Header/footer navigation has no separate Home link, Menu overlay or Work link. The wordmark links Home. Mobile exposes the same destinations directly. Project follows the specified four-section composition and uses its form as the primary action.
 
+Digital Products and Intelligent Operations are marked **Coming soon** in Home's world tabs, the Home/Services listings, their practice pages and the project form. Their pages remain available as previews; practice actions lead to the Services listing. Both enquiry choices are disabled and rejected by server validation. Legacy and named enquiry seeds for these practices show the status and select “Not sure yet”; Digital Presence and Spatial Visuals remain available.
+
 ## Real project enquiries
 
 The form sends through a Next.js Server Action and Resend. It validates on the server, uses a fixed recipient and safe reply-to, keeps entries after errors, and reports success only after Resend returns an accepted message ID. Copy/download remain local backups and do not send an enquiry.
@@ -40,9 +42,9 @@ There is no enquiry database, browser persistence of form contents, analytics or
 
 ## Motion and artwork
 
-The one-time Home transition lasts about 2.2 seconds and has a 2.7-second safeguard, Skip/Escape, focus restoration and reduced-motion/deep-link bypass. Static HTML stays available without JavaScript.
+The one-time Home transition draws the logo mark and reveals the wordmark in about 2.35 seconds, with a 2.7-second safeguard, Skip/Escape, focus restoration and reduced-motion/deep-link bypass. Static HTML stays available without JavaScript. Note: in `next dev`, React Strict Mode double-mounts effects, which marks the intro as seen on first load; check the intro against `npm run build && npm run start`.
 
-The architectural scene stays still and renders only on load/resize. GSAP moves the SVG bindu, with Pause/Resume and visibility suspension. Reduced motion loads no WebGL. Context failure retains the matching poster. Four original SVG worlds have keyboard/touch equivalents. No pinning, scroll interception, old lotus/water assets or client-evidence illustrations load through active routes.
+The architectural scene never rotates; its camera drifts with hero scroll and the mouse, rendering on demand only. GSAP moves the SVG bindu, with Pause/Resume and visibility suspension. `app/components/connected/MotionLayer.tsx` owns Lenis smooth scrolling, ScrollTrigger/SplitText reveals, the pinned horizontal How We Work sequence (≥1100px), header states, scroll progress, route curtains, the fine-pointer cursor and magnetic actions. Reduced motion loads no WebGL and none of that layer. Context failure retains the matching poster. Four original SVG worlds have keyboard/touch equivalents. No old lotus/water assets or client-evidence illustrations load through active routes.
 
 Regenerate clean posters and screenshots against a running preview:
 

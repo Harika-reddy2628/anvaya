@@ -12,8 +12,8 @@ export function parseEnquiry(form: FormData): { data: Enquiry; errors: Record<st
   const errors: Record<string, string> = {};
   if (!data.name || data.name.length > 120) errors.name = "Please enter your name (up to 120 characters).";
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email) || data.email.length > 254) errors.email = "Please enter a valid email address.";
-  const allowed = new Set<string>([...practices.map(p => p.id), "unsure"]);
-  if (!data.services.length || data.services.some(s => !allowed.has(s)) || data.services.length > 4 || (data.services.includes("unsure") && data.services.length > 1)) errors.services = "Choose a practice, or select Not sure yet.";
+  const allowed = new Set<string>([...practices.filter(p => !p.comingSoon).map(p => p.id), "unsure"]);
+  if (!data.services.length || data.services.some(s => !allowed.has(s)) || data.services.length > 4 || (data.services.includes("unsure") && data.services.length > 1)) errors.services = "Choose an available practice, or select Not sure yet.";
   if (data.outcome.length < 10 || data.outcome.length > 5000) errors.outcome = "Tell us a little more about the outcome (10–5,000 characters).";
   if (data.company.length > 200) errors.company = "Please keep the project name under 200 characters.";
   if (data.phone.length > 60) errors.phone = "Please keep the phone number under 60 characters.";
