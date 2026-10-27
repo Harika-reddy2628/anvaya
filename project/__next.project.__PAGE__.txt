@@ -1,0 +1,42 @@
+1:"$Sreact.fragment"
+2:"$Sreact.suspense"
+3:I[8172,["119","static/chunks/119-14ee0103a6d0a0cb.js","480","static/chunks/480-3d49c234d55851f2.js","500","static/chunks/app/project/page-1b2b623734528e0c.js"],"ProjectForm"]
+4:I[8172,["119","static/chunks/119-14ee0103a6d0a0cb.js","480","static/chunks/480-3d49c234d55851f2.js","500","static/chunks/app/project/page-1b2b623734528e0c.js"],"ProjectFormFromQuery"]
+5:I[484,[],"OutletBoundary"]
+9:I[484,[],"ViewportBoundary"]
+a:I[484,[],"MetadataBoundary"]
+8:X
+21:X
+21:C
+0:{"buildId":"T8w4t0r1g0bGraMgd-CSu","data":[{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","tabIndex":-1,"children":[["$","section",null,{"className":"page-hero","id":"intro","children":[["$","div",null,{"className":"wrap-full page-hero-grid","children":[["$","div",null,{"className":"page-hero-copy","children":[["$","p",null,{"className":"section-label","children":[["$","span",null,{"className":"bindu","aria-hidden":"true"}],["$","span",null,{"children":"START A PROJECT"}]]}],["$","h1",null,{"children":"What are you trying to move?"}],false,["$","div",null,{"className":"page-intro","children":["$","p",null,{"children":"Tell us what you are building, improving or trying to make clearer. You do not need to have every answer yet — a useful starting point is enough."}]}],"$undefined"]}],false]}],["$","div",null,{"className":"wrap-full page-hero-meta","aria-hidden":"true","children":[["$","span",null,{"children":["Anvaya / ","START A PROJECT"]}],["$","span",null,{"children":"India / Working globally"}],["$","span",null,{"className":"meta-bar","children":["$","i",null,{}]}]]}]]}],["$","section",null,{"className":"section enquiry-section","id":"enquiry","data-rail":"The conversation","children":["$","div",null,{"className":"wrap","children":[["$","p",null,{"className":"section-label","children":[["$","b",null,{"children":"01"}],["$","span",null,{"className":"slash","aria-hidden":"true","children":"/"}],["$","span",null,{"children":"START THE CONVERSATION"}]]}],["$","div",null,{"className":"form-layout","children":[["$","aside",null,{"className":"form-aside","children":[["$","h2",null,{"children":"A useful starting point."}],["$","p",null,{"children":"Bring the idea, the bottleneck or the unfinished system. We will begin with the real outcome."}],["$","p",null,{"children":"* Required fields. Everything else can begin with “not sure yet.”"}]]}],["$","$2",null,{"fallback":["$","$L3",null,{}],"children":["$","$L4",null,{}]}]]}]]}]}],["$","section",null,{"className":"section direct-section","id":"direct","data-rail":"Direct note","children":["$","div",null,{"className":"wrap","children":["$","div",null,{"className":"connection-grid","children":[["$","h2",null,{"children":"Prefer a direct note?"}],["$","p",null,{"children":"Use the project form above to start the conversation."}]]}]}]}],["$","section",null,{"className":"section next-section","id":"next","data-rail":"What happens next","children":["$","div",null,{"className":"wrap","children":[["$","p",null,{"className":"section-label","children":[["$","b",null,{"children":"02"}],["$","span",null,{"className":"slash","aria-hidden":"true","children":"/"}],["$","span",null,{"children":"WHAT HAPPENS NEXT"}]]}],["$","h2",null,{"children":"A clear first conversation."}],["$","ol",null,{"className":"step-list","children":[["$","li","We read the context",{"children":[["$","span",null,{"className":"step-number","children":"01"}],["$","div",null,{"children":[["$","h3",null,{"children":"We read the context"}],["$","p",null,{"children":"We understand the idea, need or bottleneck."}]]}]]}],["$","li","We find the right starting point",{"children":[["$","span",null,{"className":"step-number","children":"02"}],["$","div",null,{"children":[["$","h3",null,{"children":"We find the right starting point"}],["$","p",null,{"children":"We identify the clearest scope and next move."}]]}]]}],["$","li","We come back with a direction",{"children":[["$","span",null,{"className":"step-number","children":"03"}],["$","div",null,{"children":[["$","h3",null,{"children":"We come back with a direction"}],["$","p",null,{"children":"You get a useful response, not a generic sales script."}]]}]]}]]}]]}]}]]}],null,["$","$L5",null,{"children":["$","$2",null,{"name":"Next.MetadataOutlet","children":"$@6"}]}]]}],"isPartial":"$@7","staleTime":"$8","varyParams":null},{"rsc":["$","$1","h",{"children":[null,["$","$L9",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#ffffff"}],["$","meta","3",{"name":"color-scheme","content":"light"}]]}],["$","div",null,{"hidden":true,"children":["$","$La",null,{"children":["$","$2",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Start a Project — Anvaya"}],["$","meta","1",{"name":"description","content":"Tell Anvaya what you are building, improving or trying to make clearer. Start with a useful conversation."}],["$","meta","2",{"property":"og:title","content":"Anvaya — Make. Move. Matter."}],["$","meta","3",{"property":"og:description","content":"Tell Anvaya what you are building, improving or trying to make clearer. Start with a useful conversation."}],"$Lb","$Lc","$Ld","$Le","$Lf","$L10","$L11","$L12","$L13","$L14","$L15","$L16","$L17","$L18","$L19","$L1a","$L1b","$L1c"]}]}]}],"$L1d"]}],"isPartial":"$@1e","staleTime":"$8","varyParams":null},{"rsc":"$L1f","isPartial":"$@20","staleTime":"$8","varyParams":"$21"}],"isUpgradeableISRFallback":false,"a":"$@22","rootVaryParams":null,"needsRuntimeRequest":"$@23"}
+24:I[6869,[],"IconMark"]
+25:I[7121,[],""]
+26:I[4581,[],""]
+6:null
+b:["$","meta","4",{"property":"og:site_name","content":"Anvaya"}]
+c:["$","meta","5",{"property":"og:locale","content":"en_IN"}]
+d:["$","meta","6",{"property":"og:image","content":"https://harika-reddy2628.github.io/anvaya/anvaya/opengraph-image?4046fc91977cf8b8"}]
+e:["$","meta","7",{"property":"og:image:type","content":"image/png"}]
+f:["$","meta","8",{"property":"og:image:width","content":"1200"}]
+10:["$","meta","9",{"property":"og:image:height","content":"630"}]
+11:["$","meta","10",{"property":"og:image:alt","content":"Anvaya — Make. Move. Matter."}]
+12:["$","meta","11",{"property":"og:type","content":"website"}]
+13:["$","meta","12",{"name":"twitter:card","content":"summary_large_image"}]
+14:["$","meta","13",{"name":"twitter:title","content":"Anvaya — Make. Move. Matter."}]
+15:["$","meta","14",{"name":"twitter:description","content":"Tell Anvaya what you are building, improving or trying to make clearer. Start with a useful conversation."}]
+16:["$","meta","15",{"name":"twitter:image","content":"https://harika-reddy2628.github.io/anvaya/anvaya/opengraph-image?4046fc91977cf8b8"}]
+17:["$","meta","16",{"name":"twitter:image:alt","content":"Anvaya — Make. Move. Matter."}]
+18:["$","meta","17",{"name":"twitter:image:type","content":"image/png"}]
+19:["$","meta","18",{"name":"twitter:image:width","content":"1200"}]
+1a:["$","meta","19",{"name":"twitter:image:height","content":"630"}]
+1b:["$","link","20",{"rel":"icon","href":"/icon.svg"}]
+1c:["$","$L24","21",{}]
+1d:["$","meta",null,{"name":"next-size-adjust","content":""}]
+1f:["$","$1","c",{"children":[null,["$","$L25",null,{"parallelRouterKey":"children","template":["$","$L26",null,{}]}]]}]
+23:true
+8:300
+8:C
+22:0
+1e:"$undefined"
+20:"$undefined"
+7:"$undefined"
