@@ -178,10 +178,10 @@ function buildPage(delay: number) {
 
   const hero = main.querySelector<HTMLElement>(".hero");
   if (hero) {
-    // Entrance: the headline rises line by line, the highlight sweeps behind "Matter.", then the frame settles in.
+    // Entrance (transform and opacity only, per character; one light blur on the mark): the headline rises line by line, the highlight sweeps behind "Matter.", then the frame settles in.
     gsap.timeline({ delay, defaults: { ease: EASE_OUT } })
-      .from(SplitText.create(q(".hero-line:not(.hero-mark) > span")[0], { type: "words,chars", wordsClass: "hero-word", charsClass: "hero-char" }).chars, { yPercent: 70, rotateX: -70, opacity: 0, filter: "blur(12px)", duration: 1.4, stagger: .035, ease: "expo.out" }, .15)
-      .from(q(".hero-mark > span"), { opacity: 0, filter: "blur(18px)", scale: 1.15, letterSpacing: ".2em", duration: 1.8, ease: "expo.out" }, .55)
+      .from(SplitText.create(q(".hero-line:not(.hero-mark) > span")[0], { type: "words,chars", wordsClass: "hero-word", charsClass: "hero-char" }).chars, { yPercent: 70, rotateX: -70, opacity: 0, duration: 1.4, stagger: .035, ease: "expo.out", force3D: true }, .15)
+      .from(q(".hero-mark > span"), { opacity: 0, filter: "blur(8px)", scale: 1.12, duration: 1.6, ease: "expo.out", clearProps: "filter" }, .55)
       .fromTo(q(".hero-mark-box"), { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: EASE_IN_OUT }, .75)
       .from(q(".hero-lede-top, .hero-actions > *"), { opacity: 0, y: 24, duration: 1.1, stagger: .08 }, .9)
       .from(q(".hero-foot > *, .hero-scroll"), { opacity: 0, y: 14, duration: 1, stagger: .08 }, 1.2);

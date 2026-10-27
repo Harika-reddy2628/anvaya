@@ -155,11 +155,11 @@ export default function PetalScene() {
     layout();
 
     const state = { open: 0, scroll: 0, px: 0, py: 0, pointerAngle: 9, pointerOn: 0 };
-    let width = 0, height = 0, frame = 0, running = false, disposed = false;
+    let width = 0, height = 0, frame = 0, running = false, disposed = false, compiled = false;
     const clock = new THREE.Clock(), hubScreen = new THREE.Vector3();
 
     function draw() {
-      if (disposed || !width || !height) return;
+      if (disposed || !compiled || !width || !height) return;
       const time = clock.getElapsedTime();
       backdropMaterial.uniforms.uTime.value = time;
       petals.forEach((p, i) => {
@@ -194,7 +194,8 @@ export default function PetalScene() {
     }
 
     const hero = target.closest<HTMLElement>(".hero") ?? target;
-    const intro = gsap.to(state, { open: 1, duration: 3.2, delay: .25, ease: "power1.out" });
+    // The fan opens once its shaders are ready (see compileAsync below), so the first frames are not a stall.
+    const intro = gsap.to(state, { open: 1, duration: 3.2, delay: .25, ease: "power1.out", paused: true });
     const scrolled = ScrollTrigger.create({ trigger: hero, start: "top top", end: "bottom top", scrub: true, onUpdate: self => { state.scroll = self.progress; } });
     const move = (event: PointerEvent) => {
       state.px = event.clientX / innerWidth - .5; state.py = event.clientY / innerHeight - .5;
@@ -233,7 +234,13 @@ export default function PetalScene() {
     const sizes = new ResizeObserver(resize); sizes.observe(target);
     const lost = (event: Event) => { event.preventDefault(); target.dataset.scene = "failed"; stop(); };
     renderer.domElement.addEventListener("webglcontextlost", lost);
-    resize(); update();
+    // Compile the glass and backdrop shaders off the critical path (parallel compile where the GPU supports it),
+    // then start drawing; the CSS fan stays in place until the first live frame.
+    renderer.compileAsync(scene, camera).catch(() => {}).then(() => {
+      if (disposed) return;
+      compiled = true; resize(); update(); intro.play();
+    });
+    resize();
 
     return () => {
       disposed = true; stop(); intro.kill(); scrolled.kill(); gsap.killTweensOf(state);
