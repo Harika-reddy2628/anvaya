@@ -10,7 +10,6 @@ export default function TermsPage() {
   return (
     <main id="main-content" tabIndex={-1} className="wrap inner-page policy-page">
       <div className="page-heading">
-        <span className="eyebrow">WORKING WITH ANVAYA</span>
         <h1>
           Project terms<span className="accent">.</span>
         </h1>

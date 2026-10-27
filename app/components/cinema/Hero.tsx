@@ -40,7 +40,6 @@ export function Hero() {
       {live && <Scene />}
     </div>
     <div className="hero-center">
-      <p className="hero-eyebrow"><span className="bindu" aria-hidden="true" />Technology and design studio</p>
       <h1 id="hero-title"><span className="hero-line"><span>Ambitious ideas.</span></span> <span className="hero-line hero-mark"><i className="hero-mark-box" aria-hidden="true" /><span>Built to last.</span></span></h1>
       <p className="hero-lede-top">We turn ambitious ideas into clear digital experiences, useful products, intelligent operations and spatial visuals.</p>
       <div className="hero-actions"><Link className="action action-light" href="/project"><span>Start a Project</span><span className="action-arrow" aria-hidden="true">↗</span></Link><Link className="action" href="#what-we-build"><span>Explore what we build</span><span aria-hidden="true">↓</span></Link></div>

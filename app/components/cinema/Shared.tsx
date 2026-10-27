@@ -1,23 +1,17 @@
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import { contact, plans, practices, proof, socialIcons, terms } from "../../lib/site";
-import { LogoMark, Wordmark } from "./Logo";
+import { Wordmark } from "./Logo";
 
 export function Action({ href = "/project", children = "Start a Project", light = false, text = false }: { href?: string; children?: ReactNode; light?: boolean; text?: boolean }) {
   return <Link href={href} className={`action${light ? " action-light" : ""}${text ? " action-text" : ""}`}><span>{children}</span><span className="action-arrow" aria-hidden="true">↗</span></Link>;
 }
 
-/** Kicker in the tour's format: the accent number, then the label. "01 — LABEL" splits into both parts. */
-export function Label({ children }: { children: ReactNode }) {
-  const match = typeof children === "string" ? /^(\d{2}) — (.+)$/.exec(children) : null;
-  return <p className="section-label">{match ? <><b>{match[1]}</b><span className="slash" aria-hidden="true">/</span><span>{match[2]}</span></> : <><span className="bindu" aria-hidden="true" /><span>{children}</span></>}</p>;
-}
 export function ComingSoon() {
   return <span className="practice-status">Coming soon</span>;
 }
-export function FinalCTA({ heading = "Have something worth building?", body = "Bring us the idea, the bottleneck or the unfinished system. We will begin with the real outcome.", action = "Start a Project", href = "/project", number, direct = false }: { heading?: string; body?: string; action?: string; href?: string; number?: string; direct?: boolean }) {
+export function FinalCTA({ heading = "Have something worth building?", body = "Bring us the idea, the bottleneck or the unfinished system. We will begin with the real outcome.", action = "Start a Project", href = "/project", direct = false }: { heading?: string; body?: string; action?: string; href?: string; direct?: boolean }) {
   return <section className="final-cta section" id="next-move" data-rail="The next move"><div className="wrap">
-    <Label>{number ? `${number} — THE NEXT MOVE` : "THE NEXT MOVE"}</Label>
     <h2>{heading}</h2>
     <div className="cta-foot"><p>{body}</p><div><Action href={href} light>{action}</Action>{direct && contact.email && <p className="direct-line">Prefer a direct note? Write to <a href={`mailto:${contact.email}`}>{contact.email}</a>.</p>}</div></div>
   </div></section>;
@@ -40,11 +34,6 @@ function SocialIcon({ name, href }: { name: string; href: string }) {
 }
 export function Footer() {
   return <footer className="site-footer"><div className="wrap-full">
-    <div className="footer-head">
-      <Link href="/" className="footer-brand" aria-label="Anvaya home"><LogoMark className="footer-mark" /><Wordmark /></Link>
-      <p className="footer-line">A technology and design studio. Ambitious ideas, built to last.</p>
-      <Link href="/project" className="pill pill-solid footer-cta"><span>Start a Project</span><span aria-hidden="true">↗</span></Link>
-    </div>
     <div className="footer-grid">
       <nav aria-label="Footer navigation"><p className="footer-heading">Explore</p><Link href="/work">Works</Link><Link href="/services">Services</Link><Link href="/pricing">Pricing</Link><Link href="/blog">Blog</Link><Link href="/studio">Studio</Link></nav>
       <nav aria-label="Footer services"><p className="footer-heading">Services</p>{practices.map(p => <Link key={p.id} href={`/services/${p.slug}`}>{p.name}</Link>)}</nav>
@@ -94,16 +83,15 @@ export function ProofSection() {
     <ul className="testimonial-slots" aria-label="Testimonials">{[1, 2, 3].map(n => <li key={n}><span className="slot-mark" aria-hidden="true">“</span><p>Reserved for a client testimonial.</p><span className="slot-meta">Name · Role · Company</span></li>)}</ul>
   </>;
 }
-export function PageHero({ eyebrow, title, children, action, href, practice, comingSoon = false }: { eyebrow: string; title: string; children: ReactNode; action?: string; href?: string; practice?: number; comingSoon?: boolean }) {
+export function PageHero({ title, children, action, href, practice, comingSoon = false }: { title: string; children: ReactNode; action?: string; href?: string; practice?: number; comingSoon?: boolean }) {
   return <section className={`page-hero${practice !== undefined ? " page-hero-art" : ""}`} id="intro"><div className="wrap-full page-hero-grid">
     <div className="page-hero-copy">
-      <Label>{eyebrow}</Label>
       <h1>{title}</h1>{comingSoon && <ComingSoon />}
       <div className="page-intro">{children}</div>
       {action && <Action href={href} light>{action}</Action>}
     </div>
     {practice !== undefined && <p className="page-hero-number" aria-hidden="true"><span>Practice</span>{practices[practice].number}<small>/ 04</small></p>}
-  </div><div className="wrap-full page-hero-meta" aria-hidden="true"><span>Anvaya / {eyebrow}</span><span>India / Working globally</span><span className="meta-bar"><i /></span></div></section>;
+  </div></section>;
 }
 /** Services: full-frame practice cards that stack as the reader scrolls (CSS sticky; GSAP dims the covered card). */
 export function ServiceBlocks() {

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Action, FinalCTA, Label, PageHero } from "../components/cinema/Shared";
+import { Action, FinalCTA, PageHero } from "../components/cinema/Shared";
 import { TourPreview } from "../components/cinema/TourPreview";
 
 const TOUR = "https://anvaya-westroad-tour.vercel.app/";
@@ -9,9 +9,8 @@ export const metadata: Metadata = { title: "Works", description: "Selected Anvay
 // Only documented, published work appears here. Historical project data stays in source and is not launch evidence.
 export default function WorkPage() {
   return <main id="main-content" tabIndex={-1}>
-    <PageHero eyebrow="WORKS" title="Work you can walk through."><p>Selected projects from the studio. Each one is shown as it was delivered, so you can explore it yourself.</p></PageHero>
+    <PageHero title="Work you can walk through."><p>Selected projects from the studio. Each one is shown as it was delivered, so you can explore it yourself.</p></PageHero>
     <section className="section work-section" id="west-road"><div className="wrap">
-      <Label>01 — SPATIAL VISUALS</Label>
       <article className="work-feature">
         <div className="work-feature-copy">
           <p className="work-meta"><Link href="/services/spatial-visuals">Spatial Visuals</Link><span>Virtual walkthrough</span></p>

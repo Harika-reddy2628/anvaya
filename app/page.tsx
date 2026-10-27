@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Hero } from "./components/cinema/Hero";
 import { ServiceDial } from "./components/cinema/ServiceDial";
-import { Action, Faq, FinalCTA, Label, PricingPlans, ProofSection, StepList } from "./components/cinema/Shared";
+import { Action, Faq, FinalCTA, PricingPlans, ProofSection, StepList } from "./components/cinema/Shared";
 import { processSteps } from "./lib/site";
 
 // Every answer restates the owner's published copy; nothing here adds new commitments.
@@ -19,31 +19,26 @@ export default function Home() {
   return <main id="main-content" tabIndex={-1}>
     <Hero />
     <section className="section build-section" id="what-we-build"><div className="wrap">
-      <Label>01 — WHAT WE DO</Label>
       <div className="section-heading"><h2>One idea. <em>Every capability it needs.</em></h2><p>From a first sketch to a working system, Anvaya brings together the right design, technology and visual talent to make your idea real.</p></div>
       <ServiceDial />
       <div className="cta-band"><p>Choose one service, or bring us a problem that crosses all four.</p><Action href="/project" light>Start a Project</Action></div>
     </div></section>
     <section className="section process-section" id="process"><div className="wrap">
-      <Label>02 — HOW WE WORK</Label>
       <div className="section-heading process-intro"><h2>Clear before <em>clever.</em></h2><p>Every project needs a different answer. The way we get there stays simple.</p></div>
       <StepList steps={processSteps} />
       <p className="process-closing">No unnecessary theatre. Just a clear way forward.</p>
     </div></section>
     <section className="section pricing-section" id="pricing"><div className="wrap">
-      <Label>03 — PRICING</Label>
       <div className="section-heading"><h2>Clear prices. <em>No surprises.</em></h2><p>Published ranges, fixed timelines and a set number of review rounds — agreed in writing before any work begins.</p></div>
       <PricingPlans />
     </div></section>
     <section className="section proof-section" id="reviews"><div className="wrap">
-      <Label>04 — REVIEWS</Label>
       <div className="section-heading"><h2>What clients <em>say.</em></h2><p>We publish only genuine reviews from completed projects. The first ones will appear here.</p></div>
       <ProofSection />
     </div></section>
     <section className="section faq-section" id="faq"><div className="wrap">
-      <Label>05 — QUESTIONS</Label>
       <div className="faq-layout"><h2>Before you <em>start.</em></h2><Faq items={questions} /></div>
     </div></section>
-    <FinalCTA number="06" body="Whether it is a new idea, a product that needs direction, a business process that needs to move better or a space that needs to be seen — start with the outcome." direct />
+    <FinalCTA body="Whether it is a new idea, a product that needs direction, a business process that needs to move better or a space that needs to be seen — start with the outcome." direct />
   </main>;
 }
