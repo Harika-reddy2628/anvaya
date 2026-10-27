@@ -133,7 +133,7 @@ main>section:not(.hero),main>.marquee,main.policy-page,.site-footer{position:rel
 .service-row-link:hover span:last-child{transform:rotate(45deg)}
 .dial-ring,.glass-star{display:none}
 
-.service-dial.is-dial{--r:min(72vh,660px);position:relative;height:100svh;display:grid;grid-template-columns:minmax(260px,28%) minmax(0,1fr);align-items:center;margin-inline:calc(var(--pad) * -1);padding-inline:var(--pad);overflow:hidden}
+.service-dial.is-dial{--r:min(72vh,660px);position:relative;height:100svh;display:grid;grid-template-columns:minmax(260px,28%) minmax(0,1fr);align-items:center;margin-inline:calc(var(--pad) * -1);padding-inline:var(--pad);clip-path:inset(0 -100vw 0 0)}
 .is-dial .dial-ring{display:block;position:absolute;left:calc(var(--r) * -.62);top:50%;width:0;height:0;pointer-events:none}
 .is-dial .dial-arc{position:absolute;left:calc(var(--r) * -1);top:calc(var(--r) * -1);width:calc(var(--r) * 2);height:calc(var(--r) * 2);border:1px solid var(--hair-2);border-radius:50%}
 .is-dial .dial-number{position:absolute;left:0;top:0;transform:rotate(calc(var(--a) + var(--turn,0deg))) translateX(var(--r)) rotate(calc(-1 * (var(--a) + var(--turn,0deg))))}
@@ -148,7 +148,9 @@ main>section:not(.hero),main>.marquee,main.policy-page,.site-footer{position:rel
 .is-dial .service-row-title h3{font-size:clamp(64px,7vw,124px);line-height:.95}
 .is-dial .service-row-offer{max-width:40ch;font-size:20px}
 .is-dial .service-rows .tag-list li{padding:8px 16px;font-family:var(--sans);font-size:14px;letter-spacing:0;background:rgba(255,255,255,.6)}
-.is-dial .glass-star{display:block;position:absolute;right:-9vw;top:54%;width:min(34vw,560px);height:min(62vh,560px);transform:translateY(-50%);z-index:1;pointer-events:none}
+/* The dial crops its arc on the left, top and bottom but stays open on the right, so the glass star can reach into the
+   page margin; its overhang is capped at the real gutter (less a scrollbar) so it never adds a horizontal scroll. */
+.is-dial .glass-star{display:block;position:absolute;right:calc(-1 * min(7vw, max(0px, (100vw - 100% - 16px) / 2)));top:54%;width:min(38vw,72vh,640px);aspect-ratio:1;height:auto;transform:translateY(-50%);z-index:1;pointer-events:none}
 .glass-star canvas{display:block;width:100%;height:100%}
 .cta-band{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px 48px;margin-top:96px;padding:48px;border-radius:var(--radius);background:var(--ink-2)}
 .cta-band p{font-family:var(--serif);font-size:clamp(25px,2.4vw,39px);line-height:1.15;letter-spacing:-.025em;max-width:28ch}
