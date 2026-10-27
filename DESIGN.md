@@ -1,5 +1,42 @@
 # Anvaya — Make. Move. Matter.
 
+> **Branch `redesign/orionix-studio`, 27 October 2026.** Owner request: rebuild the site using https://orionix.framer.website/ as the reference. That reference's structure and visual language replace the cinematic ink direction described below; copy, routes, the enquiry flow and the motion engine are unchanged.
+>
+> - **Palette and type:** cool porcelain `#F2F4F6` canvas, `#E8ECEF` panels and `#0D1114` ink. One ocean-blue accent: `#1F5F8B` on light, `#8CC8F0` on dark. Fraunces (display), Inter (text) and Geist Mono (labels) are self-hosted under the OFL. `app/light.css` redefines the `app/cinema.css` tokens, and dark blocks re-declare them locally.
+> - **No raster images** (owner, 27 October 2026). Practice cards, service blocks and practice heroes are typographic. The rendered posters stay in `public/art` as historical source.
+> - **Hero** (owner reference: Pinterest "Blue Glass Petal", 27 October 2026). The stage is light, with the copy left-aligned on desktop and centred on phones.
+>   - **Glass fan:** `PetalScene.tsx` renders 15 thick glass petals (11 on phones), pill outlines extruded with a soft bevel, radiating from a hub at the lower right (bottom centre on phones). No image files.
+>   - **Glass wall:** the backdrop is a reeded-glass wall. Vertical flutes refract slowly drifting light, water caustics play across it, and pointer ripples bend the flutes.
+> - **Crystal butterfly** (owner reference: Pinterest "Crystal butterfly sculpture", 27 October 2026). `Butterfly.tsx` draws it in a fixed transparent layer, with no image files.
+>   - **Form:** a 40px (28px on phones) butterfly with curved forewings and scalloped, tailed hindwings, all faceted. Facets shade from deep blue at the root to ice at the rim, with silver veins and a bright cut-glass rim light. The body and antennae are metal, and a soft halo glows behind it.
+>   - **Shine:** the reflection environment rotates, so glints sweep across the facets, faster in flight. While flying it sheds a short trail of twinkling sparkles from its wing tips.
+>   - **Layering:** the layer sits above the hero scene and transparent section backgrounds but below all text and content (hero copy and `main` sections at z-index 2). It passes behind copy and cards and never in front. The hero clips its stage, not itself, so it never forms a stacking context.
+>   - **Flight:** quick downstrokes with a slower recovery, banking into turns, and eased approaches at a speed capped for calm arcs. In the hero it roams the visible hero area. While the reader scrolls it flutters along with a slight lag; when scrolling stops it flies to the nearest spot with no text under its wingspan (found with `elementsFromPoint`) and basks with its wings open and a slow beat. It hops every few seconds and startles away from the cursor at rest.
+>   - **Route changes:** the same butterfly persists across pages and glides to a clear spot once the route curtain lifts.
+>   - **Guide:** at rest its head points to where the reader goes next (the next section below, or the closing call to action at the end), and every couple of seconds it makes a small hop that way. In the hero it periodically settles beside the scroll cue.
+>   - **Reduced motion or no WebGL:** not loaded.
+>   - **Material:** transmission with a pale-blue attenuation under a procedural daylight studio. A shader patch tints grazing angles deep teal, for the crisp edge lines of real glass slabs. A procedural backdrop plane gives the glass a soft gradient to refract.
+>   - **Motion:** the fan unfolds from a closed stack, centre outward, with a slight overshoot, then breathes in a slow travelling wave. Petals part around the pointer's bearing and the fan tilts toward the pointer.
+>   - **Scroll:** the fan rotates and grows while the copy lifts away, and the stage shrinks into a rounded card.
+>   - **Headline** (owner copy, 27 October 2026): "Ambitious ideas." builds letter by letter from a blur; "Built to last." focuses in with a shimmering ink-to-ocean gradient on frosted glass.
+>   - **Palette:** cool porcelain `#F2F4F6`, ink `#0D1114` and accent `#1F5F8B` site-wide (`#8CC8F0` on dark blocks).
+>   - **Running cost:** the render loop runs only while the hero is visible and the tab is shown.
+>   - **Reduced motion or no WebGL:** a CSS fan of rounded glass petals stands in for the scene.
+> - **Section transitions:** light sections rise into place on scroll, dark blocks open from an inset rounded frame, and the strip widens in.
+> - **Cursor:** a small water-droplet bead locked exactly to the pointer. It is positioned from the pointer event with `translate3d`, with no easing or backdrop filter, so it never lags. It scales into a clear drop over links and buttons, shrinks on press and hides over form fields. In the hero, moving it drops ripples into the reeded-glass wall. It is shown only for fine pointers without reduced motion.
+> - **Finish:** a slim ink scrollbar, a branded selection colour, and a light sheen across dark primary actions on hover (removed for reduced motion).
+> - **Navigation** (owner, 27 October 2026): arch mark and wordmark; a frosted pill holding Works, About (Studio), Pricing, Services, Blog and a Pages button that opens a frosted panel listing every page (closes on Escape, outside click and navigation); Start a Project.
+>   - **Works:** publishes the West Road residence walkthrough (owner-confirmed, https://anvaya-westroad-tour.vercel.app/) under Spatial Visuals. It shows only the facts the live tour displays (11 views, 1.5 m eye level, live floor plan, guided tour) and loads the tour in an iframe on request. The Spatial Visuals page links to it. Other historical cases stay unpublished.
+>   - **Pricing:** engagement models plus the owner's INR enquiry ranges, labelled as ranges, not prices; commercial terms stay at `/terms`.
+>   - **Blog:** says plainly that the first articles are being prepared, with no placeholder posts.
+> - **What we do dial** (owner reference screenshot, 27 October 2026): at 1100px and wider with motion, the stage pins for four steps. A large arc of italic numbers turns down the left edge, with the active number marked by a dot. The active service's title, line, tag pills and link focus in from blur, and an eight-petal glass star (`GlassStar.tsx`) turns an eighth per service and re-forms its petals. Without motion, or on narrower screens, it is a list.
+> - **Page changes:** the outgoing page lifts and blurs away under a frosted porcelain veil carrying the wordmark; the next page settles out of the same blur. The butterfly persists across the change.
+> - **Home order:** hero; 01 What we do (owner copy, 27 October 2026: "One idea. Every capability it needs." with four large service rows, each a full-row link that fills with an ink panel, slides and turns its arrow on hover); Brand/Product/Systems/Space strip; 02 The point; Why Anvaya; How we work; Ways to work together; The studio; Questions; Final CTA.
+> - **Opening** (owner reference: Pinterest title-card film, 27 October 2026): ink stage. "Ambitious" types in sans, an accent point pops, and an italic "ideas." writes behind a caret. A blue light rises from below while "Built to last." focuses out of blur. The line collapses to a point and the arch mark draws, then the screen lifts. Nominal 2.35s, 2.6s safeguard, skippable; the butterfly mounts only after it.
+> - **Hero to next section:** the hero copy blurs away while a horizon of blue light rises from the hero's base, and the What we do heading focuses out of blur as it enters. This echoes the opening. The owner's transition reference (Pinterest 949907746430316455) could not be retrieved, so confirm against it.
+> - **Removed:** the section rail, header ticker, film grain, thread loop, worlds viewer and pinned process.
+> - **Not imitated:** client logos, testimonials, stats, pricing and blog. Work stays unpublished.
+
 Current authority: the owner's complete website script, 8 October 2026. Implementation contract: [connected-studio plan](docs/anvaya-connected-studio-plan.md). The former Lusion/cobalt and glass-lotus specifications are historical.
 
 ## Character and tokens

@@ -11,7 +11,7 @@ export const contact = {
 
 export const practices = [
   {
-    id: "interface", slug: "digital-presence", number: "01", name: "Digital Presence", comingSoon: false,
+    id: "interface", slug: "digital-presence", offer: "Websites, e-commerce, UI/UX and brand systems.", number: "01", name: "Digital Presence", comingSoon: false,
     line: "Make the first impression useful.",
     summary: "Websites, e-commerce, UI/UX and brand systems for businesses that need to be understood and chosen.",
     tags: "WEB DESIGN / WEB DEVELOPMENT / E-COMMERCE / UI/UX / BRAND SYSTEMS",
@@ -36,7 +36,7 @@ export const practices = [
     finalHeading: "Ready to make your presence clearer?", finalAction: "Start a digital presence project",
   },
   {
-    id: "product", slug: "digital-products", number: "02", name: "Digital Products", comingSoon: true,
+    id: "product", slug: "digital-products", offer: "Apps, dashboards, platforms and digital tools.", number: "02", name: "Digital Products", comingSoon: true,
     line: "Turn a complex idea into something people can use.",
     summary: "Platforms, dashboards and applications designed around real people, real workflows and a clear next step.",
     tags: "FULL-STACK APPLICATIONS / DASHBOARDS / PLATFORMS / SAAS / ANDROID APPS",
@@ -60,7 +60,7 @@ export const practices = [
     finalHeading: "Have a product that needs a clearer way forward?", finalAction: "Start a product conversation",
   },
   {
-    id: "automation", slug: "intelligent-operations", number: "03", name: "Intelligent Operations", comingSoon: true,
+    id: "automation", slug: "intelligent-operations", offer: "AI systems, agentic workflows and business automation.", number: "03", name: "Intelligent Operations", comingSoon: true,
     line: "Make repeated work move with more clarity.",
     summary: "Agentic workflows, AI support and WhatsApp automation that reduce friction without removing human judgement.",
     tags: "AGENTIC WORKFLOWS / AI SYSTEMS / WHATSAPP AUTOMATION / BUSINESS AUTOMATION",
@@ -84,7 +84,7 @@ export const practices = [
     finalHeading: "See a workflow that should move better?", finalAction: "Start an operations conversation",
   },
   {
-    id: "spatial", slug: "spatial-visuals", number: "04", name: "Spatial Visuals", comingSoon: false,
+    id: "spatial", slug: "spatial-visuals", offer: "Architectural visualisation, interiors, 3D modelling and walkthroughs.", number: "04", name: "Spatial Visuals", comingSoon: false,
     line: "Make the unbuilt feel understandable.",
     summary: "Architectural visualisation, interior concepts and 3D models that help people see a space before it exists.",
     tags: "ARCHITECTURAL VISUALISATION / INTERIOR VISUALS / 3D MODELLING / WALKTHROUGHS",
