@@ -197,6 +197,24 @@ export default function Butterfly({ path }: { path: string }) {
     let nextSpark = 0, sparkDebt = 0;
     const tip = new THREE.Vector3();
 
+    // The thread: each place it lands is joined to the last by a faint line of light that fades, so the reader sees
+    // the flight as one continuous path, from one stop to the next (connection, continuity).
+    const threadPos = new Float32Array(6);
+    const threadGeo = new THREE.BufferGeometry();
+    threadGeo.setAttribute("position", new THREE.BufferAttribute(threadPos, 3));
+    const threadMat = new THREE.LineBasicMaterial({ color: 0x8cc8f0, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending });
+    const threadLine = new THREE.Line(threadGeo, threadMat); threadLine.frustumCulled = false; scene.add(threadLine);
+    disposables.push(threadGeo, threadMat);
+    const lastStop = new THREE.Vector2(NaN, NaN);
+    let threadLife = 0;
+    function weave(stop: THREE.Vector2) {
+      if (!Number.isNaN(lastStop.x)) {
+        threadPos.set([lastStop.x, lastStop.y, 0, stop.x, stop.y, 0]);
+        threadGeo.attributes.position.needsUpdate = true; threadLife = 1;
+      }
+      lastStop.copy(stop);
+    }
+
     // Flight state, in screen pixels.
     const pos = new THREE.Vector2(innerWidth + 80, innerHeight * .28), vel = new THREE.Vector2(-120, 20), aim = pos.clone();
     let mode: "fly" | "rest" = "fly", heading = -1.2, bank = 0, flyMix = 1, phase = 0, width = 0, height = 0, frame = 0, last = performance.now(), disposed = false;
@@ -263,7 +281,7 @@ export default function Butterfly({ path }: { path: string }) {
         const desired = to.normalize().multiplyScalar(Math.min(speedCap, dist * 1.8));
         desired.add(new THREE.Vector2(Math.sin(t * 1.9) * 26, Math.cos(t * 1.4) * 22));
         vel.lerp(desired, Math.min(1, dt * 1.8));
-        if (dist < 4 && !scrolling) { mode = "rest"; restUntil = t + 6 + Math.random() * 4; restCount++; nudgeAt = t + 1.6; }
+        if (dist < 4 && !scrolling) { mode = "rest"; restUntil = t + 6 + Math.random() * 4; restCount++; nudgeAt = t + 1.6; weave(pos); }
       } else {
         vel.multiplyScalar(Math.pow(.01, dt)); pos.lerp(aim, Math.min(1, dt * 2.5));
         // Every few seconds a small hop toward the next stop, as if leading the way.
@@ -327,6 +345,7 @@ export default function Butterfly({ path }: { path: string }) {
         sparkPos[i * 3] += sparkVel[i * 2] * dt; sparkPos[i * 3 + 1] += sparkVel[i * 2 + 1] * dt;
       }
       sparkGeo.attributes.position.needsUpdate = true; sparkGeo.attributes.aLife.needsUpdate = true; sparkGeo.attributes.aSize.needsUpdate = true;
+      threadLife = Math.max(0, threadLife - dt * .3); threadMat.opacity = threadLife * .55;
       renderer.render(scene, camera);
     }
     function resize() {
