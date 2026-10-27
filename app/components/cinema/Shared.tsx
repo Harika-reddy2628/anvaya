@@ -10,7 +10,7 @@ export function Action({ href = "/project", children = "Start a Project", light 
 export function ComingSoon() {
   return <span className="practice-status">Coming soon</span>;
 }
-export function FinalCTA({ heading = "Have something worth building?", body = "Bring us the idea, the bottleneck or the unfinished system. We will begin with the real outcome.", action = "Start a Project", href = "/project", direct = false }: { heading?: string; body?: string; action?: string; href?: string; direct?: boolean }) {
+export function FinalCTA({ heading = "Ready to start your project?", body = "Tell us what you need in a few lines. We will reply with a clear next step.", action = "Start a Project", href = "/project", direct = false }: { heading?: string; body?: string; action?: string; href?: string; direct?: boolean }) {
   return <section className="final-cta section" id="next-move" data-rail="The next move"><div className="wrap">
     <h2>{heading}</h2>
     <div className="cta-foot"><p>{body}</p><div><Action href={href} light>{action}</Action>{direct && contact.email && <p className="direct-line">Prefer a direct note? Write to <a href={`mailto:${contact.email}`}>{contact.email}</a>.</p>}</div></div>
@@ -65,7 +65,7 @@ export function PricingPlans() {
       <p className="plan-price"><b>{plan.price}</b><span>{plan.unit} · {plan.alt}</span></p>
       <dl className="plan-facts"><div><dt>Timeline</dt><dd>{plan.timeline}</dd></div><div><dt>Reviews</dt><dd>{plan.rounds}</dd></div><div><dt>Warranty</dt><dd>14-day defect fixes</dd></div></dl>
       <ul className="plan-includes">{plan.includes.map(item => <li key={item}>{item}</li>)}</ul>
-      {plan.available ? <Action href={`/project?service=${plan.id === "spatial" ? "spatial" : "unsure"}`}>Enquire about this</Action> : <Action href="/services" text>See available practices</Action>}
+      {plan.available ? <Action href={`/project?service=${plan.id === "spatial" ? "spatial" : "unsure"}`}>Enquire about this</Action> : <Action href="/services" text>See available services</Action>}
     </article>)}</div>
     <dl className="terms-grid">{terms.map(([term, detail]) => <div key={term}><dt>{term}</dt><dd>{detail}</dd></div>)}</dl>
     <p className="terms-note">Ranges are indicative and tied to the described scope. Exact deliverables, dates and price are fixed in your agreed project scope. Full details in the <Link href="/terms">project terms</Link>.</p>
@@ -90,14 +90,14 @@ export function PageHero({ title, children, action, href, practice, comingSoon =
       <div className="page-intro">{children}</div>
       {action && <Action href={href} light>{action}</Action>}
     </div>
-    {practice !== undefined && <p className="page-hero-number" aria-hidden="true"><span>Practice</span>{practices[practice].number}<small>/ 04</small></p>}
+    {practice !== undefined && <p className="page-hero-number" aria-hidden="true"><span>Service</span>{practices[practice].number}<small>/ 04</small></p>}
   </div></section>;
 }
 /** Services: full-frame practice cards that stack as the reader scrolls (CSS sticky; GSAP dims the covered card). */
 export function ServiceBlocks() {
   return <div className="service-stack">{practices.map((p, index) => <article className="service-block" key={p.id} style={{ "--i": index } as CSSProperties}>
     <div className="service-body">
-      <div className="service-head"><span className="service-index" aria-hidden="true">{p.number}</span><span className="mini-label">{p.number} / 04 — Practice</span></div>
+      <div className="service-head"><span className="service-index" aria-hidden="true">{p.number}</span></div>
       <div className="service-description"><h3>{p.name}{p.comingSoon && <> <ComingSoon /></>}</h3><p>{p.summary}</p><p className="service-tags">{p.tags}</p><Action href={`/services/${p.slug}`} text>{p.comingSoon ? "Preview" : "Explore"} {p.name}</Action></div>
     </div>
     <div className="service-mark" aria-hidden="true"><span>{p.number}</span><p>{p.line}</p></div>

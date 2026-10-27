@@ -22,10 +22,10 @@ export default async function ServicePage({ params }: Props) {
   const index = practices.findIndex(p => p.id === practice.id);
   const href = practice.comingSoon ? "/services#practices" : `/project?service=${practice.id}`;
   return <main id="main-content" tabIndex={-1}>
-    <PageHero title={practice.line} action={practice.comingSoon ? "Explore available practices" : practice.action} href={href} practice={index} comingSoon={practice.comingSoon}><p>{practice.intro}</p>{practice.comingSoon && <p>This practice is coming soon. Digital Presence and Spatial Visuals are available for new projects.</p>}</PageHero>
+    <PageHero title={practice.line} action={practice.comingSoon ? "See available services" : practice.action} href={href} practice={index} comingSoon={practice.comingSoon}><p>{practice.intro}</p>{practice.comingSoon && <p>This service is coming soon. Websites & Branding and 3D Renders & Walkthroughs are open for new projects.</p>}</PageHero>
     <section className="section create-section" id="create" data-rail="What we create"><div className="wrap"><h2>{practice.createHeading}</h2><div className="detail-capabilities">{practice.capabilities.map(([title, body], i) => <article key={title}><span>{String(i + 1).padStart(2, "0")} /</span><h3>{title}</h3><p>{body}</p></article>)}</div></div></section>
-    <section className="section connection-section" id="solve" data-rail={practice.id === "automation" ? "The principle" : "What we solve"}><div className="wrap"><div className="connection-grid"><h2>{practice.problemHeading}</h2><div className="section-copy">{practice.problem.map(p => <p key={p}>{p}</p>)}<Action href={href} text>{practice.comingSoon ? "Explore available practices" : "Let’s find the right starting point"}</Action></div></div></div></section>
-    <section className="section detail-approach" id="approach" data-rail="Approach"><div className="wrap"><div className="section-heading"><h2>{practice.approachHeading}</h2><p>One clear direction, from the first conversation to the finished work.</p></div><StepList steps={practice.steps} /></div></section>
+    <section className="section connection-section" id="solve" data-rail={practice.id === "automation" ? "The principle" : "What we solve"}><div className="wrap"><div className="connection-grid"><h2>{practice.problemHeading}</h2><div className="section-copy">{practice.problem.map(p => <p key={p}>{p}</p>)}<Action href={href} text>{practice.comingSoon ? "See available services" : "Tell us what you need"}</Action></div></div></div></section>
+    <section className="section detail-approach" id="approach" data-rail="Approach"><div className="wrap"><div className="section-heading"><h2>{practice.approachHeading}</h2><p>From the first call to the finished work.</p></div><StepList steps={practice.steps} /></div></section>
     {practice.id === "spatial" && <section className="section work-section" id="selected-work"><div className="wrap">
       <article className="work-feature">
         <div className="work-feature-copy">
@@ -37,6 +37,6 @@ export default async function ServicePage({ params }: Props) {
         <TourPreview src={TOUR} title="West Road residence — virtual walkthrough" />
       </article>
     </div></section>}
-    {practice.comingSoon ? <FinalCTA heading="This practice is coming soon." body="For projects today, explore Digital Presence and Spatial Visuals." action="Explore available practices" href={href} /> : <FinalCTA heading={practice.finalHeading} action={practice.finalAction} href={href} />}
+    {practice.comingSoon ? <FinalCTA heading="This service is coming soon." body="For projects today, see Websites & Branding and 3D Renders & Walkthroughs." action="See available services" href={href} /> : <FinalCTA heading={practice.finalHeading} action={practice.finalAction} href={href} />}
   </main>;
 }

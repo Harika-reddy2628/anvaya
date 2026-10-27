@@ -13,7 +13,7 @@ export function parseEnquiry(form: FormData): { data: Enquiry; errors: Record<st
   if (!data.name || data.name.length > 120) errors.name = "Please enter your name (up to 120 characters).";
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email) || data.email.length > 254) errors.email = "Please enter a valid email address.";
   const allowed = new Set<string>([...practices.filter(p => !p.comingSoon).map(p => p.id), "unsure"]);
-  if (!data.services.length || data.services.some(s => !allowed.has(s)) || data.services.length > 4 || (data.services.includes("unsure") && data.services.length > 1)) errors.services = "Choose an available practice, or select Not sure yet.";
+  if (!data.services.length || data.services.some(s => !allowed.has(s)) || data.services.length > 4 || (data.services.includes("unsure") && data.services.length > 1)) errors.services = "Choose an available service, or select Not sure yet.";
   if (data.outcome.length < 10 || data.outcome.length > 5000) errors.outcome = "Tell us a little more about the outcome (10–5,000 characters).";
   if (data.company.length > 200) errors.company = "Please keep the project name under 200 characters.";
   if (data.phone.length > 60) errors.phone = "Please keep the phone number under 60 characters.";
@@ -24,5 +24,5 @@ export function parseEnquiry(form: FormData): { data: Enquiry; errors: Record<st
   return { data, errors };
 }
 export function enquiryText(data: Enquiry) {
-  return ["ANVAYA — PROJECT ENQUIRY", "", `Name: ${data.name}`, `Company or project: ${data.company || "Not provided"}`, `Email: ${data.email}`, `Phone / WhatsApp: ${data.phone || "Not provided"}`, `Practices: ${data.services.map(id => practices.find(p => p.id === id)?.name || "Not sure yet").join(", ")}`, "", "DESIRED OUTCOME", data.outcome, "", `Timeline: ${data.timeline}`, `Budget (INR): ${data.budget}`, "", "ADDITIONAL CONTEXT", data.context || "Not provided"].join("\n");
+  return ["ANVAYA — PROJECT ENQUIRY", "", `Name: ${data.name}`, `Company or project: ${data.company || "Not provided"}`, `Email: ${data.email}`, `Phone / WhatsApp: ${data.phone || "Not provided"}`, `Services: ${data.services.map(id => practices.find(p => p.id === id)?.name || "Not sure yet").join(", ")}`, "", "DESIRED OUTCOME", data.outcome, "", `Timeline: ${data.timeline}`, `Budget (INR): ${data.budget}`, "", "ADDITIONAL CONTEXT", data.context || "Not provided"].join("\n");
 }

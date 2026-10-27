@@ -490,3 +490,124 @@ html{scrollbar-width:thin;scrollbar-color:rgba(13,17,20,.28) transparent}
 }
 
 @media(prefers-reduced-motion:reduce){.hero-scroll:after,.hero .hero-mark>span{animation:none}.action-light:after,.pill-solid:after{display:none}}
+
+/* Readability pass (27 Oct 2026): buttons, labels and small UI text use the text face in sentence case, so a
+   busy reader can scan them. Mono stays only for numbers and the clock. */
+.pill,.header-project{font-family:var(--sans);font-size:14px;font-weight:500;letter-spacing:0;text-transform:none}
+.footer-heading,.plan-practice,.plan-facts dt,.terms-grid dt,.work-meta,.brief-backup,.process-closing,.hero-corner-link,.site-footer .footer-bottom,.footer-term span,.pages-menu-label,.slot-meta{font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:.01em;text-transform:none}
+.tag-list li{font-family:var(--sans);font-size:13px;letter-spacing:0}
+.service-tags{font-family:var(--sans);font-size:13px;letter-spacing:.02em;text-transform:none}
+.form-field label,.form-field legend,.practice-choices legend{font-family:var(--sans);font-size:15px;font-weight:600;letter-spacing:0;text-transform:none;line-height:1.4;color:var(--ivory)}
+.page-intro,.section-heading>p,.section-copy p{line-height:1.65}
+@media(max-width:560px){.site-header .header-project{font-size:12px;letter-spacing:0}}
+
+/* Status pages: 404, error and loading */
+.state-page{min-height:88svh;display:flex;align-items:center;padding:150px 0 96px}
+.state-wrap{width:100%}
+.state-code{display:flex;align-items:center;gap:.08em;margin:0 0 24px;font-family:var(--serif);font-style:italic;font-size:clamp(120px,20vw,280px);line-height:.85;letter-spacing:-.05em;color:var(--accent)}
+.state-code-small{font-size:clamp(96px,14vw,180px)}
+.state-thread{position:relative;display:inline-block;width:.9em;height:.9em;border-radius:50%;border:2px solid var(--hair-2)}
+.state-thread i{position:absolute;left:-40%;right:-40%;top:50%;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:thread-sway 4s var(--ease) infinite alternate}
+@keyframes thread-sway{from{transform:translateY(-50%) rotate(-10deg)}to{transform:translateY(-50%) rotate(10deg)}}
+.state-page h1{font-size:clamp(48px,6.4vw,104px);max-width:14ch}
+.state-lede{margin-top:24px;max-width:52ch;color:var(--ivory-2);font-size:18px;line-height:1.6}
+.state-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:40px}
+.state-links{margin-top:64px;padding-top:32px;border-top:1px solid var(--hair)}
+.state-links p{margin-bottom:16px;font-size:13px;font-weight:500;color:var(--ivory-3)}
+.state-links ul{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.state-links a{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border:1px solid var(--hair-2);border-radius:999px;font-size:14px;transition:border-color .3s,background-color .3s}
+.state-links a:hover{border-color:var(--accent);background:rgba(31,95,139,.06)}
+.state-ref{margin-top:32px;font-size:13px;color:var(--ivory-3)}
+
+/* Project enquiry: three short steps */
+.enquiry-form{display:block}
+.enquiry-form .form-step{border:0;margin:0;padding:0;min-width:0}
+.enquiry-form .form-step+.form-step{margin-top:48px}
+.enquiry-form.is-stepped .form-step+.form-step{margin-top:0}
+.enquiry-form.is-stepped .form-step{animation:step-in .6s var(--ease-out)}
+@keyframes step-in{from{opacity:0;transform:translateY(16px)}}
+.enquiry-form .form-step-title{margin:0;padding:0;font-family:var(--serif);font-size:clamp(30px,3vw,44px);font-weight:380;letter-spacing:-.03em;line-height:1.05;color:var(--ivory);outline:none}
+.form-step-hint{margin:12px 0 32px;color:var(--ivory-2);font-size:16px}
+.form-progress{display:flex;gap:8px;margin:0 0 40px;padding:0;list-style:none;counter-reset:none}
+.form-progress li{flex:1;min-width:0}
+.form-progress li:before{content:"";display:block;height:3px;margin-bottom:12px;border-radius:3px;background:var(--hair);transition:background-color .5s}
+.form-progress li.is-done:before,.form-progress li.is-current:before{background:var(--accent)}
+.form-progress button{display:flex;align-items:center;gap:10px;min-height:32px;color:var(--ivory-3);font-size:14px;font-weight:500;text-align:left}
+.form-progress button:disabled{cursor:default}
+.form-progress .is-done button{color:var(--ivory-2);cursor:pointer}
+.form-progress .is-done button:hover{color:var(--accent)}
+.form-progress .is-current button{color:var(--ivory)}
+.form-progress-dot{display:grid;place-items:center;width:26px;height:26px;flex:none;border-radius:50%;border:1px solid var(--hair-2);font-size:12px}
+.is-current .form-progress-dot,.is-done .form-progress-dot{border-color:var(--accent);background:var(--accent);color:#fff}
+.service-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.service-choice{position:relative;display:grid;grid-template-columns:1fr 24px;gap:6px 12px;padding:20px 20px 22px;border:1px solid var(--hair-2);border-radius:18px;background:rgba(255,255,255,.45);cursor:pointer;transition:border-color .3s,background-color .3s,transform .4s var(--ease-out),box-shadow .4s}
+.service-choice:hover{transform:translateY(-2px);border-color:var(--ivory-3);box-shadow:0 18px 40px -28px rgba(13,17,20,.35)}
+.service-choice input{position:absolute;opacity:0;width:1px;height:1px}
+.service-choice:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:3px}
+.service-choice:has(input:checked){border-color:var(--accent);background:rgba(31,95,139,.07)}
+.service-choice.is-soon{cursor:default;border-style:dashed;background:transparent;opacity:.7}
+.service-choice.is-soon:hover{transform:none;box-shadow:none}
+.service-choice-name{grid-column:1;font-size:17px;font-weight:600;line-height:1.3;color:var(--ivory)}
+.service-choice-name .practice-status{margin-left:6px;vertical-align:middle;font-size:10px;padding:1px 8px}
+.service-choice-offer{grid-column:1;font-size:14px;line-height:1.5;color:var(--ivory-2)}
+.service-choice-check{grid-column:2;grid-row:1;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--hair-2);transition:background-color .3s,border-color .3s}
+.service-choice:has(input:checked) .service-choice-check{border-color:var(--accent);background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat}
+.enquiry-form .form-field.full+.form-field,.enquiry-form .form-step>.form-field+.form-field{margin-top:32px}
+.starter-row{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 4px}
+.starter{min-height:36px;padding:0 14px;border:1px dashed var(--hair-2);border-radius:999px;font-size:13px;color:var(--ivory-2);transition:border-color .3s,color .3s,background-color .3s}
+.starter:hover{border-style:solid;border-color:var(--accent);color:var(--accent);background:rgba(31,95,139,.05)}
+.enquiry-form small.is-ok{color:var(--success)}
+.chip-field{border:0;padding:0;margin:0;min-width:0}
+.chip-field legend{padding:0;margin-bottom:12px}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;cursor:pointer}
+.chip input{position:absolute;opacity:0;width:1px;height:1px}
+.chip span{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border:1px solid var(--hair-2);border-radius:999px;font-size:14px;color:var(--ivory-2);transition:border-color .3s,background-color .3s,color .3s}
+.chip:hover span{border-color:var(--ivory-3);color:var(--ivory)}
+.chip input:checked+span{border-color:var(--ivory);background:var(--ivory);color:#fff}
+.chip input:focus-visible+span{outline:2px solid var(--accent);outline-offset:3px}
+.optional{margin-left:6px;font-size:12px;font-weight:500;color:var(--ivory-3)}
+.form-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+.form-summary{display:grid;gap:0;margin:40px 0 0;padding:8px 24px;border:1px solid var(--hair);border-radius:18px;background:rgba(255,255,255,.45)}
+.form-summary>div{display:grid;grid-template-columns:120px 1fr auto;gap:16px;align-items:baseline;padding:14px 0}
+.form-summary>div+div{border-top:1px solid var(--hair)}
+.form-summary dt{font-size:13px;font-weight:500;color:var(--ivory-3)}
+.form-summary dd{margin:0;font-size:15px;color:var(--ivory);overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.form-summary button{font-size:13px;color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.enquiry-form .form-footer{margin-top:40px;padding-top:0}
+.form-nav{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
+.form-back{min-height:44px;font-size:15px;font-weight:500;color:var(--ivory-2)}
+.form-back:hover{color:var(--accent)}
+.form-count{margin-left:auto;font-size:13px;color:var(--ivory-3)}
+.form-footer .action.action-light{background:var(--ivory);color:#fff;border-color:var(--ivory)}
+.action.is-pending .send-icon{width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.form-status p+p{margin-top:8px}
+.form-success{padding:clamp(32px,4vw,56px);border:1px solid var(--hair);border-radius:var(--radius);background:rgba(255,255,255,.55);outline:none;animation:step-in .8s var(--ease-out)}
+.form-success-mark svg{width:64px;height:64px;fill:none;stroke:var(--success);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.form-success-mark circle{stroke-dasharray:151;stroke-dashoffset:151;animation:draw 1s var(--ease-out) forwards}
+.form-success-mark path{stroke-dasharray:40;stroke-dashoffset:40;animation:draw .6s var(--ease-out) .6s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.form-success h3{margin:24px 0 12px;font-family:var(--serif);font-size:clamp(36px,4vw,56px);font-weight:380;letter-spacing:-.03em;line-height:1}
+.form-success>p{color:var(--ivory-2);font-size:17px;max-width:46ch}
+.form-success .form-summary{margin-top:32px}
+.form-success-next{margin:32px 0;padding-left:20px;color:var(--ivory-2);font-size:15px;line-height:1.9}
+@media(max-width:760px){
+  .service-choice-grid,.form-pair{grid-template-columns:1fr}
+  .form-progress-name{display:none}
+  .form-progress button{justify-content:center;width:100%}
+  .form-summary{padding:4px 16px}
+  .form-summary>div{grid-template-columns:1fr auto;gap:4px 12px}
+  .form-summary dt{grid-column:1/-1}
+  .form-count{width:100%;margin-left:0}
+}
+@media(prefers-reduced-motion:reduce){
+  .enquiry-form.is-stepped .form-step,.form-success,.state-thread i,.action.is-pending .send-icon{animation:none}
+  .form-success-mark circle,.form-success-mark path{animation:none;stroke-dashoffset:0}
+}
+
+/* Opening, before hydration: the pre-paint script marks html[data-intro=playing], so the intro screen shows as a plain
+   dark frame from the first paint (its content waits for GSAP). If scripts never run it lifts itself after 4s. */
+html[data-intro=playing] .intro-screen[hidden]{display:grid;animation:intro-failsafe 0s linear 4s forwards}
+.intro-screen[hidden] *{visibility:hidden}
+@keyframes intro-failsafe{to{visibility:hidden;opacity:0;pointer-events:none}}
