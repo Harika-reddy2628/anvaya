@@ -32,7 +32,7 @@ export default function GlassStar({ active }: { active: number }) {
     });
     glass.onBeforeCompile = shader => {
       shader.fragmentShader = shader.fragmentShader.replace("#include <opaque_fragment>", `#include <opaque_fragment>
-        float edgeTint = pow(1.0 - abs(dot(normalize(normal), normalize(vViewPosition))), 1.5);
+        float edgeTint = pow(max(1.0 - abs(dot(normalize(normal), normalize(vViewPosition))), 0.0), 1.5);
         gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(.06, .25, .36), smoothstep(.08, .55, edgeTint) * .8);`);
     };
     const geometry = petalGeometry(.82, 4.2, .34);

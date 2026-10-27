@@ -146,7 +146,7 @@ export default function Butterfly({ path }: { path: string }) {
     // A bright rim where the facets turn away, like light caught in the edge of cut glass.
     crystal.onBeforeCompile = shader => {
       shader.fragmentShader = shader.fragmentShader.replace("#include <opaque_fragment>", `#include <opaque_fragment>
-        float rim = pow(1.0 - abs(dot(normalize(normal), normalize(vViewPosition))), 2.5);
+        float rim = pow(max(1.0 - abs(dot(normalize(normal), normalize(vViewPosition))), 0.0), 2.5);
         gl_FragColor.rgb += vec3(.62, .86, 1.) * rim * .55;`);
     };
     const silver = new THREE.LineBasicMaterial({ color: "#f2f9ff", transparent: true, opacity: .85 });
