@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { EngagementCards, FinalCTA, Label, PageHero } from "../components/cinema/Shared";
+import { FinalCTA, Label, PageHero, PricingPlans } from "../components/cinema/Shared";
 import { budgetOptions } from "../lib/site";
 
-export const metadata: Metadata = { title: "Pricing", description: "How Anvaya engagements are shaped and scoped, with INR enquiry ranges to start the conversation." };
+export const metadata: Metadata = { title: "Pricing", description: "Anvaya pricing: published ranges, timelines, review rounds, payment terms and warranty." };
 
 // Enquiry ranges are the owner's confirmed INR bands from the project form. They are not fixed prices or packages.
 export default function PricingPage() {
   const ranges = budgetOptions.filter(option => option !== "Need guidance");
   return <main id="main-content" tabIndex={-1}>
-    <PageHero eyebrow="PRICING" title="Scoped to the outcome, not a package."><p>Every project is shaped around what needs to move. We agree the scope, deliverables and timeline before work begins, then quote against it.</p></PageHero>
-    <section className="section engagement-section" id="models"><div className="wrap">
-      <Label>01 — WAYS TO WORK TOGETHER</Label>
-      <div className="section-heading"><h2>Focused when needed. <em>Connected when it matters.</em></h2><p>We do not begin with a fixed package. We begin with what needs to move.</p></div>
-      <EngagementCards />
+    <PageHero eyebrow="PRICING" title="Practical pricing, agreed up front."><p>Every plan states its price range, timeline and review rounds. We agree the exact scope and quote before work begins.</p></PageHero>
+    <section className="section pricing-section" id="plans"><div className="wrap">
+      <Label>01 — PLANS</Label>
+      <div className="section-heading"><h2>Clear prices. <em>No surprises.</em></h2><p>Published ranges, fixed timelines and a set number of review rounds — agreed in writing before any work begins.</p></div>
+      <PricingPlans />
     </div></section>
     <section className="section pricing-ranges" id="ranges"><div className="wrap">
       <Label>02 — ENQUIRY RANGES</Label>

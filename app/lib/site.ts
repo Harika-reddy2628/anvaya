@@ -1,6 +1,10 @@
+const url = (value?: string) => (value?.trim().startsWith("https://") ? value.trim() : "");
+
 export const contact = {
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() || "",
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_URL?.trim() || "",
+  // The studio address. Until the owner sets it, the footer shows the location confirmed so far.
+  address: (process.env.NEXT_PUBLIC_STUDIO_ADDRESS?.trim() || "India").split("|").map(line => line.trim()),
   socials: [
     ["LinkedIn", process.env.NEXT_PUBLIC_LINKEDIN_URL],
     ["Instagram", process.env.NEXT_PUBLIC_INSTAGRAM_URL],
@@ -8,6 +12,51 @@ export const contact = {
     ["Behance", process.env.NEXT_PUBLIC_BEHANCE_URL],
   ].filter((entry): entry is [string, string] => Boolean(entry[1]?.startsWith("https://"))),
 };
+
+/** Footer social icons. Every network shows; an icon becomes a link only once its URL is configured. */
+export const socialIcons = [
+  { name: "LinkedIn", href: url(process.env.NEXT_PUBLIC_LINKEDIN_URL) },
+  { name: "Instagram", href: url(process.env.NEXT_PUBLIC_INSTAGRAM_URL) },
+  { name: "X", href: url(process.env.NEXT_PUBLIC_X_URL) },
+  { name: "Behance", href: url(process.env.NEXT_PUBLIC_BEHANCE_URL) },
+  { name: "Dribbble", href: url(process.env.NEXT_PUBLIC_DRIBBBLE_URL) },
+  { name: "GitHub", href: url(process.env.NEXT_PUBLIC_GITHUB_URL) },
+] as const;
+
+/* Pricing. Ranges, timelines, payment, ownership and warranty restate the published project terms (/terms).
+   Review rounds are a working default the owner asked for (27 October 2026) and should be confirmed. */
+export const reviewRounds = { included: 2, note: "Two rounds of changes per stage are included. Further rounds are quoted before work begins." };
+export const plans = [
+  {
+    id: "spatial", name: "Spatial visual", practice: "Spatial Visuals", available: true,
+    price: "₹40,000–1,20,000", alt: "$500–1,500", unit: "per asset or space", timeline: "48 hours–5 business days",
+    rounds: "2 review rounds per asset",
+    includes: ["Agreed viewer, model or walkthrough scope", "Web-ready exports and packed master assets", "Handover with .blend and .glb files where applicable"],
+  },
+  {
+    id: "sprint", name: "14-day sprint", practice: "Digital Products · Intelligent Operations", available: false,
+    price: "₹1,25,000–2,75,000", alt: "$1,500–3,500", unit: "fixed scope", timeline: "14 calendar days",
+    rounds: "2 review rounds: flows, then build",
+    includes: ["One agreed MVP or agentic pipeline", "Engineering, deployment and documentation", "Source code and repository handover"],
+  },
+  {
+    id: "partner", name: "Engineering partner", practice: "All practices", available: true,
+    price: "$2,500–4,500", alt: "billed in USD", unit: "per month", timeline: "Ongoing, agreed monthly scope",
+    rounds: "Reviews each agreed delivery cycle",
+    includes: ["Dedicated engineering engagement", "Prioritised roadmap and delivery scope", "Specialists across Anvaya’s four practices"],
+  },
+] as const;
+export const terms = [
+  ["Payment", "50% to begin, 50% on final verified delivery — or an agreed, fully funded platform escrow."],
+  ["Review rounds", reviewRounds.note],
+  ["Scope changes", "Reviewed together; any effect on timing and price is agreed before extra work starts."],
+  ["Ownership", "100% of delivered source, repositories, configurations and master 3D assets passes to you on final payment."],
+  ["Warranty", "14 days of technical defect fixes on the delivered scope, at no extra cost."],
+  ["Third-party costs", "Subscriptions and usage fees are identified and agreed during scoping."],
+] as const;
+
+/** Social proof. Counts stay at zero until genuine reviews and testimonials are collected; never mock data. */
+export const proof = { reviews: 0, testimonials: 0, rating: 0, caseStudies: 1 } as const;
 
 export const practices = [
   {

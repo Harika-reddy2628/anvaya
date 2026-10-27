@@ -50,7 +50,7 @@ test("content stays visible without JavaScript", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, baseURL: "http://127.0.0.1:3107" }); const page = await context.newPage();
   await page.goto("/");
   await expect(page.locator("header .wordmark")).toBeVisible();
-  for (const selector of [".hero-line > span", ".point-section .section-copy p", ".step-list li", ".service-rows > li", ".faq-item"]) {
+  for (const selector of [".hero-line > span", ".step-list li", ".plan-card", ".testimonial-slots li", ".service-rows > li", ".faq-item"]) {
     expect(await page.locator(selector).first().evaluate(e => getComputedStyle(e).opacity)).toBe("1");
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();

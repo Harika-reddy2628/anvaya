@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
-import { contact, practices } from "../../lib/site";
-import { Wordmark } from "./Logo";
+import { contact, plans, practices, proof, socialIcons, terms } from "../../lib/site";
+import { LogoMark, Wordmark } from "./Logo";
 
 export function Action({ href = "/project", children = "Start a Project", light = false, text = false }: { href?: string; children?: ReactNode; light?: boolean; text?: boolean }) {
   return <Link href={href} className={`action${light ? " action-light" : ""}${text ? " action-text" : ""}`}><span>{children}</span><span className="action-arrow" aria-hidden="true">↗</span></Link>;
@@ -22,16 +22,65 @@ export function FinalCTA({ heading = "Have something worth building?", body = "B
     <div className="cta-foot"><p>{body}</p><div><Action href={href} light>{action}</Action>{direct && contact.email && <p className="direct-line">Prefer a direct note? Write to <a href={`mailto:${contact.email}`}>{contact.email}</a>.</p>}</div></div>
   </div></section>;
 }
+/** Simple 24px social glyphs, drawn in currentColor. */
+const glyphs: Record<string, ReactNode> = {
+  LinkedIn: <><rect x="3" y="9" width="4" height="12" /><circle cx="5" cy="4.5" r="2" /><path d="M10 9h3.8v1.7c.6-1 1.9-2 3.9-2 3.4 0 4.3 2.2 4.3 5.3V21h-4v-6.3c0-1.5-.3-2.8-1.9-2.8s-2.1 1.2-2.1 2.8V21h-4z" /></>,
+  Instagram: <><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" strokeWidth="2" /><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" strokeWidth="2" /><circle cx="17.3" cy="6.7" r="1.2" /></>,
+  X: <path d="M4 3h4.6l4.1 5.8L17.6 3H20l-6.2 7.4L21 21h-4.6l-4.5-6.3L6.4 21H4l6.8-8z" />,
+  Behance: <path d="M3 6h5.2c2.2 0 3.6 1 3.6 2.9 0 1.2-.7 2-1.6 2.4 1.3.3 2.2 1.3 2.2 2.8 0 2.2-1.7 3.4-4 3.4H3zm2.6 2.1v2.6h2.3c.9 0 1.4-.5 1.4-1.3s-.5-1.3-1.4-1.3zm0 4.6v3h2.5c1.1 0 1.7-.6 1.7-1.5s-.6-1.5-1.7-1.5zM14.5 7h5.6v1.4h-5.6zm2.9 2.8c2.6 0 4 1.8 4 4.4v.6h-5.9c.1 1.3.9 2 2 2 .9 0 1.4-.4 1.7-1h2c-.5 1.9-1.9 2.8-3.8 2.8-2.5 0-4.1-1.7-4.1-4.4 0-2.5 1.6-4.4 4.1-4.4zm-1.9 3.6h3.8c-.1-1.1-.8-1.8-1.9-1.8s-1.7.7-1.9 1.8z" />,
+  Dribbble: <><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="2" /><path d="M5 7.5c4 1 8.3.5 12.5-2.2M3.4 13.5c5.2-2.6 11-2.4 17.2.3M8.5 20c1.2-5.4 4-10 7-15.6" fill="none" stroke="currentColor" strokeWidth="1.6" /></>,
+  GitHub: <path d="M12 2.5a9.7 9.7 0 0 0-3 18.9c.5.1.7-.2.7-.5v-1.7c-2.7.6-3.3-1.2-3.3-1.2-.4-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.3-2.2-.2-4.4-1.1-4.4-4.8 0-1.1.4-1.9 1-2.6-.1-.3-.4-1.2.1-2.6 0 0 .8-.3 2.7 1a9.3 9.3 0 0 1 4.9 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.3.1 2.6.6.7 1 1.5 1 2.6 0 3.7-2.3 4.6-4.4 4.8.4.3.7.9.7 1.8v2.7c0 .3.2.6.7.5A9.7 9.7 0 0 0 12 2.5z" />,
+};
+function SocialIcon({ name, href }: { name: string; href: string }) {
+  const svg = <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">{glyphs[name]}</svg>;
+  // Until a profile URL is configured the icon is shown but is not a link, so nothing points nowhere.
+  return href
+    ? <a className="social-icon" href={href} target="_blank" rel="noopener noreferrer" aria-label={`Anvaya on ${name}`}>{svg}</a>
+    : <span className="social-icon is-pending" title={`${name} — link coming soon`}>{svg}<span className="sr-only">{name} (coming soon)</span></span>;
+}
 export function Footer() {
   return <footer className="site-footer"><div className="wrap-full">
-    <div className="footer-top">
-      <p className="footer-statement">Technology and design studio.<br />Make / Move / Matter.<br /><span>India, working globally.</span></p>
-      <nav aria-label="Footer navigation"><Link href="/work">Works</Link><Link href="/services">Services</Link><Link href="/studio">Studio</Link><Link href="/pricing">Pricing</Link><Link href="/blog">Blog</Link><Link href="/project">Start a Project ↗</Link></nav>
-      <div className="footer-contact">{contact.email && <a href={`mailto:${contact.email}`}>{contact.email}</a>}{contact.socials.map(([name, url]) => <a href={url} key={name} target="_blank" rel="noopener noreferrer">{name} ↗</a>)}</div>
+    <div className="footer-head">
+      <Link href="/" className="footer-brand" aria-label="Anvaya home"><LogoMark className="footer-mark" /><Wordmark /></Link>
+      <p className="footer-line">A technology and design studio. Ambitious ideas, built to last.</p>
+      <Link href="/project" className="pill pill-solid footer-cta"><span>Start a Project</span><span aria-hidden="true">↗</span></Link>
     </div>
-    <Link href="/" className="footer-wordmark" aria-label="Anvaya home"><Wordmark className="footer-word" /></Link>
-    <div className="footer-bottom"><p>© 2026 Anvaya Digital Studio. All rights reserved.</p><span lang="hi" className="indic">अन्वय</span><Link href="/privacy">Privacy</Link></div>
+    <div className="footer-grid">
+      <nav aria-label="Footer navigation"><p className="footer-heading">Explore</p><Link href="/work">Works</Link><Link href="/services">Services</Link><Link href="/pricing">Pricing</Link><Link href="/blog">Blog</Link><Link href="/studio">Studio</Link></nav>
+      <nav aria-label="Footer services"><p className="footer-heading">Services</p>{practices.map(p => <Link key={p.id} href={`/services/${p.slug}`}>{p.name}</Link>)}</nav>
+      <div className="footer-contact"><p className="footer-heading">Studio</p><address>{contact.address.map(line => <span key={line}>{line}</span>)}<span>Working globally</span></address>{contact.email && <a href={`mailto:${contact.email}`}>{contact.email}</a>}<Link href="/project">Send a project enquiry</Link></div>
+      <div className="footer-social"><p className="footer-heading">Follow</p><div className="social-row">{socialIcons.map(s => <SocialIcon key={s.name} name={s.name} href={s.href} />)}</div></div>
+    </div>
+    <Link href="/" className="footer-wordmark" aria-label="Anvaya home" tabIndex={-1}><Wordmark className="footer-word" /></Link>
+    <div className="footer-bottom"><p>© 2026 Anvaya Digital Studio</p><span lang="hi" className="indic">अन्वय</span><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><a href="#main-content" className="footer-top-link">Back to top ↑</a></div>
   </div></footer>;
+}
+/** Practical pricing: three published offers, each with range, timeline and review rounds, then the shared terms. */
+export function PricingPlans() {
+  return <>
+    <div className="plan-grid">{plans.map(plan => <article className={`plan-card${plan.available ? "" : " is-soon"}`} key={plan.id}>
+      <p className="plan-practice">{plan.practice}{!plan.available && <> <ComingSoon /></>}</p>
+      <h3>{plan.name}</h3>
+      <p className="plan-price"><b>{plan.price}</b><span>{plan.unit} · {plan.alt}</span></p>
+      <dl className="plan-facts"><div><dt>Timeline</dt><dd>{plan.timeline}</dd></div><div><dt>Reviews</dt><dd>{plan.rounds}</dd></div><div><dt>Warranty</dt><dd>14-day defect fixes</dd></div></dl>
+      <ul className="plan-includes">{plan.includes.map(item => <li key={item}>{item}</li>)}</ul>
+      {plan.available ? <Action href={`/project?service=${plan.id === "spatial" ? "spatial" : "unsure"}`}>Enquire about this</Action> : <Action href="/services" text>See available practices</Action>}
+    </article>)}</div>
+    <dl className="terms-grid">{terms.map(([term, detail]) => <div key={term}><dt>{term}</dt><dd>{detail}</dd></div>)}</dl>
+    <p className="terms-note">Ranges are indicative and tied to the described scope. Exact deliverables, dates and price are fixed in your agreed project scope. Full details in the <Link href="/terms">project terms</Link>.</p>
+  </>;
+}
+/** Reviews and testimonials, held at zero until genuine ones are collected. */
+export function ProofSection() {
+  return <>
+    <dl className="proof-stats">
+      <div><dt>Client reviews</dt><dd>{proof.reviews}</dd></div>
+      <div><dt>Average rating</dt><dd>{proof.rating.toFixed(1)}<small>/ 5</small></dd></div>
+      <div><dt>Testimonials</dt><dd>{proof.testimonials}</dd></div>
+      <div><dt>Published case studies</dt><dd>{proof.caseStudies}</dd></div>
+    </dl>
+    <ul className="testimonial-slots" aria-label="Testimonials">{[1, 2, 3].map(n => <li key={n}><span className="slot-mark" aria-hidden="true">“</span><p>Reserved for a client testimonial.</p><span className="slot-meta">Name · Role · Company</span></li>)}</ul>
+  </>;
 }
 export function PageHero({ eyebrow, title, children, action, href, practice, comingSoon = false }: { eyebrow: string; title: string; children: ReactNode; action?: string; href?: string; practice?: number; comingSoon?: boolean }) {
   return <section className={`page-hero${practice !== undefined ? " page-hero-art" : ""}`} id="intro"><div className="wrap-full page-hero-grid">
@@ -53,18 +102,6 @@ export function ServiceBlocks() {
     </div>
     <div className="service-mark" aria-hidden="true"><span>{p.number}</span><p>{p.line}</p></div>
     <span className="service-shade" aria-hidden="true" />
-  </article>)}</div>;
-}
-/** Ways to engage, from the owner's working model. Enquiry ranges live on the form, never as prices here. */
-export function EngagementCards() {
-  const models = [
-    ["01", "One practice", "For a clearly defined need.", "/project"],
-    ["02", "Connected project", "For work that crosses brand, product, systems or space.", "/project"],
-    ["03", "Ongoing partnership", "For teams that need design and technology support as they grow.", "/project"],
-  ] as const;
-  return <div className="engagement-grid">{models.map(([n, title, body, href], index) => <article className={`engagement-card${index === 1 ? " is-featured" : ""}`} key={n}>
-    <span className="engagement-number">{n}</span><h3>{title}</h3><p>{body}</p>
-    <Action href={href} light={index === 1}>Enquire about {title.toLowerCase()}</Action>
   </article>)}</div>;
 }
 export function Faq({ items }: { items: readonly (readonly [string, ReactNode])[] }) {

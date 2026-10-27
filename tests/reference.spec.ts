@@ -9,7 +9,7 @@ const pages = [
   ["/studio", "Connection, with intent."],
   ["/project", "What are you trying to move?"],
   ["/work", "Work you can walk through."],
-  ["/pricing", "Scoped to the outcome, not a package."],
+  ["/pricing", "Practical pricing, agreed up front."],
   ["/blog", "Notes from the studio."],
 ];
 test.beforeEach(async ({ page }) => { await page.addInitScript(() => sessionStorage.setItem("anvaya-intention-intro", "1")); });
@@ -126,4 +126,21 @@ test("Works shows the West Road walkthrough and links it from Spatial Visuals", 
   await expect(page).toHaveURL(/\/work#west-road$/);
   await expect(page.getByRole("heading", { name: "West Road Residence." })).toBeVisible();
   await expect(page.getByRole("link", { name: "Open the full walkthrough" })).toHaveAttribute("href", "https://anvaya-westroad-tour.vercel.app/");
+});
+
+test("home shows practical pricing with review rounds and zeroed reviews, and the footer is complete", async ({ page }) => {
+  await page.goto("/");
+  const pricing = page.locator("#pricing");
+  await expect(pricing.getByRole("heading", { name: "14-day sprint" })).toBeAttached();
+  await expect(pricing.getByText("2 review rounds per asset")).toBeAttached();
+  await expect(pricing.locator(".terms-grid")).toContainText("Two rounds of changes per stage");
+  const stats = page.locator("#reviews .proof-stats");
+  await expect(stats).toContainText("Client reviews"); await expect(stats.locator("dd").first()).toHaveText("0");
+  await expect(page.locator(".testimonial-slots li")).toHaveCount(3);
+  for (const id of ["studio", "engagement", "point", "connected-studio"]) await expect(page.locator(`#${id}`)).toHaveCount(0);
+  const footer = page.locator("footer");
+  await expect(footer.locator("address")).toContainText("India");
+  await expect(footer.locator(".social-icon")).toHaveCount(6);
+  // Unconfigured profiles render as icons, never as links to nowhere.
+  await expect(footer.locator('a.social-icon[href="#"], a.social-icon:not([href])')).toHaveCount(0);
 });

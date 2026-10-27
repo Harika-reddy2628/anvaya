@@ -253,7 +253,7 @@ function buildPage(delay: number) {
     const chars = SplitText.create(word, { type: "chars", mask: "chars", charsClass: "split-char" }).chars;
     gsap.timeline({ scrollTrigger: once(footer, "top 80%") })
       .from(chars, { yPercent: 110, duration: 1.3, stagger: .05, ease: EASE_OUT })
-      .from(footer.querySelectorAll(".footer-top > *, .footer-bottom"), { opacity: 0, y: 24, duration: 1, stagger: .1, ease: EASE_OUT }, .3);
+      .from(footer.querySelectorAll(".footer-head > *, .footer-grid > *, .footer-bottom"), { opacity: 0, y: 24, duration: 1, stagger: .1, ease: EASE_OUT }, .3);
   }
 }
 
