@@ -3,6 +3,8 @@ import { ImageResponse } from "next/og";
 export const alt = "Anvaya — Make. Move. Matter.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+// Rendered once at build time, which also lets it export to static hosting.
+export const dynamic = "force-static";
 
 export default function Image() {
   return new ImageResponse(

@@ -67,3 +67,14 @@ npm run test:e2e
 The suite starts the production server at 127.0.0.1:3107 with email credentials explicitly empty. Server-side provider tests use mocked fetch responses; no live email is sent. Profiles cover desktop/mobile Chromium, reduced-motion Chromium and desktop/mobile WebKit. Actual Safari and physical phones are separate verification requirements, not implied by emulation.
 
 See the [implementation report](docs/connected-studio-implementation-2026-10-08.md) for current results and remaining configuration.
+
+## GitHub Pages preview
+
+A static preview builds with `GITHUB_PAGES=1` (served under `/anvaya/`). Static hosting has no server, so the enquiry form reports that nothing was sent and offers the local copy/download backups. Use a Node host (for example Vercel) for live email delivery.
+
+```bash
+GITHUB_PAGES=1 NEXT_PUBLIC_SITE_URL=https://harika-reddy2628.github.io/anvaya npx next build --webpack
+touch out/.nojekyll   # serve the _next/ folder
+```
+
+The contents of `out/` are published to the `gh-pages` branch.

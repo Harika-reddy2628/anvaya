@@ -1,6 +1,7 @@
 "use client";
 import { useActionState, useEffect, useRef, useState, type ChangeEvent } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { sendEnquiry } from "../../project/actions";
 import { budgetOptions, practices, timelineOptions } from "../../lib/site";
 import { enquiryText, initialEnquiryState, parseEnquiry } from "../../lib/enquiry";
@@ -54,4 +55,11 @@ export function ProjectForm({ initialService }: { initialService?: string }) {
     <div className="form-field full"><label htmlFor="context">Anything else we should know?</label><textarea id="context" name="context" maxLength={5000} {...inputProps("context")} /><small id="context-help">Links, references, constraints or context are welcome.</small>{error("context")}</div>
     <div className="form-footer"><p>By sending an enquiry, you agree to the handling of your information described in our <Link href="/privacy">Privacy notice</Link>.</p><button className="action" type="submit" disabled={pending}><span>{pending ? "Sending enquiry…" : "Send project enquiry"}</span><span aria-hidden="true">↗</span></button><div ref={status} role="status" aria-live="polite" tabIndex={-1}>{state.message && <p className={`form-status form-status-${state.status}`}>{state.message}</p>}</div><div className="brief-backup"><button type="button" onClick={copy}>Copy brief</button><button type="button" onClick={download}>Download brief</button><p role="status">{copyStatus}</p></div></div>
   </form>;
+}
+
+/** Seeds the practice choice from ?service= (an id or slug); a different seed remounts a fresh form. */
+export function ProjectFormFromQuery() {
+  const service = useSearchParams().get("service");
+  const initialService = practices.find(p => p.id === service || p.slug === service)?.id;
+  return <ProjectForm key={initialService || "unsure"} initialService={initialService} />;
 }

@@ -85,7 +85,10 @@ export function MotionLayer() {
         if (url.origin !== location.origin || url.pathname === location.pathname) return;
         // Next.js Link skips its own navigation for prevented clicks; the route is pushed once the curtain covers the page.
         event.preventDefault();
-        leave(url.pathname + url.search + url.hash);
+        // Under a base path (static hosting) the router expects app paths, so strip the prefix first.
+        const base = process.env.NEXT_PUBLIC_BASE_PATH || "";
+        const appPath = base && url.pathname.startsWith(base) ? url.pathname.slice(base.length) || "/" : url.pathname;
+        leave(appPath + url.search + url.hash);
       };
       window.addEventListener("click", click, true);
 
@@ -247,13 +250,48 @@ function buildPage(delay: number) {
   q(".point-signature, .name-mark, .studio-note-visual .indic, .belief-grid h3").forEach(el => gsap.fromTo(el, { yPercent: 18 }, { yPercent: -18, ease: "none", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true } }));
   q(".marquee-track").forEach((track, index) => gsap.fromTo(track, { xPercent: index % 2 ? -50 : 0 }, { xPercent: index % 2 ? 0 : -50, ease: "none", scrollTrigger: { trigger: track.parentElement, start: "top bottom", end: "bottom top", scrub: .6 } }));
 
+  // Pricing: plan cards rise and settle out of a slight tilt one after another, each price unmasks, then the terms
+  // grid fills in cell by cell.
+  q(".plan-grid").forEach(grid => {
+    const cards = grid.querySelectorAll(".plan-card");
+    gsap.timeline({ scrollTrigger: once(grid, "top 85%") })
+      .from(cards, { opacity: 0, y: 80, rotateX: 10, transformPerspective: 900, transformOrigin: "50% 100%", duration: 1.3, stagger: .14, ease: EASE_OUT, clearProps: "transform" })
+      .from(grid.querySelectorAll(".plan-price b"), { clipPath: "inset(0% 100% 0% 0%)", duration: 1, stagger: .14, ease: EASE_IN_OUT }, .35)
+      .from(grid.querySelectorAll(".plan-includes li, .plan-facts div"), { opacity: 0, x: -14, duration: .7, stagger: .03, ease: EASE_OUT }, .55);
+  });
+  q(".terms-grid").forEach(gridEl => gsap.from(gridEl.children, { opacity: 0, y: 26, duration: .9, stagger: { each: .08, grid: "auto", from: "start" }, ease: EASE_OUT, scrollTrigger: once(gridEl, "top 88%") }));
+  // Reviews: each counter rolls up from zero to its real value, then the reserved testimonial slots draw in.
+  q(".proof-stats dd").forEach(dd => {
+    const node = dd.firstChild, target = parseFloat(node?.textContent || "0"), decimals = (node?.textContent || "").includes(".") ? 1 : 0;
+    const count = { value: 0 };
+    gsap.timeline({ scrollTrigger: once(dd, "top 90%") })
+      .from(dd, { opacity: 0, y: 30, duration: .9, ease: EASE_OUT })
+      .to(count, { value: target, duration: 1.4, ease: "power3.out", onUpdate: () => { if (node) node.textContent = count.value.toFixed(decimals); } }, 0);
+  });
+  q(".testimonial-slots").forEach(list => gsap.from(list.children, { opacity: 0, y: 50, scale: .96, duration: 1.1, stagger: .12, ease: EASE_OUT, scrollTrigger: once(list, "top 88%") }));
+  // Works, pricing ranges and the walkthrough preview.
+  q(".work-feature").forEach(feature => gsap.timeline({ scrollTrigger: once(feature, "top 80%") })
+    .fromTo(feature.querySelector(".tour-preview"), { clipPath: "inset(12% 12% 12% 12% round 32px)", opacity: 0 }, { clipPath: "inset(0% 0% 0% 0% round 24px)", opacity: 1, duration: 1.5, ease: EASE_IN_OUT, clearProps: "clipPath" })
+    .from(feature.querySelectorAll(".work-feature-copy > *, .work-facts li"), { opacity: 0, y: 26, duration: 1, stagger: .07, ease: EASE_OUT }, .1)
+    .fromTo(feature.querySelectorAll(".tour-plan path"), { strokeDasharray: 2000, strokeDashoffset: 2000 }, { strokeDashoffset: 0, duration: 2.2, ease: "power2.inOut" }, .4));
+  q(".range-list").forEach(list => gsap.from(list.children, { opacity: 0, x: -40, duration: 1, stagger: .1, ease: EASE_OUT, scrollTrigger: once(list, "top 88%") }));
+
+  // Footer: the wordmark rises letter by letter, the thread draws across to its bindu, the meaning and columns follow.
   const footer = document.querySelector(".site-footer");
   const word = footer?.querySelector(".footer-word");
   if (footer && word) {
     const chars = SplitText.create(word, { type: "chars", mask: "chars", charsClass: "split-char" }).chars;
-    gsap.timeline({ scrollTrigger: once(footer, "top 80%") })
+    gsap.from(footer.querySelectorAll(".footer-head > *, .footer-grid > *"), { opacity: 0, y: 24, duration: 1, stagger: .08, ease: EASE_OUT, scrollTrigger: once(footer, "top 85%") });
+    const signature = footer.querySelector(".footer-signature") ?? footer;
+    gsap.timeline({ scrollTrigger: once(signature, "top 90%") })
       .from(chars, { yPercent: 110, duration: 1.3, stagger: .05, ease: EASE_OUT })
-      .from(footer.querySelectorAll(".footer-head > *, .footer-grid > *, .footer-bottom"), { opacity: 0, y: 24, duration: 1, stagger: .1, ease: EASE_OUT }, .3);
+      .fromTo(footer.querySelector(".footer-thread path"), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" }, .2)
+      .from(footer.querySelector(".footer-thread circle"), { scale: 0, transformOrigin: "50% 50%", duration: .6, ease: "back.out(3)" }, 1.5)
+      .from(footer.querySelectorAll(".footer-meaning > *"), { opacity: 0, y: 18, duration: .9, stagger: .08, ease: EASE_OUT }, .3)
+      .fromTo(footer.querySelector(".footer-ghost"), { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.8, ease: EASE_OUT }, .1)
+      .from(footer.querySelector(".footer-bottom"), { opacity: 0, duration: .8 }, .8);
+    // A slow drift on the ghosted अन्वय as the footer scrolls in.
+    gsap.fromTo(footer.querySelector(".footer-ghost"), { xPercent: 6 }, { xPercent: -6, ease: "none", scrollTrigger: { trigger: footer, start: "top bottom", end: "bottom bottom", scrub: true } });
   }
 }
 

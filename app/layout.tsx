@@ -14,6 +14,7 @@ const sans = localFont({ src: "./fonts/Inter-Latin.woff2", variable: "--font-san
 const mono = localFont({ src: "./fonts/geist-mono-latin.woff2", variable: "--font-mono", weight: "100 900", display: "swap" });
 const hind = localFont({ src: "./fonts/Hind-Regular.ttf", variable: "--font-hind", weight: "400", display: "swap", preload: false });
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: { default: "Anvaya — Make. Move. Matter.", template: "%s — Anvaya" },
   description: "Technology and design studio. Digital presence, digital products, intelligent operations and spatial visuals. India, working globally.",
   icons: { icon: "/icon.svg" },

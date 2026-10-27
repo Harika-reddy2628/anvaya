@@ -51,7 +51,19 @@ export function Footer() {
       <div className="footer-contact"><p className="footer-heading">Studio</p><address>{contact.address.map(line => <span key={line}>{line}</span>)}<span>Working globally</span></address>{contact.email && <a href={`mailto:${contact.email}`}>{contact.email}</a>}<Link href="/project">Send a project enquiry</Link></div>
       <div className="footer-social"><p className="footer-heading">Follow</p><div className="social-row">{socialIcons.map(s => <SocialIcon key={s.name} name={s.name} href={s.href} />)}</div></div>
     </div>
-    <Link href="/" className="footer-wordmark" aria-label="Anvaya home" tabIndex={-1}><Wordmark className="footer-word" /></Link>
+    <div className="footer-signature">
+      <div className="footer-meaning">
+        <span className="footer-devanagari indic" lang="hi">अन्वय</span>
+        <p className="footer-term"><b>anvaya</b><span>Sanskrit</span></p>
+        <p className="footer-definition">Connection, relationship and continuity — the thread between an idea and its outcome.</p>
+        <p className="footer-motto">Make. Move. <em>Matter.</em></p>
+      </div>
+      <Link href="/" className="footer-wordmark" aria-label="Anvaya home" tabIndex={-1}>
+        <span className="footer-ghost indic" lang="hi" aria-hidden="true">अन्वय</span>
+        <Wordmark className="footer-word" />
+        <svg className="footer-thread" viewBox="0 0 1000 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 20H420C470 20 470 6 520 6S570 34 620 34 670 20 720 20H985" pathLength="1" /><circle cx="992" cy="20" r="6" /></svg>
+      </Link>
+    </div>
     <div className="footer-bottom"><p>© 2026 Anvaya Digital Studio</p><span lang="hi" className="indic">अन्वय</span><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><a href="#main-content" className="footer-top-link">Back to top ↑</a></div>
   </div></footer>;
 }
