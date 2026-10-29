@@ -4,7 +4,7 @@ import { useEffect } from "react";
 // Replaces the root layout when it fails, so it carries its own document and styles.
 export default function GlobalError({ error, retry }: { error: Error & { digest?: string }; retry: () => void }) {
   useEffect(() => { console.error(error); }, [error]);
-  return <html lang="en"><body style={{ margin: 0, minHeight: "100vh", display: "grid", placeItems: "center", background: "#f2f6fb", color: "#0b1838", fontFamily: "Inter, system-ui, -apple-system, 'Segoe UI', sans-serif" }}>
+  return <html lang="en"><body style={{ margin: 0, minHeight: "100vh", display: "grid", placeItems: "center", background: "#ffffff", color: "#0b1838", fontFamily: "Inter, system-ui, -apple-system, 'Segoe UI', sans-serif" }}>
     <title>Something went wrong — Anvaya</title>
     <main style={{ maxWidth: 560, padding: "48px 24px" }}>
       <p style={{ margin: 0, fontSize: 14, fontWeight: 600, letterSpacing: ".18em" }}>ANVAYA.</p>

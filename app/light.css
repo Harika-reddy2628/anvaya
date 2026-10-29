@@ -4,7 +4,7 @@
    Inter text, Geist Mono labels; no raster images. The hero's glass discs carry the colour. */
 
 :root{
-  --ink:#f2f6fb;--ink-2:#e6eef8;--ink-3:#d9e5f3;
+  --ink:#ffffff;--ink-2:#eef3fa;--ink-3:#e1e9f4;
   --ivory:#0b1838;--ivory-2:#3b4a66;--ivory-3:#56658a;
   --hair:rgba(11,24,56,.1);--hair-2:rgba(11,24,56,.2);
   --accent:#1e66d0;--accent-deep:#4fb8ff;

@@ -2,7 +2,7 @@
 
 > **Branch `redesign/orionix-studio`, 27 October 2026.** Owner request: rebuild the site using https://orionix.framer.website/ as the reference. That reference's structure and visual language replace the cinematic ink direction described below; copy, routes, the enquiry flow and the motion engine are unchanged.
 >
-> - **Palette and type** (owner direction, 29 October 2026: take the colour combination from the butterfly): ice-tinted porcelain `#F2F6FB` canvas, `#E6EEF8` panels and velvet-navy `#0B1838` ink (also the dark-section and footer ground), with muted text `#3B4A66` / `#56658A`. Morpho-blue accent `#1E66D0` on light (deepened from the butterfly's `#2477E6` for small-text contrast) and sky `#4FB8FF` on dark. The footer wordmark grades ice `#A6E4FF`, sky, morpho and root blue `#123F9C` into the ink. Fraunces (display), Inter (text) and Geist Mono (labels) are self-hosted under the OFL. `app/light.css` redefines the `app/cinema.css` tokens, and dark blocks re-declare them locally.
+> - **Palette and type** (owner direction, 29 October 2026: take the colour combination from the butterfly): white `#FFFFFF` canvas (owner direction, 29 October 2026), ice `#EEF3FA` panels and velvet-navy `#0B1838` ink (also the dark-section and footer ground), with muted text `#3B4A66` / `#56658A`. Morpho-blue accent `#1E66D0` on light (deepened from the butterfly's `#2477E6` for small-text contrast) and sky `#4FB8FF` on dark. The footer wordmark grades ice `#A6E4FF`, sky, morpho and root blue `#123F9C` into the ink. Fraunces (display), Inter (text) and Geist Mono (labels) are self-hosted under the OFL. `app/light.css` redefines the `app/cinema.css` tokens, and dark blocks re-declare them locally.
 > - **No raster images** (owner, 27 October 2026). Practice cards, service blocks and practice heroes are typographic. The rendered posters stay in `public/art` as historical source.
 > - **Hero** (owner reference: Pinterest "Blue Glass Petal", 27 October 2026). The stage is light, with the copy left-aligned on desktop and centred on phones.
 >   - **Glass fan:** `PetalScene.tsx` renders 15 thick glass petals (11 on phones), pill outlines extruded with a soft bevel, radiating from a hub at the lower right (bottom centre on phones). No image files.
@@ -18,7 +18,7 @@
 >   - **Motion:** the fan unfolds from a closed stack, centre outward, with a slight overshoot, then breathes in a slow travelling wave. Petals part around the pointer's bearing and the fan tilts toward the pointer.
 >   - **Scroll:** the fan rotates and grows while the copy lifts away, and the stage shrinks into a rounded card.
 >   - **Headline** (owner copy, 27 October 2026): "Ambitious ideas." builds letter by letter from a blur; "Built to last." focuses in with a shimmering ink-to-ocean gradient on frosted glass.
->   - **Palette:** ice porcelain `#F2F6FB`, velvet-navy ink `#0B1838` and morpho accent `#1E66D0` site-wide (sky `#4FB8FF` on dark blocks), all drawn from the butterfly.
+>   - **Palette:** white canvas, velvet-navy ink `#0B1838` and morpho accent `#1E66D0` site-wide (sky `#4FB8FF` on dark blocks), all drawn from the butterfly.
 >   - **Running cost:** the render loop runs only while the hero is visible and the tab is shown.
 >   - **Reduced motion or no WebGL:** a CSS fan of rounded glass petals stands in for the scene.
 > - **Section transitions:** light sections rise into place on scroll, dark blocks open from an inset rounded frame, and the strip widens in.
