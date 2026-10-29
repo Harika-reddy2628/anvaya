@@ -322,6 +322,11 @@ main>section:not(.hero),main>.marquee,main.policy-page,.site-footer{position:rel
 .plan-includes li{position:relative;padding-left:22px}
 .plan-includes li:before{content:"";position:absolute;left:0;top:.55em;width:10px;height:6px;border-left:1.5px solid var(--accent);border-bottom:1.5px solid var(--accent);transform:rotate(-45deg)}
 .plan-card .action{margin-top:auto;align-self:flex-start}
+.plan-offer{align-self:flex-start;margin-top:6px;padding:4px 10px;border-radius:999px;background:var(--accent);color:#fff;font-size:13px}
+.quoted-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.quoted-detail{font-size:15px;color:var(--ivory-2)}
+.addon-grid{margin-top:0}
+.addon-grid dd{font-family:var(--serif);font-size:22px;font-variant-numeric:tabular-nums}
 .terms-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;margin-top:48px;border:1px solid var(--hair);border-radius:var(--radius);overflow:hidden;background:var(--hair)}
 .terms-grid div{padding:24px 28px;background:var(--ink)}
 .terms-grid dt{margin-bottom:8px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}

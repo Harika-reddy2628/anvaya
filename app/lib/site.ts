@@ -23,36 +23,55 @@ export const socialIcons = [
   { name: "GitHub", href: url(process.env.NEXT_PUBLIC_GITHUB_URL) },
 ] as const;
 
-/* Pricing. Ranges, timelines, payment, ownership and warranty restate the published project terms (/terms).
-   Review rounds are a working default the owner asked for (27 October 2026) and should be confirmed. */
-export const reviewRounds = { included: 2, note: "Two rounds of changes per stage are included. Further rounds are quoted before work begins." };
+/* Pricing. Matches the internal catalog v3 (Anvaya-CLI docs/ANVAYA_CATALOG_AND_TERMS_OF_WORK.md, 29 October 2026).
+   India-only list in INR, priced per unit type (one floorplan). Update both together. */
+export const reviewRounds = { included: 2, note: "Two rounds of changes are included, sent as one consolidated list each. Further rounds are ₹1,999 each." };
+export const launchOffer = { price: "₹17,999", until: "15 November 2026" };
 export const plans = [
   {
-    id: "spatial", name: "3D renders", practice: "3D Renders & Walkthroughs", available: true,
-    price: "₹40,000–1,20,000", alt: "$500–1,500", unit: "per image set or space", timeline: "48 hours–5 business days",
-    rounds: "2 rounds of changes per image set",
-    includes: ["Agreed images, 3D model or walkthrough", "High-resolution images ready for web and print", "Source 3D files (.blend, .glb) where applicable"],
+    id: "stills", name: "Stills", practice: "3D Renders & Walkthroughs", available: true,
+    price: "₹9,999", unit: "per unit type", offer: "", timeline: "5 working days",
+    rounds: "2 rounds of changes",
+    includes: ["4 photoreal interior renders: living, kitchen-dining, master bedroom and one room you choose", "Furnished in a clean, modern style", "Full-HD and print-size files for brochures and hoardings"],
   },
   {
-    id: "sprint", name: "14-day build", practice: "Apps & Software · AI & Automation", available: false,
-    price: "₹1,25,000–2,75,000", alt: "$1,500–3,500", unit: "fixed scope", timeline: "14 calendar days",
-    rounds: "2 rounds of changes: screens, then build",
-    includes: ["One agreed first version of an app, or one AI workflow", "Build, launch and written documentation", "Full source code handed over to you"],
+    id: "tour", name: "360° Tour", practice: "3D Renders & Walkthroughs", available: true,
+    price: "₹24,999", unit: "per unit type", offer: `Launch price ${launchOffer.price} until ${launchOffer.until}`, timeline: "7 working days",
+    rounds: "2 rounds of changes",
+    includes: ["Every room as a 360° view; buyers walk room to room on phone or laptop", "One link for WhatsApp, plus a QR code for brochures and the site office", "The 4 stills, and 12 months of hosting"],
   },
   {
-    id: "partner", name: "Monthly tech team", practice: "All services", available: true,
-    price: "$2,500–4,500", alt: "billed in USD", unit: "per month", timeline: "Ongoing, agreed monthly scope",
-    rounds: "Review at every agreed delivery",
-    includes: ["A dedicated team working on your product", "Agreed monthly plan and priorities", "Design, development, AI and 3D specialists"],
+    id: "premium", name: "Premium", practice: "3D Renders & Walkthroughs", available: true,
+    price: "₹44,999", unit: "per unit type", offer: "", timeline: "10 working days",
+    rounds: "2 rounds of changes",
+    includes: ["Everything in the 360° Tour, with 8 stills instead of 4", "2 interior style options, such as warm wood and light minimal", "30-second video reel and a tour page with your project name, logo and enquiry button"],
   },
 ] as const;
+export const addOns = [
+  ["Another unit type, same project", "35% off"],
+  ["3D floor plan (top-down, furnished)", "₹2,999"],
+  ["Extra still image", "₹2,499"],
+  ["Extra round of changes", "₹1,999"],
+  ["Express delivery, about half the time", "+25%"],
+  ["Tour hosting after the first year", "₹1,999 / year"],
+] as const;
+/** Services quoted after a short call. Prices are starting points, not packages. */
+export const quoted = [
+  { id: "interface", name: "Project website", price: "from ₹14,999", detail: "A landing page for one project with the tour, floorplans, location and an enquiry form." },
+  { id: "automation", name: "Enquiry follow-up", price: "from ₹9,999 + ₹2,999 / month", detail: "Enquiries from your website and ads land in one sheet; buyers who opted in get WhatsApp follow-ups. WhatsApp’s own message charges are billed at cost." },
+  { id: "spatial", name: "Video ads", price: "from ₹4,999 per ad", detail: "15–30 second ads for Instagram and YouTube, made from your project’s 3D visuals." },
+  { id: "unsure", name: "Launch bundle", price: "from ₹62,999", detail: "Premium visuals, a project website and two video ads, about 10% below buying them separately." },
+] as const;
 export const terms = [
-  ["Payment", "50% to begin, 50% on final verified delivery — or an agreed, fully funded platform escrow."],
+  ["Payment", "50% advance to start, 50% before final files. UPI or bank transfer. Previews carry a watermark until paid."],
   ["Review rounds", reviewRounds.note],
-  ["Scope changes", "Reviewed together; any effect on timing and price is agreed before extra work starts."],
-  ["Ownership", "You own 100% of the delivered code, files and 3D assets once the final payment is made."],
-  ["Warranty", "14 days of technical defect fixes on the delivered scope, at no extra cost."],
-  ["Third-party costs", "Any outside costs (hosting, software subscriptions) are listed and agreed with you up front."],
+  ["Scope changes", "Changes cover furniture, finishes, lighting and camera angles. Moving walls or resizing rooms after you approve the layout is quoted as a new floorplan."],
+  ["Confidentiality", "Your plans and renders are never shown to anyone without your written permission. We sign an NDA on request at no cost."],
+  ["Same price for all", "Every builder pays from this same published list."],
+  ["Ownership", "You own the final images, videos and tour once the final payment is made. Our tools and furniture library stay with Anvaya."],
+  ["RERA", "Renders are artist’s impressions of the approved plan. Label them so on brochures and ads, next to your project’s RERA registration number."],
+  ["Warranty", "14 days to report a broken link, rendering error or wrong room. We fix it at no cost."],
+  ["Third-party costs", "WhatsApp message charges and paid hosting, if ever needed, are listed and agreed up front. No GST is added at present."],
 ] as const;
 
 /** Social proof. Counts stay at zero until genuine reviews and testimonials are collected; never mock data. */
@@ -164,5 +183,5 @@ export const processSteps = [
   ["Design", "We show you the design and make changes with you."],
   ["Deliver", "We build, test and hand over work that is ready to use."],
 ] as const;
-export const budgetOptions = ["Need guidance", "Under ₹50,000 (about $600)", "₹50,000–₹1.5 lakh (about $600–1,800)", "₹1.5–5 lakh (about $1,800–6,000)", "Above ₹5 lakh (about $6,000+)"] as const;
+export const budgetOptions = ["Need guidance", "Under ₹15,000", "₹15,000–₹50,000", "₹50,000–₹1.5 lakh", "Above ₹1.5 lakh"] as const;
 export const timelineOptions = ["Not sure yet", "As soon as possible", "In 1–3 months", "Later this year"] as const;
