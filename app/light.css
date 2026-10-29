@@ -208,7 +208,9 @@ main>section:not(.hero),main>.marquee,main.policy-page,.site-footer{position:rel
 .faq-icon{position:relative;width:16px;height:16px;justify-self:end}
 .faq-icon:before,.faq-icon:after{content:"";position:absolute;left:0;top:50%;width:16px;height:1px;background:currentColor;transition:transform .4s var(--ease)}
 .faq-icon:after{transform:rotate(90deg)}
-.faq-item[open] .faq-icon:after{transform:rotate(0)}
+.faq-item[open]:not([data-open="false"]) .faq-icon:after{transform:rotate(0)}
+.faq-body{overflow:hidden}
+.faq-item summary:focus-visible{outline-offset:-2px}
 .faq-answer{padding:0 40px 32px 64px;color:var(--ivory-2)}
 .faq-answer a{text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--accent)}
 

@@ -126,6 +126,7 @@ The introduction follows the tour's loader. On ink, the wordmark and Skip pill s
 Owner update, 23 October 2026 (Awwwards-style direction). Only bindu/thread motion is ambient, with a visible Pause/Resume control; it suspends offscreen or when the document is hidden. Everything else responds to scroll, pointer or navigation:
 
 - Lenis smooths wheel scrolling of the native window (touch stays native); anchors, history and `scrollTo` remain browser-owned.
+- **FAQ** (owner request, 29 October 2026): rows stay native `<details>`. With JavaScript, a click eases the answer open (height plus a light fade and lift, 420ms, ease-out) or closed (300ms), and the plus/minus turns at the click. Reduced motion toggles instantly.
 - **Day to night, footer only** (owner reference: sunflower.me, 29 October 2026; the page canvas itself stays light): the footer opens with a dawn band fading from the page canvas through sky `#DCEAFF`, light blue and root blue `#1A3A80` into its night. As the reader scrolls through the footer, its night deepens from root blue to velvet navy `#0B1838` (GSAP scrubs the `--f-night` variable). The closing call to action stays a separate rounded box with a band of canvas below it.
 - Headings reveal by masked lines (SplitText), labels by bindu, copy and cards by staggered rise, artwork by clip wipe. Elements skipped by jumps settle immediately.
 - The Point copy fills word by word with scroll; Devanagari marks and belief words have gentle parallax; the Make/Move/Matter and Brand/Product/Systems/Space marquee is scroll-linked, never autoplaying.

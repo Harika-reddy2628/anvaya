@@ -103,9 +103,7 @@ export function ServiceBlocks() {
     <span className="service-shade" aria-hidden="true" />
   </article>)}</div>;
 }
-export function Faq({ items }: { items: readonly (readonly [string, ReactNode])[] }) {
-  return <div className="faq-list">{items.map(([question, answer], index) => <details className="faq-item" key={question}><summary><span className="faq-number">{String(index + 1).padStart(2, "0")}</span><span className="faq-question">{question}</span><span className="faq-icon" aria-hidden="true" /></summary><div className="faq-answer">{answer}</div></details>)}</div>;
-}
+export { Faq } from "./Faq";
 export function StepList({ steps }: { steps: readonly (readonly [string, string])[] }) {
   return <ol className="step-list">{steps.map(([title, body], index) => <li key={title}><span className="step-number">{String(index + 1).padStart(2, "0")}</span><div><h3>{title}</h3><p>{body}</p></div></li>)}</ol>;
 }
