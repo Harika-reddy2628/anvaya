@@ -275,7 +275,7 @@ export default function Butterfly({ path }: { path: string }) {
     const threadPos = new Float32Array(6);
     const threadGeo = new THREE.BufferGeometry();
     threadGeo.setAttribute("position", new THREE.BufferAttribute(threadPos, 3));
-    const threadMat = new THREE.LineBasicMaterial({ color: 0x8cc8f0, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending });
+    const threadMat = new THREE.LineBasicMaterial({ color: 0x4fb8ff, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending });
     const threadLine = new THREE.Line(threadGeo, threadMat); threadLine.frustumCulled = false; scene.add(threadLine);
     disposables.push(threadGeo, threadMat);
     const lastStop = new THREE.Vector2(NaN, NaN);
