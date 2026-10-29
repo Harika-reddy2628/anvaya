@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Lenis from "lenis";
-import { EASE_IN_OUT, EASE_OUT, INTRO_DONE, ScrollTrigger, SplitText, afterIntro, gsap, introWillPlay } from "../../lib/motion";
+import { EASE_IN_OUT, EASE_OUT, INTRO_DONE, ScrollTrigger, SplitText, afterIntro, gsap, introWillPlay, setSmoothScroll } from "../../lib/motion";
 import { Wordmark } from "./Logo";
 
 const MOTION = "(prefers-reduced-motion: no-preference)";
@@ -33,6 +33,7 @@ export function MotionLayer() {
       root.classList.add("motion");
       const lenis = new Lenis({ lerp: .095, anchors: false });
       lenis.on("scroll", ScrollTrigger.update);
+      setSmoothScroll(lenis);
       const tick = (time: number) => lenis.raf(time * 1000);
       gsap.ticker.add(tick);
       gsap.ticker.lagSmoothing(0);
@@ -101,6 +102,7 @@ export function MotionLayer() {
         header?.style.removeProperty("--depth");
         progress.kill();
         gsap.ticker.remove(tick);
+        setSmoothScroll(null);
         lenis.destroy();
         clearTimeout(fallback.current);
         leaving.current = false;

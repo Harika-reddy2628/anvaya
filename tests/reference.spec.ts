@@ -132,9 +132,11 @@ test("Works shows the West Road walkthrough and links it from Spatial Visuals", 
 test("home shows practical pricing with review rounds and zeroed reviews, and the footer is complete", async ({ page }) => {
   await page.goto("/");
   const pricing = page.locator("#pricing");
-  await expect(pricing.getByRole("heading", { name: "14-day build" })).toBeAttached();
-  await expect(pricing.getByText("2 rounds of changes per image set")).toBeAttached();
-  await expect(pricing.locator(".terms-grid")).toContainText("Two rounds of changes per stage");
+  await expect(pricing.getByRole("heading", { name: "360° Tour" })).toBeAttached();
+  await expect(pricing.locator(".offer-banner")).toContainText("Founding-client offer");
+  await expect(pricing.locator(".price-row s").first()).toHaveText("₹14,999");
+  await expect(pricing.getByRole("link", { name: /Explore the full catalog/ })).toHaveAttribute("href", "/pricing#add-ons");
+  await expect(pricing.locator(".terms-grid")).toContainText("Two rounds of changes are included");
   const stats = page.locator("#reviews .proof-stats");
   await expect(stats).toContainText("Client reviews"); await expect(stats.locator("dd").first()).toHaveText("0");
   await expect(page.locator(".testimonial-slots li")).toHaveCount(3);

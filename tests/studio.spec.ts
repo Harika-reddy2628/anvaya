@@ -37,8 +37,8 @@ test("service combinations, route seeds and INR guidance remain consistent", asy
   await expect(service(page, "interface")).not.toBeChecked(); await expect(service(page, "spatial")).not.toBeChecked();
   await cont(page);
   await expect(page.getByRole("radio", { name: "Need guidance" })).toBeChecked();
-  await page.getByRole("radio", { name: /₹1.5–5 lakh/ }).check({ force: true });
-  await expect(page.getByRole("radio", { name: /₹1.5–5 lakh/ })).toBeChecked();
+  await page.getByRole("radio", { name: /₹50,000–₹1.5 lakh/ }).check({ force: true });
+  await expect(page.getByRole("radio", { name: /₹50,000–₹1.5 lakh/ })).toBeChecked();
   await page.goto("/project?service=unrecognised"); await expect(service(page, "unsure")).toBeChecked();
 });
 test("copy and download preserve a local brief without sending", async ({ page }) => {
