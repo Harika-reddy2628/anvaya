@@ -83,6 +83,14 @@ export function ServiceDial() {
         window[method]("touchmove", onTouchMove as EventListener, { passive: false } as AddEventListenerOptions);
         window[method]("touchend", onTouchEnd as EventListener);
         window[method]("keydown", onKey as EventListener);
+        document[method]("focusin", onFocus as EventListener);
+      };
+      // Tabbing out of the dial (to the header, or past the section) hands scrolling back where focus went;
+      // otherwise the wheel would keep turning a dial the reader has already left.
+      const onFocus = (event: FocusEvent) => {
+        if (!captured || element.contains(event.target as Node)) return;
+        captured = false; listen(false);
+        getSmoothScroll()?.start();
       };
       // Entering the pin takes over scrolling and settles on the first (or, from below, the last) service.
       const capture = (i: number) => {
