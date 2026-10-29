@@ -2,7 +2,10 @@ import Link from "next/link";
 import { Hero } from "./components/cinema/Hero";
 import { ServiceDial } from "./components/cinema/ServiceDial";
 import { Action, Faq, FinalCTA, PricingPlans, ProofSection, StepList } from "./components/cinema/Shared";
-import { processSteps } from "./lib/site";
+import { foundingOffer, processSteps, proof } from "./lib/site";
+
+// Review stats appear only once genuine reviews or testimonials exist; zero counts read as "nobody hires them".
+const hasProof = proof.reviews > 0 || proof.testimonials > 0;
 
 // Every answer restates the owner's published copy; nothing here adds new commitments.
 const questions = [
@@ -33,8 +36,10 @@ export default function Home() {
       <PricingPlans />
     </div></section>
     <section className="section proof-section" id="reviews"><div className="wrap">
-      <div className="section-heading"><h2>What clients <em>say.</em></h2><p>We publish only genuine reviews from completed projects. The first ones will appear here.</p></div>
-      <ProofSection />
+      {hasProof
+        ? <div className="section-heading"><h2>What clients <em>say.</em></h2><p>We publish only genuine reviews from completed projects.</p></div>
+        : <div className="section-heading"><h2>Our first <em>clients.</em></h2><p>We publish only genuine reviews from completed projects, so this space waits for our first builders. The first {foundingOffer.slots} get founding prices in return for a short testimonial.</p></div>}
+      {hasProof ? <ProofSection /> : <Action href="/pricing">See the founding offer</Action>}
     </div></section>
     <section className="section faq-section" id="faq"><div className="wrap">
       <div className="faq-layout"><h2>Before you <em>start.</em></h2><Faq items={questions} /></div>

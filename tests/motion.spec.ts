@@ -23,8 +23,9 @@ test("route curtains navigate with history intact and never stay over the page",
   await page.addInitScript(skipIntro); await page.goto("/");
   await expect(page.locator("html")).toHaveClass(/motion/);
   await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "About" }).click();
-  await expect(page).toHaveURL(/\/studio$/);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Connection, with intent.");
+  // Under software rendering the home page's 3D runs slowly until it falls back, so allow for a slow transition.
+  await expect(page).toHaveURL(/\/studio$/, { timeout: 10_000 });
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("About Anvaya.");
   await expect(page.locator(".page-curtain")).toHaveCSS("visibility", "hidden", { timeout: 4000 });
   await page.goBack(); await expect(page).toHaveURL(/\/$/);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
@@ -43,14 +44,14 @@ test("How We Work lays out four steps without pinning", async ({ page }) => {
   await page.locator(".process-section").scrollIntoViewIfNeeded();
   await expect(page.locator(".process-section")).not.toHaveClass(/is-horizontal/);
   await expect(page.locator(".process-section .step-list li")).toHaveCount(4);
-  await expect(page.getByRole("heading", { name: "Clear before clever." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "How we work." })).toBeVisible();
 });
 
 test("content stays visible without JavaScript", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, baseURL: "http://127.0.0.1:3107" }); const page = await context.newPage();
   await page.goto("/");
   await expect(page.locator("header .wordmark")).toBeVisible();
-  for (const selector of [".hero-line > span", ".step-list li", ".plan-card", ".testimonial-slots li", ".service-rows > li", ".faq-item"]) {
+  for (const selector of [".hero-line > span", ".step-list li", ".plan-card", "#reviews .section-heading", ".service-rows > li", ".faq-item"]) {
     expect(await page.locator(selector).first().evaluate(e => getComputedStyle(e).opacity)).toBe("1");
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
