@@ -272,6 +272,30 @@ function buildPage(delay: number) {
     .fromTo(feature.querySelectorAll(".tour-plan path"), { strokeDasharray: 2000, strokeDashoffset: 2000 }, { strokeDashoffset: 0, duration: 2.2, ease: "power2.inOut" }, .4));
   q(".range-list").forEach(list => gsap.from(list.children, { opacity: 0, x: -40, duration: 1, stagger: .1, ease: EASE_OUT, scrollTrigger: once(list, "top 88%") }));
 
+  // Day to night, after the owner's Sunflower reference: as the reader scrolls, the page canvas slowly cools from
+  // ice white through pale ice-blue to soft sky (the butterfly's wing tones), then falls into velvet navy as the
+  // closing call to action (or the footer) arrives, so the page ends in one seamless night with the footer. The
+  // sections are transparent, so the body colour shows through; matchMedia reverts it on route change.
+  const day = ["#f2f6fb", "#e9f2fd", "#dceaff"], night = "#0b1838";
+  const dusk = document.querySelector<HTMLElement>("main > .final-cta:last-child") ?? document.querySelector<HTMLElement>(".site-footer");
+  if (dusk) {
+    gsap.timeline({ scrollTrigger: { trigger: "main", start: "top top", endTrigger: dusk, end: "top 85%", scrub: true } })
+      .fromTo(document.body, { backgroundColor: day[0] }, { backgroundColor: day[1], ease: "none" })
+      .to(document.body, { backgroundColor: day[2], ease: "none" });
+    gsap.fromTo(document.body, { backgroundColor: day[2] }, { backgroundColor: night, ease: "none", immediateRender: false, scrollTrigger: { trigger: dusk, start: "top 85%", end: "top 30%", scrub: true } });
+    // As night falls the page's own tokens flip to the dark set in a short window mid-dusk, so text, hairlines and
+    // panels stay readable on the darkening canvas. Dark blocks declare their own tokens and are unaffected.
+    const main = document.querySelector("main");
+    if (main) gsap.fromTo(main, {
+      "--ink": "#f2f6fb", "--ink-2": "#e6eef8", "--ink-3": "#d9e5f3", "--ivory": "#0b1838", "--ivory-2": "#3b4a66", "--ivory-3": "#56658a",
+      "--hair": "rgba(11,24,56,.1)", "--hair-2": "rgba(11,24,56,.2)", "--accent": "#1e66d0",
+    }, {
+      "--ink": "#0b1838", "--ink-2": "#12234a", "--ink-3": "#1a2d5a", "--ivory": "#f2f6fb", "--ivory-2": "rgba(242,246,251,.74)", "--ivory-3": "rgba(242,246,251,.58)",
+      "--hair": "rgba(255,255,255,.12)", "--hair-2": "rgba(255,255,255,.28)", "--accent": "#4fb8ff",
+      ease: "none", immediateRender: false, scrollTrigger: { trigger: dusk, start: "top 72%", end: "top 48%", scrub: true },
+    });
+  }
+
   // Footer: the light beams sweep in across the panel, the columns rise, then the name rises letter by letter out of
   // the bottom edge.
   const footer = document.querySelector(".site-footer");
