@@ -35,6 +35,8 @@ function SocialIcon({ name, href }: { name: string; href: string }) {
 export function Footer() {
   return <footer className="site-footer"><div className="wrap-full">
     <div className="footer-panel">
+      {/* Dawn to night: a band fading from the page canvas through sky and root blue into the footer's night. */}
+      <div className="footer-dawn" aria-hidden="true" />
       {/* Soft diagonal beams of blue light drifting across the panel, over the name and under the text. */}
       <div className="footer-beams" aria-hidden="true" />
       <div className="footer-grid">
