@@ -220,7 +220,7 @@ export default function Butterfly({ path }: { path: string }) {
       });
       m.onBeforeCompile = shader => {
         shader.fragmentShader = shader.fragmentShader.replace("#include <opaque_fragment>", `#include <opaque_fragment>
-          float rim = pow(1.0 - abs(dot(normalize(normal), normalize(vViewPosition))), 2.5);
+          float rim = pow(max(1.0 - abs(dot(normalize(normal), normalize(vViewPosition))), 0.0), 2.5);
           gl_FragColor.rgb += vec3(.55, .82, 1.) * rim * .35;`);
       };
       return m;
@@ -268,6 +268,25 @@ export default function Butterfly({ path }: { path: string }) {
     scene.add(trail.points, halo, butterfly, sparks.points);
     let trailGap = 0, sparkDebt = 0;
     const tip = new THREE.Vector3();
+
+    // The thread: each place it lands is joined to the last by a faint line of light that fades, so the reader sees
+    // the flight as one continuous path, from one stop to the next (connection, continuity). Points are in screen
+    // pixels and converted to the scene's centred coordinates when drawn.
+    const threadPos = new Float32Array(6);
+    const threadGeo = new THREE.BufferGeometry();
+    threadGeo.setAttribute("position", new THREE.BufferAttribute(threadPos, 3));
+    const threadMat = new THREE.LineBasicMaterial({ color: 0x8cc8f0, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending });
+    const threadLine = new THREE.Line(threadGeo, threadMat); threadLine.frustumCulled = false; scene.add(threadLine);
+    disposables.push(threadGeo, threadMat);
+    const lastStop = new THREE.Vector2(NaN, NaN);
+    let threadLife = 0;
+    function weave(stop: THREE.Vector2) {
+      if (!Number.isNaN(lastStop.x)) {
+        threadPos.set([lastStop.x - width / 2, height / 2 - lastStop.y, -12, stop.x - width / 2, height / 2 - stop.y, -12]);
+        threadGeo.attributes.position.needsUpdate = true; threadLife = 1;
+      }
+      lastStop.copy(stop);
+    }
 
     // Flight state, in screen pixels. Heading 0 points up the screen; the butterfly always flies along its heading.
     const pos = new THREE.Vector2(innerWidth + 80, innerHeight * .3), aim = new THREE.Vector2(innerWidth * .7, innerHeight * .35), pointer = new THREE.Vector2(-999, -999);
@@ -342,7 +361,7 @@ export default function Butterfly({ path }: { path: string }) {
         if (mode === "land") {
           // On the final approach it settles straight onto the spot.
           if (dist < size * .6) pos.lerp(aim, Math.min(1, dt * 3));
-          if (dist < 2) { mode = "rest"; restUntil = t + 3 + Math.random() * 2; }
+          if (dist < 2) { mode = "rest"; restUntil = t + 3 + Math.random() * 2; weave(pos); }
         }
       }
       pos.set(THREE.MathUtils.clamp(pos.x, -120, width + 120), THREE.MathUtils.clamp(pos.y, -120, height + 120));
@@ -400,6 +419,7 @@ export default function Butterfly({ path }: { path: string }) {
         sparks.emit(tip.x, tip.y, tip.z + 5, 6 + Math.random() * 6, (Math.random() - .5) * 12, -8 - Math.random() * 10);
       }
       sparks.update(dt, 1);
+      threadLife = Math.max(0, threadLife - dt * .3); threadMat.opacity = threadLife * .55;
       renderer.render(scene, camera);
     }
     function resize() {

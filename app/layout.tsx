@@ -16,12 +16,15 @@ const hind = localFont({ src: "./fonts/Hind-Regular.ttf", variable: "--font-hind
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: { default: "Anvaya — Make. Move. Matter.", template: "%s — Anvaya" },
-  description: "Technology and design studio. Digital presence, digital products, intelligent operations and spatial visuals. India, working globally.",
+  description: "Anvaya builds websites, apps, AI automation and 3D renders for businesses in India and worldwide.",
   icons: { icon: "/icon.svg" },
   openGraph: { type: "website", siteName: "Anvaya", title: "Anvaya — Make. Move. Matter.", locale: "en_IN" },
   twitter: { card: "summary_large_image" },
 };
 export const viewport: Viewport = { themeColor: "#ffffff", colorScheme: "light" };
+// Runs before first paint: if the Home opening will play, mark it now so the intro screen covers the page from the
+// first frame instead of appearing after hydration. Mirrors introWillPlay() and INTRO_KEY in lib/motion (a client module, so not importable here).
+const PREPAINT = `try{if(location.pathname==="/"&&!location.hash&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&sessionStorage.getItem("anvaya-intention-intro")!=="1")document.documentElement.dataset.intro="playing"}catch(e){}`;
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" className={`${serif.variable} ${sans.variable} ${mono.variable} ${hind.variable}`}><body><Intro><a href="#main-content" className="skip-link" tabIndex={0}>Skip to content</a><Header /><ButterflyLayer />{children}<Footer /></Intro><MotionLayer /></body></html>;
+  return <html lang="en" className={`${serif.variable} ${sans.variable} ${mono.variable} ${hind.variable}`} suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: PREPAINT }} /></head><body><Intro><a href="#main-content" className="skip-link" tabIndex={0}>Skip to content</a><Header /><ButterflyLayer />{children}<Footer /></Intro><MotionLayer /></body></html>;
 }

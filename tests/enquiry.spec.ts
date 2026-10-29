@@ -20,7 +20,7 @@ test("server rejects coming-soon practices before contacting the email provider"
       const form = validForm(); form.append("services", service);
       const result = await sendEnquiry(initialEnquiryState, form);
       expect(result.status).toBe("error");
-      expect(result.errors?.services).toContain("Choose an available practice");
+      expect(result.errors?.services).toContain("Choose an available service");
     }
     expect(requests).toBe(0);
   } finally { globalThis.fetch = original; }
@@ -35,7 +35,7 @@ test("delivery uses a fixed inbox, safe reply-to and provider acceptance", async
     expect(result.status).toBe("success"); expect(result.message).toContain("your note is with Anvaya");
     expect(requests).toHaveLength(1); expect(requests[0].url).toBe("https://api.resend.com/emails");
     expect(requests[0].body.to).toBe("inbox@example.test"); expect(requests[0].body.reply_to).toBe("visitor@example.test");
-    expect(requests[0].body.text).toContain("Digital Presence"); expect(requests[0].key).toContain("anvaya-enquiry/");
+    expect(requests[0].body.text).toContain("Websites & Branding"); expect(requests[0].key).toContain("anvaya-enquiry/");
     globalThis.fetch = async () => Response.json({ name: "validation_error", message: "Rejected" }, { status: 422 });
     expect((await sendEnquiry(initialEnquiryState, validForm())).status).toBe("error");
     globalThis.fetch = async () => { throw new Error("Network unavailable"); };

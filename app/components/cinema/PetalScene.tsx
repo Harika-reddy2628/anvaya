@@ -81,12 +81,12 @@ const backdropShader = {
         ring += wave;
       }
       uv += push;
-      // Vertical flutes: each rib refracts a slightly shifted slice of the light behind and catches a highlight.
+      // Vertical flutes (pow bases are clamped: a negative base is undefined in GLSL and renders NaN stripes on some GPUs): each rib refracts a slightly shifted slice of the light behind and catches a highlight.
       float ribs = 34. * uAspect, f = fract(uv.x * ribs);
       vec2 behind = uv + vec2((f - .5) * .045, 0.);
       vec3 col = light(behind);
       col *= .965 + .05 * sin(f * 3.1416);
-      col += vec3(1.) * pow(1. - abs(f - .18) * 6., 6.) * .05 * step(abs(f - .18), .166);
+      col += vec3(1.) * pow(max(1. - abs(f - .18) * 6., 0.), 6.) * .05 * step(abs(f - .18), .166);
       col += vec3(.7, .86, 1.) * caustic(behind * vec2(uAspect, 1.) * 5., uTime * .35) * .09;
       col += vec3(.9, .96, 1.) * ring * .05;
       gl_FragColor = vec4(clamp(col, 0., 1.), 1.);
@@ -125,7 +125,7 @@ export default function PetalScene() {
     // cannot show that, so grazing angles are tinted toward deep teal after shading.
     glass.onBeforeCompile = shader => {
       shader.fragmentShader = shader.fragmentShader.replace("#include <opaque_fragment>", `#include <opaque_fragment>
-        float edgeTint = pow(1.0 - abs(dot(normalize(normal), normalize(vViewPosition))), 1.5);
+        float edgeTint = pow(max(1.0 - abs(dot(normalize(normal), normalize(vViewPosition))), 0.0), 1.5);
         gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(.03, .19, .29), smoothstep(.06, .5, edgeTint) * .88);`);
     };
     const hub = new THREE.Group(), fan = new THREE.Group();
@@ -155,11 +155,11 @@ export default function PetalScene() {
     layout();
 
     const state = { open: 0, scroll: 0, px: 0, py: 0, pointerAngle: 9, pointerOn: 0 };
-    let width = 0, height = 0, frame = 0, running = false, disposed = false;
+    let width = 0, height = 0, frame = 0, running = false, disposed = false, compiled = false;
     const clock = new THREE.Clock(), hubScreen = new THREE.Vector3();
 
     function draw() {
-      if (disposed || !width || !height) return;
+      if (disposed || !compiled || !width || !height) return;
       const time = clock.getElapsedTime();
       backdropMaterial.uniforms.uTime.value = time;
       petals.forEach((p, i) => {
@@ -194,7 +194,8 @@ export default function PetalScene() {
     }
 
     const hero = target.closest<HTMLElement>(".hero") ?? target;
-    const intro = gsap.to(state, { open: 1, duration: 3.2, delay: .25, ease: "power1.out" });
+    // The fan opens once its shaders are ready (see compileAsync below), so the first frames are not a stall.
+    const intro = gsap.to(state, { open: 1, duration: 3.2, delay: .25, ease: "power1.out", paused: true });
     const scrolled = ScrollTrigger.create({ trigger: hero, start: "top top", end: "bottom top", scrub: true, onUpdate: self => { state.scroll = self.progress; } });
     const move = (event: PointerEvent) => {
       state.px = event.clientX / innerWidth - .5; state.py = event.clientY / innerHeight - .5;
@@ -233,7 +234,13 @@ export default function PetalScene() {
     const sizes = new ResizeObserver(resize); sizes.observe(target);
     const lost = (event: Event) => { event.preventDefault(); target.dataset.scene = "failed"; stop(); };
     renderer.domElement.addEventListener("webglcontextlost", lost);
-    resize(); update();
+    // Compile the glass and backdrop shaders off the critical path (parallel compile where the GPU supports it),
+    // then start drawing; the CSS fan stays in place until the first live frame.
+    renderer.compileAsync(scene, camera).catch(() => {}).then(() => {
+      if (disposed) return;
+      compiled = true; resize(); update(); intro.play();
+    });
+    resize();
 
     return () => {
       disposed = true; stop(); intro.kill(); scrolled.kill(); gsap.killTweensOf(state);

@@ -11,7 +11,7 @@ const FADES = [
   ".section-heading > p", ".section-copy > *", ".service-description > *", ".principles article", ".belief-grid article",
   ".working-model > div", ".detail-capabilities article", ".step-list li", ".capabilities-heading p", ".process-intro > p",
   ".process-closing", ".practice-card", ".engagement-card", ".faq-item", ".cta-band > *", ".cta-foot > p", ".cta-foot > div", ".form-aside > *", ".policy-content section",
-  ".service-index", ".page-hero-meta", ".why-section .action", ".studio-note .mini-label", ".studio-note .action",
+  ".service-index", ".why-section .action", ".studio-note .mini-label", ".studio-note .action",
 ].join(",");
 
 /** Owns site-wide motion: smooth scrolling, scroll reveals, header state, cursor, magnetic actions and route curtains. */
@@ -178,11 +178,10 @@ function buildPage(delay: number) {
 
   const hero = main.querySelector<HTMLElement>(".hero");
   if (hero) {
-    // Entrance: the headline rises line by line, the highlight sweeps behind "Matter.", then the frame settles in.
+    // Entrance (transform and opacity only, per character; one light blur on the mark): the headline rises line by line, the highlight sweeps behind "Matter.", then the frame settles in.
     gsap.timeline({ delay, defaults: { ease: EASE_OUT } })
-      .from(q(".hero-eyebrow"), { opacity: 0, y: 16, duration: 1 }, .1)
-      .from(SplitText.create(q(".hero-line:not(.hero-mark) > span")[0], { type: "words,chars", wordsClass: "hero-word", charsClass: "hero-char" }).chars, { yPercent: 70, rotateX: -70, opacity: 0, filter: "blur(12px)", duration: 1.4, stagger: .035, ease: "expo.out" }, .15)
-      .from(q(".hero-mark > span"), { opacity: 0, filter: "blur(18px)", scale: 1.15, letterSpacing: ".2em", duration: 1.8, ease: "expo.out" }, .55)
+      .from(SplitText.create(q(".hero-line:not(.hero-mark) > span")[0], { type: "words,chars", wordsClass: "hero-word", charsClass: "hero-char" }).chars, { yPercent: 70, rotateX: -70, opacity: 0, duration: 1.4, stagger: .035, ease: "expo.out", force3D: true }, .15)
+      .from(q(".hero-mark > span"), { opacity: 0, filter: "blur(8px)", scale: 1.12, duration: 1.6, ease: "expo.out", clearProps: "filter" }, .55)
       .fromTo(q(".hero-mark-box"), { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: EASE_IN_OUT }, .75)
       .from(q(".hero-lede-top, .hero-actions > *"), { opacity: 0, y: 24, duration: 1.1, stagger: .08 }, .9)
       .from(q(".hero-foot > *, .hero-scroll"), { opacity: 0, y: 14, duration: 1, stagger: .08 }, 1.2);
@@ -210,16 +209,13 @@ function buildPage(delay: number) {
     type: "lines", mask: "lines", linesClass: "split-line", autoSplit: true,
     onSplit: self => gsap.from(self.lines, { yPercent: 112, duration: 1.25, stagger: .09, ease: EASE_OUT, delay }),
   }));
-  gsap.from(q(".page-hero .section-label, .page-intro > *, .page-hero .action, .page-hero .practice-status, .page-hero-meta > *, .policy-page .section-label"), { opacity: 0, y: 22, duration: 1.1, stagger: .07, ease: EASE_OUT, delay: delay + .35 });
+  gsap.from(q(".page-intro > *, .page-hero .action, .page-hero .practice-status"), { opacity: 0, y: 22, duration: 1.1, stagger: .07, ease: EASE_OUT, delay: delay + .35 });
   gsap.from(q(".page-hero-number"), { yPercent: 40, opacity: 0, duration: 1.8, ease: EASE_OUT, delay: delay + .2 });
 
   q("h2").forEach(h => SplitText.create(h, {
     type: "lines", mask: "lines", linesClass: "split-line", autoSplit: true,
     onSplit: self => gsap.from(self.lines, { yPercent: 115, duration: 1.25, stagger: .09, ease: EASE_OUT, scrollTrigger: once(h) }),
   }));
-  q(".section-label").filter(label => !label.closest(".page-hero")).forEach(label => gsap.timeline({ scrollTrigger: once(label, "top 92%") })
-    .from(label, { opacity: 0, x: -16, duration: 1, ease: EASE_OUT })
-    .from(label.querySelector("b, .bindu"), { opacity: 0, y: 8, duration: .7, ease: EASE_OUT }, .15));
 
   const fades = q(FADES).filter(el => !el.closest(".point-section .section-copy, .page-hero"));
   gsap.set(fades, { opacity: 0, y: 38 });

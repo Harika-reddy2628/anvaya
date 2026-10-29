@@ -32,10 +32,11 @@ export default function GlassStar({ active }: { active: number }) {
     });
     glass.onBeforeCompile = shader => {
       shader.fragmentShader = shader.fragmentShader.replace("#include <opaque_fragment>", `#include <opaque_fragment>
-        float edgeTint = pow(1.0 - abs(dot(normalize(normal), normalize(vViewPosition))), 1.5);
+        float edgeTint = pow(max(1.0 - abs(dot(normalize(normal), normalize(vViewPosition))), 0.0), 1.5);
         gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(.06, .25, .36), smoothstep(.08, .55, edgeTint) * .8);`);
     };
     const geometry = petalGeometry(.82, 4.2, .34);
+    const REACH = 4.2 * 1.18;
     const star = new THREE.Group(), tilt = new THREE.Group();
     tilt.add(star); scene.add(tilt);
     tilt.rotation.set(-.25, -.55, 0);
@@ -70,7 +71,12 @@ export default function GlassStar({ active }: { active: number }) {
     function resize() {
       const w = target!.clientWidth, h = target!.clientHeight;
       if (!w || !h) return;
-      renderer.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix(); draw();
+      renderer.setSize(w, h); camera.aspect = w / h;
+      // Fit the whole star (petal reach plus tilt and bloom headroom) inside the narrower canvas side, so it never
+      // meets the canvas edge and gets cut off.
+      const half = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * Math.min(1, camera.aspect);
+      camera.position.z = REACH / half;
+      camera.updateProjectionMatrix(); draw();
     }
     goTo.current = index => {
       gsap.to(state, { turn: -index * Math.PI / 4, duration: 1.4, ease: "expo.out", overwrite: "auto" });

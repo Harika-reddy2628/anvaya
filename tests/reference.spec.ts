@@ -1,15 +1,15 @@
 import { expect, test } from "@playwright/test";
 const pages = [
   ["/", "Ambitious ideas. Built to last."],
-  ["/services", "The right work rarely sits in one box."],
-  ["/services/digital-presence", "Make the first impression useful."],
-  ["/services/digital-products", "Turn a complex idea into something people can use."],
-  ["/services/intelligent-operations", "Make repeated work move with more clarity."],
-  ["/services/spatial-visuals", "Make the unbuilt feel understandable."],
-  ["/studio", "Connection, with intent."],
-  ["/project", "What are you trying to move?"],
-  ["/work", "Work you can walk through."],
-  ["/pricing", "Practical pricing, agreed up front."],
+  ["/services", "Our services."],
+  ["/services/digital-presence", "A website that explains your business in seconds."],
+  ["/services/digital-products", "Turn your idea into an app people actually use."],
+  ["/services/intelligent-operations", "Let software handle the repetitive work."],
+  ["/services/spatial-visuals", "See your space before it is built."],
+  ["/studio", "About Anvaya."],
+  ["/project", "Tell us about your project."],
+  ["/work", "Our work."],
+  ["/pricing", "Simple, upfront pricing."],
   ["/blog", "Notes from the studio."],
 ];
 test.beforeEach(async ({ page }) => { await page.addInitScript(() => sessionStorage.setItem("anvaya-intention-intro", "1")); });
@@ -37,8 +37,9 @@ test("legacy service URLs resolve to named practices and unpublished case studie
   await page.goto("/about"); await expect(page).toHaveURL(/\/studio$/);
   for (const path of ["/work/oppy", "/not-a-page"]) {
     const response = await page.goto(path); expect(response?.status()).toBe(404);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("This page has not found its connection yet.");
-    await expect(page.getByRole("link", { name: "Go Home" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Page not found.");
+    await expect(page.getByRole("link", { name: "Go to the home page" })).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "Popular pages" }).getByRole("link", { name: "Pricing" })).toBeVisible();
   }
 });
 test("native navigation, history, skip link and anchors remain usable", async ({ page }) => {
@@ -57,16 +58,16 @@ test("practice cards, questions and enquiry seeds work by keyboard and pointer",
   const question = page.locator(".faq-item summary").first();
   await question.focus(); await page.keyboard.press("Enter");
   await expect(page.locator(".faq-item").first()).toHaveAttribute("open", "");
-  await expect(page.locator(".faq-answer").first()).toContainText("Digital Presence and Spatial Visuals are available");
+  await expect(page.locator(".faq-answer").first()).toContainText("Websites & Branding and 3D Renders & Walkthroughs are open");
   // The home dial shows one service at a time, so follow the practice link from Services.
   await page.goto("/services");
-  await page.getByRole("link", { name: "Explore Spatial Visuals", exact: true }).first().click();
+  await page.getByRole("link", { name: "Explore 3D Renders & Walkthroughs", exact: true }).first().click();
   await expect(page).toHaveURL(/\/services\/spatial-visuals$/);
-  await page.getByRole("link", { name: "Visualise a space" }).click();
-  await expect(page.getByRole("checkbox", { name: "Spatial Visuals", exact: true })).toBeChecked();
+  await page.getByRole("link", { name: "Get a 3D quote" }).first().click();
+  await expect(page.locator('input[name="services"][value="spatial"]')).toBeChecked();
 });
 test("coming-soon labels appear in listings, cards and practice pages", async ({ page }) => {
-  const upcoming = [["Digital Products", "digital-products"], ["Intelligent Operations", "intelligent-operations"]];
+  const upcoming = [["Apps & Software", "digital-products"], ["AI & Automation", "intelligent-operations"]];
   for (const path of ["/", "/services"]) {
     await page.goto(path);
     // Home lists practices as large rows; Services keeps the stacked blocks.
@@ -81,7 +82,7 @@ test("coming-soon labels appear in listings, cards and practice pages", async ({
       const preview = path === "/" ? block.locator(`a[aria-label="Preview ${name} — Coming soon"]`) : block.getByRole("link", { name: `Preview ${name}`, exact: true });
       await expect(preview).toHaveAttribute("href", `/services/${slug}`);
     }
-    for (const name of ["Digital Presence", "Spatial Visuals"]) {
+    for (const name of ["Websites & Branding", "3D Renders & Walkthroughs"]) {
       const block = page.locator(card).filter({ has: path === "/" ? page.locator("h3", { hasText: new RegExp(`^${name}$`) }) : page.getByRole("heading", { name, exact: true }) });
       await expect(block.getByText("Coming soon", { exact: true })).toHaveCount(0);
     }
@@ -90,9 +91,9 @@ test("coming-soon labels appear in listings, cards and practice pages", async ({
     await page.goto(`/services/${slug}`);
     await expect(page).toHaveTitle(new RegExp(`${name} — Coming soon`));
     await expect(page.locator(".page-hero").getByText("Coming soon", { exact: true })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Explore available practices", exact: true })).toHaveCount(3);
+    await expect(page.getByRole("link", { name: "See available services", exact: true })).toHaveCount(3);
     await expect(page.locator('a[href^="/project?service="]')).toHaveCount(0);
-    await page.getByRole("link", { name: "Explore available practices", exact: true }).first().click();
+    await page.getByRole("link", { name: "See available services", exact: true }).first().click();
     await expect(page).toHaveURL(/\/services#practices$/);
   }
 });
@@ -111,7 +112,7 @@ test("the Pages menu lists every page and closes on Escape", async ({ page }) =>
   const toggle = page.getByRole("navigation", { name: "Main navigation" }).getByRole("button", { name: /Pages/ });
   await toggle.click(); await expect(toggle).toHaveAttribute("aria-expanded", "true");
   const menu = page.locator("#pages-menu");
-  for (const name of ["Home", "Works", "Pricing", "Blog", "Spatial Visuals", "Privacy", "Terms"]) await expect(menu.getByRole("link", { name, exact: true })).toBeVisible();
+  for (const name of ["Home", "Works", "Pricing", "Blog", "3D Renders & Walkthroughs", "Privacy", "Terms"]) await expect(menu.getByRole("link", { name, exact: true })).toBeVisible();
   await page.keyboard.press("Escape"); await expect(menu).toBeHidden(); await expect(toggle).toBeFocused();
   await toggle.click(); await menu.getByRole("link", { name: "Pricing", exact: true }).click();
   await expect(page).toHaveURL(/\/pricing$/); await expect(menu).toBeHidden();
@@ -131,8 +132,8 @@ test("Works shows the West Road walkthrough and links it from Spatial Visuals", 
 test("home shows practical pricing with review rounds and zeroed reviews, and the footer is complete", async ({ page }) => {
   await page.goto("/");
   const pricing = page.locator("#pricing");
-  await expect(pricing.getByRole("heading", { name: "14-day sprint" })).toBeAttached();
-  await expect(pricing.getByText("2 review rounds per asset")).toBeAttached();
+  await expect(pricing.getByRole("heading", { name: "14-day build" })).toBeAttached();
+  await expect(pricing.getByText("2 rounds of changes per image set")).toBeAttached();
   await expect(pricing.locator(".terms-grid")).toContainText("Two rounds of changes per stage");
   const stats = page.locator("#reviews .proof-stats");
   await expect(stats).toContainText("Client reviews"); await expect(stats.locator("dd").first()).toHaveText("0");

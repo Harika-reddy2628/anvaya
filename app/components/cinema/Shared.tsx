@@ -8,17 +8,11 @@ export function Action({ href = "/project", children = "Start a Project", light 
   return <Link href={href} className={`action${light ? " action-light" : ""}${text ? " action-text" : ""}`}><span>{children}</span><span className="action-arrow" aria-hidden="true">↗</span></Link>;
 }
 
-/** Kicker in the tour's format: the accent number, then the label. "01 — LABEL" splits into both parts. */
-export function Label({ children }: { children: ReactNode }) {
-  const match = typeof children === "string" ? /^(\d{2}) — (.+)$/.exec(children) : null;
-  return <p className="section-label">{match ? <><b>{match[1]}</b><span className="slash" aria-hidden="true">/</span><span>{match[2]}</span></> : <><span className="bindu" aria-hidden="true" /><span>{children}</span></>}</p>;
-}
 export function ComingSoon() {
   return <span className="practice-status">Coming soon</span>;
 }
-export function FinalCTA({ heading = "Have something worth building?", body = "Bring us the idea, the bottleneck or the unfinished system. We will begin with the real outcome.", action = "Start a Project", href = "/project", number, direct = false }: { heading?: string; body?: string; action?: string; href?: string; number?: string; direct?: boolean }) {
+export function FinalCTA({ heading = "Ready to start your project?", body = "Tell us what you need in a few lines. We will reply with a clear next step.", action = "Start a Project", href = "/project", direct = false }: { heading?: string; body?: string; action?: string; href?: string; direct?: boolean }) {
   return <section className="final-cta section" id="next-move" data-rail="The next move"><div className="wrap">
-    <Label>{number ? `${number} — THE NEXT MOVE` : "THE NEXT MOVE"}</Label>
     <h2>{heading}</h2>
     <div className="cta-foot"><p>{body}</p><div><Action href={href} light>{action}</Action>{direct && contact.email && <p className="direct-line">Prefer a direct note? Write to <a href={`mailto:${contact.email}`}>{contact.email}</a>.</p>}</div></div>
   </div></section>;
@@ -79,7 +73,7 @@ export function PricingPlans() {
       <p className="plan-price"><b>{plan.price}</b><span>{plan.unit} · {plan.alt}</span></p>
       <dl className="plan-facts"><div><dt>Timeline</dt><dd>{plan.timeline}</dd></div><div><dt>Reviews</dt><dd>{plan.rounds}</dd></div><div><dt>Warranty</dt><dd>14-day defect fixes</dd></div></dl>
       <ul className="plan-includes">{plan.includes.map(item => <li key={item}>{item}</li>)}</ul>
-      {plan.available ? <Action href={`/project?service=${plan.id === "spatial" ? "spatial" : "unsure"}`}>Enquire about this</Action> : <Action href="/services" text>See available practices</Action>}
+      {plan.available ? <Action href={`/project?service=${plan.id === "spatial" ? "spatial" : "unsure"}`}>Enquire about this</Action> : <Action href="/services" text>See available services</Action>}
     </article>)}</div>
     <dl className="terms-grid">{terms.map(([term, detail]) => <div key={term}><dt>{term}</dt><dd>{detail}</dd></div>)}</dl>
     <p className="terms-note">Ranges are indicative and tied to the described scope. Exact deliverables, dates and price are fixed in your agreed project scope. Full details in the <Link href="/terms">project terms</Link>.</p>
@@ -97,22 +91,21 @@ export function ProofSection() {
     <ul className="testimonial-slots" aria-label="Testimonials">{[1, 2, 3].map(n => <li key={n}><span className="slot-mark" aria-hidden="true">“</span><p>Reserved for a client testimonial.</p><span className="slot-meta">Name · Role · Company</span></li>)}</ul>
   </>;
 }
-export function PageHero({ eyebrow, title, children, action, href, practice, comingSoon = false }: { eyebrow: string; title: string; children: ReactNode; action?: string; href?: string; practice?: number; comingSoon?: boolean }) {
+export function PageHero({ title, children, action, href, practice, comingSoon = false }: { title: string; children: ReactNode; action?: string; href?: string; practice?: number; comingSoon?: boolean }) {
   return <section className={`page-hero${practice !== undefined ? " page-hero-art" : ""}`} id="intro"><div className="wrap-full page-hero-grid">
     <div className="page-hero-copy">
-      <Label>{eyebrow}</Label>
       <h1>{title}</h1>{comingSoon && <ComingSoon />}
       <div className="page-intro">{children}</div>
       {action && <Action href={href} light>{action}</Action>}
     </div>
-    {practice !== undefined && <p className="page-hero-number" aria-hidden="true"><span>Practice</span>{practices[practice].number}<small>/ 04</small></p>}
-  </div><div className="wrap-full page-hero-meta" aria-hidden="true"><span>Anvaya / {eyebrow}</span><span>India / Working globally</span><span className="meta-bar"><i /></span></div></section>;
+    {practice !== undefined && <p className="page-hero-number" aria-hidden="true"><span>Service</span>{practices[practice].number}<small>/ 04</small></p>}
+  </div></section>;
 }
 /** Services: full-frame practice cards that stack as the reader scrolls (CSS sticky; GSAP dims the covered card). */
 export function ServiceBlocks() {
   return <div className="service-stack">{practices.map((p, index) => <article className="service-block" key={p.id} style={{ "--i": index } as CSSProperties}>
     <div className="service-body">
-      <div className="service-head"><span className="service-index" aria-hidden="true">{p.number}</span><span className="mini-label">{p.number} / 04 — Practice</span></div>
+      <div className="service-head"><span className="service-index" aria-hidden="true">{p.number}</span></div>
       <div className="service-description"><h3>{p.name}{p.comingSoon && <> <ComingSoon /></>}</h3><p>{p.summary}</p><p className="service-tags">{p.tags}</p><Action href={`/services/${p.slug}`} text>{p.comingSoon ? "Preview" : "Explore"} {p.name}</Action></div>
     </div>
     <div className="service-mark" aria-hidden="true"><span>{p.number}</span><p>{p.line}</p></div>
