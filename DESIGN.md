@@ -81,7 +81,7 @@ Services has five sections. Each practice page has five sections. Studio has fiv
 
 Owner update, 12 October 2026: Digital Products and Intelligent Operations show a small terracotta-outline “Coming soon” label beside their names in listings and world tabs, below their practice-page H1, and in disabled enquiry choices. Preserve readable contrast and original artwork/copy. Their detail pages offer available-practice navigation; no launch date or waitlist is implied. Digital Presence and Spatial Visuals remain available.
 
-Reusable final CTA: THE NEXT MOVE / Have something worth building? / supplied body / Start a Project ↗. Home, practice and Studio variants use the owner's page-specific heading, action and copy. Footer uses the supplied positioning, Make / Move / Matter, India/global line, copyright and Privacy. Only confirmed contact/social links render.
+Reusable final CTA (owner direction, 29 October 2026: smaller): a compact rounded ink box, with the heading at clamp(40px, 5.6vw, 92px) and 56–88px vertical padding. THE NEXT MOVE / Have something worth building? / supplied body / Start a Project ↗. Home, practice and Studio variants use the owner's page-specific heading, action and copy. Footer uses the supplied positioning, Make / Move / Matter, India/global line, copyright and Privacy. Only confirmed contact/social links render.
 
 ## Logo
 

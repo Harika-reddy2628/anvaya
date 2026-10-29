@@ -214,7 +214,10 @@ main>section:not(.hero),main>.marquee,main.policy-page,.site-footer{position:rel
 
 /* Final call to action */
 .final-cta{margin-bottom:var(--pad);background:var(--dark)}
-.final-cta h2{font-size:clamp(56px,9vw,152px);line-height:.95;letter-spacing:-.05em}
+.final-cta.section{padding-block:clamp(56px,6vw,88px)}
+.final-cta h2{font-size:clamp(40px,5.6vw,92px);line-height:.98;letter-spacing:-.045em}
+.final-cta .cta-foot{margin-top:clamp(28px,3.4vw,44px);padding-top:24px}
+.final-cta .cta-foot>p{font-size:16px}
 
 /* Footer */
 .site-footer{border-top:0;padding-top:64px}
