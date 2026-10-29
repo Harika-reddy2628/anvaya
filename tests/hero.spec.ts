@@ -7,7 +7,8 @@ test("hero loads no images and shows a live scene or its CSS fallback", async ({
   expect(await page.locator("main img").count()).toBe(0);
   if (test.info().project.name === "reduced-motion") await expect(page.locator(".live-scene")).toHaveCount(0);
   else {
-    await expect(page.locator(".live-scene")).toHaveAttribute("data-scene", /ready|failed/);
+    // Shader compilation under software rendering (headless CI) can take several seconds.
+    await expect(page.locator(".live-scene")).toHaveAttribute("data-scene", /ready|failed/, { timeout: 15_000 });
     if (await page.locator(".live-scene").getAttribute("data-scene") === "ready") await expect(page.locator(".live-scene canvas")).toBeVisible();
   }
   await expect(page.locator(".hero").getByRole("link", { name: "Start a Project" })).toBeVisible();
@@ -15,7 +16,8 @@ test("hero loads no images and shows a live scene or its CSS fallback", async ({
 });
 test("a live reduced-motion change removes animated rendering", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" }); await page.goto("/");
-  await expect(page.locator(".live-scene")).toHaveCount(1);
+  // The scene mounts on an idle callback after the headline; give a loaded CI machine time to reach it.
+  await expect(page.locator(".live-scene")).toHaveCount(1, { timeout: 15_000 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(page.locator(".live-scene")).toHaveCount(0);
   await page.locator(".hero").getByRole("link", { name: "Start a Project" }).click(); await expect(page).toHaveURL(/\/project$/);
@@ -37,7 +39,7 @@ test("server-rendered content works without JavaScript", async ({ browser }) => 
   await page.goto("/"); await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.locator(".intro-screen")).toBeHidden(); await expect(page.locator(".hero-fallback")).toBeVisible();
   await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Services" }).click();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("The right work rarely sits in one box."); await context.close();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Our services."); await context.close();
 });
 test("unavailable artwork never blocks the main message or enquiry action", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });

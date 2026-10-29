@@ -152,6 +152,7 @@ main>section:not(.hero),main>.marquee,main.policy-page,.site-footer{position:rel
    page margin; its overhang is capped at the real gutter (less a scrollbar) so it never adds a horizontal scroll. */
 .is-dial .glass-star{display:block;position:absolute;right:calc(-1 * min(7vw, max(0px, (100vw - 100% - 16px) / 2)));top:54%;width:min(38vw,72vh,640px);aspect-ratio:1;height:auto;transform:translateY(-50%);z-index:1;pointer-events:none}
 .glass-star canvas{display:block;width:100%;height:100%}
+.is-dial .glass-star[data-scene=failed]{display:none}
 .cta-band{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px 48px;margin-top:96px;padding:48px;border-radius:var(--radius);background:var(--ink-2)}
 .cta-band p{font-family:var(--serif);font-size:clamp(25px,2.4vw,39px);line-height:1.15;letter-spacing:-.025em;max-width:28ch}
 
@@ -327,6 +328,18 @@ main>section:not(.hero),main>.marquee,main.policy-page,.site-footer{position:rel
 .plan-includes li{position:relative;padding-left:22px}
 .plan-includes li:before{content:"";position:absolute;left:0;top:.55em;width:10px;height:6px;border-left:1.5px solid var(--accent);border-bottom:1.5px solid var(--accent);transform:rotate(-45deg)}
 .plan-card .action{margin-top:auto;align-self:flex-start}
+.offer-banner{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin-bottom:20px;padding:14px 20px;border-radius:var(--radius);background:var(--accent);color:#fff;font-size:15px}
+.offer-banner b{font-weight:600}
+.price-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.price-label{min-width:4.5em;font-size:14px;color:var(--ivory-3)}
+.price-row s{font-size:17px;color:var(--ivory-3);text-decoration-thickness:1.5px;font-variant-numeric:tabular-nums}
+.price-row b{font-variant-numeric:tabular-nums}
+.catalog-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px;margin-top:24px;padding:22px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.catalog-cta p{margin:0;color:var(--ivory-2);font-size:16px}
+.quoted-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.quoted-detail{font-size:15px;color:var(--ivory-2)}
+.addon-grid{margin-top:0}
+.addon-grid dd{font-family:var(--serif);font-size:22px;font-variant-numeric:tabular-nums}
 .terms-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;margin-top:48px;border:1px solid var(--hair);border-radius:var(--radius);overflow:hidden;background:var(--hair)}
 .terms-grid div{padding:24px 28px;background:var(--ink)}
 .terms-grid dt{margin-bottom:8px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}

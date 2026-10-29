@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Lenis from "lenis";
-import { EASE_IN_OUT, EASE_OUT, INTRO_DONE, ScrollTrigger, SplitText, afterIntro, gsap, introWillPlay } from "../../lib/motion";
+import { EASE_IN_OUT, EASE_OUT, INTRO_DONE, ScrollTrigger, SplitText, afterIntro, gsap, introWillPlay, setSmoothScroll } from "../../lib/motion";
 import { Wordmark } from "./Logo";
 
 const MOTION = "(prefers-reduced-motion: no-preference)";
@@ -33,6 +33,7 @@ export function MotionLayer() {
       root.classList.add("motion");
       const lenis = new Lenis({ lerp: .095, anchors: false });
       lenis.on("scroll", ScrollTrigger.update);
+      setSmoothScroll(lenis);
       const tick = (time: number) => lenis.raf(time * 1000);
       gsap.ticker.add(tick);
       gsap.ticker.lagSmoothing(0);
@@ -64,8 +65,10 @@ export function MotionLayer() {
           .set(el, { visibility: "visible", opacity: 0, clipPath: "none" })
           .to(page(), { opacity: 0, y: -18, filter: "blur(8px)", duration: .42, ease: "power2.in" }, 0)
           .to(el, { opacity: 1, duration: .42, ease: "power2.inOut" }, 0)
-          .fromTo(el.querySelector(".curtain-word"), { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .5, ease: EASE_OUT }, .12)
-          .add(() => router.push(href));
+          .fromTo(el.querySelector(".curtain-word"), { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .5, ease: EASE_OUT }, .12);
+        // Navigate on a plain timer as the curtain settles, not a timeline callback: a struggling frame rate must
+        // never hold a click hostage.
+        setTimeout(() => router.push(href), 620);
         fallback.current = setTimeout(() => reveal(), 4500);
       };
       const reveal = () => {
@@ -101,6 +104,7 @@ export function MotionLayer() {
         header?.style.removeProperty("--depth");
         progress.kill();
         gsap.ticker.remove(tick);
+        setSmoothScroll(null);
         lenis.destroy();
         clearTimeout(fallback.current);
         leaving.current = false;

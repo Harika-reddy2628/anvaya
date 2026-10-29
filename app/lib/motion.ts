@@ -2,10 +2,16 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
+import type Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 export { gsap, ScrollTrigger, SplitText };
+
+/** The site's smooth-scroll instance, owned by MotionLayer; null without motion. Read it when needed, not at mount. */
+let smoothScroll: Lenis | null = null;
+export const setSmoothScroll = (lenis: Lenis | null) => { smoothScroll = lenis; };
+export const getSmoothScroll = () => smoothScroll;
 
 export const INTRO_KEY = "anvaya-intention-intro";
 export const INTRO_DONE = "anvaya:intro-done";

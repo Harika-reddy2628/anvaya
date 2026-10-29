@@ -141,7 +141,7 @@ export function ProjectForm({ initialService, onRestart }: { initialService?: st
         {error("outcome")}
       </div>
       <Chips name="timeline" label="When do you want to start?" options={timelineOptions} value={values.timeline} onChange={value => set("timeline", value)} error={error("timeline")} />
-      <Chips name="budget" label="Rough budget" help="In Indian rupees, with US dollars for reference. Choose “Need guidance” if unsure." options={budgetOptions} value={values.budget} onChange={value => set("budget", value)} error={error("budget")} />
+      <Chips name="budget" label="Rough budget" help="In Indian rupees. Choose “Need guidance” if unsure." options={budgetOptions} value={values.budget} onChange={value => set("budget", value)} error={error("budget")} />
       <div className="form-field full"><label htmlFor="context">Anything else? <span className="optional">Optional</span></label><textarea maxLength={5000} placeholder="Links to your current website, reference designs, deadlines…" {...field("context")} /><small id="context-help">Links, examples or constraints are welcome.</small>{error("context")}</div>
     </fieldset>
 

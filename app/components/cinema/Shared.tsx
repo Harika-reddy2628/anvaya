@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
-import { contact, plans, practices, proof, socialIcons, terms } from "../../lib/site";
+import { addOns, contact, foundingOffer, plans, practices, proof, quoted, socialIcons, terms } from "../../lib/site";
 import { StudioClock } from "./Hero";
 
 export function Action({ href = "/project", children = "Start a Project", light = false, text = false }: { href?: string; children?: ReactNode; light?: boolean; text?: boolean }) {
@@ -55,20 +55,39 @@ export function Footer() {
     </div>
   </div></footer>;
 }
-/** Practical pricing: three published offers, each with range, timeline and review rounds, then the shared terms. */
-export function PricingPlans() {
+/** Practical pricing: the founding-offer banner, three packages per unit type with regular prices struck through,
+    a link on to the full catalog (add-ons and launch services), then the shared terms. */
+export function PricingPlans({ catalogHref = "/pricing#add-ons" }: { catalogHref?: string }) {
   return <>
+    <div className="offer-banner" role="note"><b>{foundingOffer.title}</b><span>{foundingOffer.detail}</span></div>
     <div className="plan-grid">{plans.map(plan => <article className={`plan-card${plan.available ? "" : " is-soon"}`} key={plan.id}>
       <p className="plan-practice">{plan.practice}{!plan.available && <> <ComingSoon /></>}</p>
       <h3>{plan.name}</h3>
-      <p className="plan-price"><b>{plan.price}</b><span>{plan.unit} · {plan.alt}</span></p>
-      <dl className="plan-facts"><div><dt>Timeline</dt><dd>{plan.timeline}</dd></div><div><dt>Reviews</dt><dd>{plan.rounds}</dd></div><div><dt>Warranty</dt><dd>14-day defect fixes</dd></div></dl>
+      <div className="plan-price">
+        {plan.prices.map(([label, regular, offer]) => <p className="price-row" key={label}><span className="price-label">{label}</span><s aria-label={`Regular price ${regular}`}>{regular}</s><b>{offer}</b></p>)}
+        <span>{plan.unit}</span>
+      </div>
+      <dl className="plan-facts"><div><dt>Delivery</dt><dd>{plan.timeline}</dd></div><div><dt>Reviews</dt><dd>{plan.rounds}</dd></div><div><dt>Warranty</dt><dd>14-day defect fixes</dd></div></dl>
       <ul className="plan-includes">{plan.includes.map(item => <li key={item}>{item}</li>)}</ul>
-      {plan.available ? <Action href={`/project?service=${plan.id === "spatial" ? "spatial" : "unsure"}`}>Enquire about this</Action> : <Action href="/services" text>See available services</Action>}
+      {plan.available ? <Action href="/project?service=spatial">Enquire about this</Action> : <Action href="/services" text>See available services</Action>}
     </article>)}</div>
+    <div className="catalog-cta"><p>Add-ons, websites, enquiry follow-up and video ads are in the full catalog.</p><Action href={catalogHref}>Explore the full catalog</Action></div>
     <dl className="terms-grid">{terms.map(([term, detail]) => <div key={term}><dt>{term}</dt><dd>{detail}</dd></div>)}</dl>
-    <p className="terms-note">Ranges are indicative and tied to the described scope. Exact deliverables, dates and price are fixed in your agreed project scope. Full details in the <Link href="/terms">project terms</Link>.</p>
+    <p className="terms-note">Prices are per unit type (one floorplan, such as a 2BHK). Exact deliverables and dates are confirmed in writing before work starts. Full details in the <Link href="/terms">project terms</Link>.</p>
   </>;
+}
+/** Add-ons to any package, as item / price pairs. */
+export function PricingAddOns() {
+  return <dl className="terms-grid addon-grid">{addOns.map(([item, price]) => <div key={item}><dt>{item}</dt><dd>{price}</dd></div>)}</dl>;
+}
+/** Services quoted per project, with starting prices. */
+export function QuotedServices() {
+  return <div className="plan-grid quoted-grid">{quoted.map(q => <article className="plan-card is-soon" key={q.name}>
+    <h3>{q.name}</h3>
+    <p className="plan-price"><b>{q.price}</b></p>
+    <p className="quoted-detail">{q.detail}</p>
+    <Action href={`/project?service=${q.id}`} text>Ask for a quote</Action>
+  </article>)}</div>;
 }
 /** Reviews and testimonials, held at zero until genuine ones are collected. */
 export function ProofSection() {

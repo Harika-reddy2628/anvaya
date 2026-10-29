@@ -4,8 +4,10 @@ const chrome = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || (process.platform === "darwin" && existsSync(chrome) ? chrome : undefined);
 const chromium = { launchOptions: { executablePath } };
 export default defineConfig({
-  testDir: "./tests", fullyParallel: true, workers: 2, timeout: 30_000,
-  use: { baseURL: "http://127.0.0.1:3107", trace: "retain-on-failure", screenshot: "only-on-failure" },
+  // Tracing on every run slows the WebGL home page enough to break navigation timing, so a trace is recorded only
+  // when a failed test is retried.
+  testDir: "./tests", fullyParallel: true, workers: 2, timeout: 30_000, retries: 1,
+  use: { baseURL: "http://127.0.0.1:3107", trace: "on-first-retry", screenshot: "only-on-failure" },
   projects: [
     { name: "desktop", use: { ...devices["Desktop Chrome"], ...chromium, viewport: { width: 1440, height: 1000 } } },
     { name: "mobile", use: { ...devices["iPhone 13"], ...chromium, defaultBrowserType: "chromium" } },

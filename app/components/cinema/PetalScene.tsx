@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { frameBudget } from "../../lib/frameBudget";
 import { ScrollTrigger, gsap } from "../../lib/motion";
 
 /** A thick glass petal: a pill outline extruded with a soft bevel, pivoting at its base. */
@@ -178,8 +179,10 @@ export default function PetalScene() {
       hub.scale.setScalar(1 + state.scroll * .18);
       try { renderer.render(scene, camera); target!.dataset.scene = "ready"; } catch { target!.dataset.scene = "failed"; stop(); }
     }
-    const loop = () => { frame = requestAnimationFrame(loop); draw(); };
-    function start() { if (!running && !disposed) { running = true; clock.start(); loop(); } }
+    // Too slow even at 1x: stop for good and let the hero's CSS fallback show instead.
+    const budget = frameBudget(renderer, { resize: () => resize(), onTooSlow: () => { disposed = true; stop(); observer.disconnect(); sizes.disconnect(); target.dataset.scene = "failed"; } });
+    const loop = () => { frame = requestAnimationFrame(loop); draw(); if (compiled) budget.tick(); };
+    function start() { if (!running && !disposed) { running = true; clock.start(); budget.reset(); loop(); } }
     function stop() { running = false; cancelAnimationFrame(frame); }
     function resize() {
       width = target!.clientWidth; height = target!.clientHeight;

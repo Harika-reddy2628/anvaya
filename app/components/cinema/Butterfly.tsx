@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { frameBudget } from "../../lib/frameBudget";
 
 /* A blue butterfly that lives behind the page's text. It drifts around the whole viewport on slow, curving paths,
    flapping in short bursts and gliding between them, then lands on a spot with no text under it and basks. Behind it
@@ -330,8 +331,11 @@ export default function Butterfly({ path }: { path: string }) {
     let mounted = false;
     onRoute.current = () => { if (!mounted) { mounted = true; return; } clearTimeout(routeTimer); routeTimer = setTimeout(() => takeOff(), 900); if (mode === "rest") takeOff(); };
 
+    // The butterfly is decoration: if it cannot hold the frame budget even at 1x, it leaves the page.
+    const budget = frameBudget(renderer, { resize: () => resize(), onTooSlow: () => { disposed = true; cancelAnimationFrame(frame); renderer.domElement.style.display = "none"; } });
     function step(now: number) {
       frame = requestAnimationFrame(step);
+      budget.tick();
       const dt = Math.min(.05, (now - last) / 1000), t = now / 1000; last = now;
       if (!width) return;
       const cruise = size * 2.6;
@@ -440,7 +444,7 @@ export default function Butterfly({ path }: { path: string }) {
       scrollTimer = setTimeout(() => { scrolling = false; }, 600);
     };
     const move = (event: PointerEvent) => pointer.set(event.clientX, event.clientY);
-    const visibility = () => { cancelAnimationFrame(frame); if (!document.hidden) { last = performance.now(); frame = requestAnimationFrame(step); } };
+    const visibility = () => { cancelAnimationFrame(frame); if (!document.hidden && !disposed) { last = performance.now(); budget.reset(); frame = requestAnimationFrame(step); } };
     addEventListener("resize", resize); addEventListener("scroll", scroll, { passive: true }); addEventListener("pointermove", move, { passive: true });
     document.addEventListener("visibilitychange", visibility);
     resize();

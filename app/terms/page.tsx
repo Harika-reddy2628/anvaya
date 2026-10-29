@@ -19,50 +19,72 @@ export default function TermsPage() {
         <section>
           <h2>Scope and timelines</h2>
           <p>
-            Project deliverables, acceptance criteria, required inputs, reviews,
-            and integrations are agreed before kickoff. The flagship sprint
-            delivers an agreed production-ready MVP or agentic pipeline in 14
-            calendar days. Spatial visualizers and walkthroughs typically take
-            48 hours to 5 business days, depending on source materials and
-            complexity.
+            You send the floorplan (a PDF, CAD file or clear phone photo) and
+            the finishes you plan to use. We confirm the rooms, views and
+            delivery date in writing before work starts. Stills take 5 working
+            days, a 360° tour 7 and Premium 10. Express delivery in about half
+            the time costs 25% more.
           </p>
           <p>
-            Changes to scope are reviewed together, with their effect on timing
-            and price agreed before the additional work begins.
+            Two rounds of changes are included, each sent as one consolidated
+            list. They cover furniture, finishes, lighting and camera angles.
+            Moving walls or resizing rooms after you approve the layout is
+            quoted as a new floorplan. Further rounds are ₹1,999 each.
           </p>
         </section>
         <section>
           <h2>Pricing and payment</h2>
           <p>
-            Published ranges are indicative and tied to the described scope.
-            Spatial projects range from $500–$1,500 per asset or space.
-            Fixed-scope MVP and agentic pipeline sprints range from
-            $1,500–$3,500. Dedicated engineering retainers range from
-            $2,500–$4,500 per month.
+            Packages are priced per unit type, meaning one floorplan such as a
+            2BHK. Regular prices are Stills ₹14,999, 360° Tour ₹39,999 for a
+            2BHK or ₹54,999 for a 3BHK, and Premium from ₹89,999. Our first 3
+            builders get offer prices (₹9,999, ₹24,999, ₹34,999 and ₹59,999)
+            in return for a testimonial and permission to show the work. Each
+            further unit type in the same project is 35% off. Websites,
+            enquiry follow-up and video ads are quoted per project. Every
+            builder pays from the same published{" "}
+            <Link href="/pricing">price list</Link>.
           </p>
           <p>
-            Projects use a 50% mobilization deposit and 50% payment on final
-            verified delivery, or a fully funded, agreed platform escrow.
-            Third-party subscriptions and usage costs are addressed during
-            scoping.
+            We take a 50% advance to start and the balance before final files,
+            by UPI or bank transfer. Previews carry a watermark until payment
+            is complete. Third-party charges, such as WhatsApp message fees,
+            are listed and agreed up front. No GST is added at present.
+          </p>
+        </section>
+        <section>
+          <h2>Confidentiality</h2>
+          <p>
+            Your floorplans and renders are never shown to anyone, including
+            other builders, without your written permission. We sign an NDA
+            on request at no extra cost.
           </p>
         </section>
         <section>
           <h2>Ownership and handover</h2>
           <p>
-            Clients receive 100% ownership of delivered source code, Git
-            repositories, deployment configurations, and applicable packed
-            master 3D assets after final payment. Spatial handover includes
-            applicable .blend and .glb assets.
+            Once the final payment is made, you own the delivered images,
+            videos and tour, and may use them in any marketing. Anvaya keeps
+            its own tools, scripts and furniture library, which are not part of
+            the handover.
           </p>
         </section>
         <section>
-          <h2>Technical defect warranty</h2>
+          <h2>Renders in advertising</h2>
           <p>
-            Every project includes a 14-day technical defect warranty. Bugs,
-            rendering glitches, and API defects in the delivered scope are fixed
-            at no additional cost. Further development can be scoped separately
-            or through an engineering retainer.
+            Renders show the approved plan as an artist’s impression; finishes
+            and furniture are indicative. Under RERA, brochures and ads must
+            carry your project’s RERA registration number, and renders should
+            be labelled as artist’s impressions. Keeping ads accurate to the
+            registered project is the promoter’s responsibility.
+          </p>
+        </section>
+        <section>
+          <h2>Defect warranty</h2>
+          <p>
+            For 14 days after delivery, report any broken link, rendering error
+            or room that does not match the approved plan, and we fix it at no
+            cost. Tour hosting is included for 12 months, then ₹4,999 a year.
           </p>
         </section>
         <section>
