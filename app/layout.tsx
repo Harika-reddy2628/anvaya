@@ -12,7 +12,8 @@ import "./light.css";
 const serif = localFont({ src: [{ path: "./fonts/Fraunces-normal-Latin.woff2", style: "normal" }, { path: "./fonts/Fraunces-italic-Latin.woff2", style: "italic" }], variable: "--font-serif", weight: "100 900", display: "swap" });
 const sans = localFont({ src: "./fonts/Inter-Latin.woff2", variable: "--font-sans", weight: "100 900", display: "swap" });
 const mono = localFont({ src: "./fonts/geist-mono-latin.woff2", variable: "--font-mono", weight: "100 900", display: "swap" });
-const hind = localFont({ src: "./fonts/Hind-Regular.ttf", variable: "--font-hind", weight: "400", display: "swap", preload: false });
+// Hind only sets the wordmark अन्वय, so it ships subset to those glyphs (4 KB, from Hind-Regular via pyftsubset).
+const hind = localFont({ src: "./fonts/Hind-Anvaya.woff2", variable: "--font-hind", weight: "400", display: "swap" });
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: { default: "Anvaya — Make. Move. Matter.", template: "%s — Anvaya" },
