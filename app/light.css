@@ -354,6 +354,9 @@ main>section:not(.hero),main>.marquee,main.policy-page,.site-footer{position:rel
 .site-footer>.wrap-full{max-width:none;padding:0}
 /* A clear band of page canvas between the last section (usually the closing call to action) and the footer */
 main>section:last-child{margin-bottom:clamp(56px,7vw,112px)}
+/* Route changes move focus to <main> for screen readers; it is not a control, so it draws no focus ring (the ring
+   framed the whole page and showed as stray lines under the header and above the footer). */
+main:focus,main:focus-visible{outline:none}
 .footer-panel{--f-text:#f2f6fb;--f-muted:rgba(242,246,251,.58);--f-blue:#4fb8ff;--f-line:rgba(255,255,255,.12);position:relative;isolation:isolate;container-type:inline-size;padding:clamp(48px,6cqi,96px) clamp(24px,6.5cqi,104px) 0;border-radius:0;background:radial-gradient(80% 60% at 86% 0%,rgba(30,102,208,.34),transparent 64%),radial-gradient(60% 55% at 8% 104%,rgba(30,102,208,.22),transparent 62%),var(--dark);color:var(--f-text);overflow:hidden}
 .footer-beams{position:absolute;inset:-25% -15%;z-index:1;pointer-events:none;mix-blend-mode:screen}
 .footer-beams:before{content:"";position:absolute;inset:0;background:linear-gradient(118deg,transparent 22%,rgba(79,184,255,.07) 28%,transparent 34%),linear-gradient(118deg,transparent 40%,rgba(79,184,255,.13) 46%,rgba(79,184,255,.04) 49%,transparent 54%),linear-gradient(118deg,transparent 60%,rgba(79,184,255,.06) 65%,transparent 70%);filter:blur(22px);animation:footer-beams 16s ease-in-out infinite alternate}

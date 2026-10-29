@@ -273,10 +273,11 @@ function buildPage(delay: number) {
   q(".range-list").forEach(list => gsap.from(list.children, { opacity: 0, x: -40, duration: 1, stagger: .1, ease: EASE_OUT, scrollTrigger: once(list, "top 88%") }));
 
   // Day to night, after the owner's Sunflower reference: as the reader scrolls, the page canvas slowly cools from
-  // ice white through pale ice-blue to soft sky (the butterfly's wing tones), then falls into velvet navy as the
-  // closing call to action (or the footer) arrives, so the page ends in one seamless night with the footer. The
+  // ice white through pale ice-blue to soft sky (the butterfly's wing tones), then falls into a deep root blue as the
+  // closing call to action (or the footer) arrives. Night stays a step brighter than the navy box and footer, so the
+  // band between them still reads as space and they never merge. The
   // sections are transparent, so the body colour shows through; matchMedia reverts it on route change.
-  const day = ["#f2f6fb", "#e9f2fd", "#dceaff"], night = "#0b1838";
+  const day = ["#f2f6fb", "#e9f2fd", "#dceaff"], night = "#1a3a80";
   const dusk = document.querySelector<HTMLElement>("main > .final-cta:last-child") ?? document.querySelector<HTMLElement>(".site-footer");
   if (dusk) {
     gsap.timeline({ scrollTrigger: { trigger: "main", start: "top top", endTrigger: dusk, end: "top 85%", scrub: true } })
