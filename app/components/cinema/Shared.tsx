@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
-import { addOns, contact, plans, practices, proof, quoted, socialIcons, terms } from "../../lib/site";
+import { addOns, contact, foundingOffer, plans, practices, proof, quoted, socialIcons, terms } from "../../lib/site";
 import { Wordmark } from "./Logo";
 
 export function Action({ href = "/project", children = "Start a Project", light = false, text = false }: { href?: string; children?: ReactNode; light?: boolean; text?: boolean }) {
@@ -56,17 +56,23 @@ export function Footer() {
     <div className="footer-bottom"><p>© 2026 Anvaya Digital Studio</p><span lang="hi" className="indic">अन्वय</span><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><a href="#main-content" className="footer-top-link">Back to top ↑</a></div>
   </div></footer>;
 }
-/** Practical pricing: three fixed packages per unit type, then the shared terms. */
-export function PricingPlans() {
+/** Practical pricing: the founding-offer banner, three packages per unit type with regular prices struck through,
+    a link on to the full catalog (add-ons and launch services), then the shared terms. */
+export function PricingPlans({ catalogHref = "/pricing#add-ons" }: { catalogHref?: string }) {
   return <>
+    <div className="offer-banner" role="note"><b>{foundingOffer.title}</b><span>{foundingOffer.detail}</span></div>
     <div className="plan-grid">{plans.map(plan => <article className={`plan-card${plan.available ? "" : " is-soon"}`} key={plan.id}>
       <p className="plan-practice">{plan.practice}{!plan.available && <> <ComingSoon /></>}</p>
       <h3>{plan.name}</h3>
-      <p className="plan-price"><b>{plan.price}</b><span>{plan.unit}</span>{plan.offer && <span className="plan-offer">{plan.offer}</span>}</p>
+      <div className="plan-price">
+        {plan.prices.map(([label, regular, offer]) => <p className="price-row" key={label}><span className="price-label">{label}</span><s aria-label={`Regular price ${regular}`}>{regular}</s><b>{offer}</b></p>)}
+        <span>{plan.unit}</span>
+      </div>
       <dl className="plan-facts"><div><dt>Delivery</dt><dd>{plan.timeline}</dd></div><div><dt>Reviews</dt><dd>{plan.rounds}</dd></div><div><dt>Warranty</dt><dd>14-day defect fixes</dd></div></dl>
       <ul className="plan-includes">{plan.includes.map(item => <li key={item}>{item}</li>)}</ul>
       {plan.available ? <Action href="/project?service=spatial">Enquire about this</Action> : <Action href="/services" text>See available services</Action>}
     </article>)}</div>
+    <div className="catalog-cta"><p>Add-ons, websites, enquiry follow-up and video ads are in the full catalog.</p><Action href={catalogHref}>Explore the full catalog</Action></div>
     <dl className="terms-grid">{terms.map(([term, detail]) => <div key={term}><dt>{term}</dt><dd>{detail}</dd></div>)}</dl>
     <p className="terms-note">Prices are per unit type (one floorplan, such as a 2BHK). Exact deliverables and dates are confirmed in writing before work starts. Full details in the <Link href="/terms">project terms</Link>.</p>
   </>;

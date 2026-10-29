@@ -36,7 +36,10 @@ export default function TermsPage() {
           <h2>Pricing and payment</h2>
           <p>
             Packages are priced per unit type, meaning one floorplan such as a
-            2BHK: Stills ₹9,999, 360° Tour ₹24,999 and Premium ₹44,999. Each
+            2BHK. Regular prices are Stills ₹14,999, 360° Tour ₹39,999 for a
+            2BHK or ₹54,999 for a 3BHK, and Premium from ₹89,999. Our first 3
+            builders get offer prices (₹9,999, ₹24,999, ₹34,999 and ₹59,999)
+            in return for a testimonial and permission to show the work. Each
             further unit type in the same project is 35% off. Websites,
             enquiry follow-up and video ads are quoted per project. Every
             builder pays from the same published{" "}
@@ -81,7 +84,7 @@ export default function TermsPage() {
           <p>
             For 14 days after delivery, report any broken link, rendering error
             or room that does not match the approved plan, and we fix it at no
-            cost. Tour hosting is included for 12 months, then ₹1,999 a year.
+            cost. Tour hosting is included for 12 months, then ₹4,999 a year.
           </p>
         </section>
         <section>

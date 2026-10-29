@@ -322,7 +322,14 @@ main>section:not(.hero),main>.marquee,main.policy-page,.site-footer{position:rel
 .plan-includes li{position:relative;padding-left:22px}
 .plan-includes li:before{content:"";position:absolute;left:0;top:.55em;width:10px;height:6px;border-left:1.5px solid var(--accent);border-bottom:1.5px solid var(--accent);transform:rotate(-45deg)}
 .plan-card .action{margin-top:auto;align-self:flex-start}
-.plan-offer{align-self:flex-start;margin-top:6px;padding:4px 10px;border-radius:999px;background:var(--accent);color:#fff;font-size:13px}
+.offer-banner{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin-bottom:20px;padding:14px 20px;border-radius:var(--radius);background:var(--accent);color:#fff;font-size:15px}
+.offer-banner b{font-weight:600}
+.price-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.price-label{min-width:4.5em;font-size:14px;color:var(--ivory-3)}
+.price-row s{font-size:17px;color:var(--ivory-3);text-decoration-thickness:1.5px;font-variant-numeric:tabular-nums}
+.price-row b{font-variant-numeric:tabular-nums}
+.catalog-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px;margin-top:24px;padding:22px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.catalog-cta p{margin:0;color:var(--ivory-2);font-size:16px}
 .quoted-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 .quoted-detail{font-size:15px;color:var(--ivory-2)}
 .addon-grid{margin-top:0}

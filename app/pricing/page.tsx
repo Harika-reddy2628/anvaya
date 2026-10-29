@@ -9,10 +9,10 @@ export const metadata: Metadata = { title: "Pricing", description: "Anvaya prici
 export default function PricingPage() {
   const ranges = budgetOptions.filter(option => option !== "Need guidance");
   return <main id="main-content" tabIndex={-1}>
-    <PageHero title="Simple, upfront pricing."><p>Fixed prices per unit type for interior renders and 360° tours. Your buyers see the finished flat before the slab is cast.</p></PageHero>
+    <PageHero title="Simple, upfront pricing."><p>A 360° website of your flat before it is built, ready for any buyer’s phone. Fixed prices per unit type.</p></PageHero>
     <section className="section pricing-section" id="plans"><div className="wrap">
       <div className="section-heading"><h2>Clear prices. <em>No surprises.</em></h2><p>One price per floorplan, a set delivery time and two rounds of changes. Try one room free before you order: one sample per builder, with a watermark.</p></div>
-      <PricingPlans />
+      <PricingPlans catalogHref="#add-ons" />
     </div></section>
     <section className="section pricing-section" id="add-ons"><div className="wrap">
       <div className="section-heading"><h2>Add <em>what you need.</em></h2><p>Extras that work with any package.</p></div>
