@@ -346,8 +346,11 @@ main>section:not(.hero),main>.marquee,main.policy-page,.site-footer{position:rel
    left block has the © line over a hairline, square social buttons and quiet notes; two link columns have blue
    headings over hairlines; and the huge "Anvaya" in blue fades into the dark and is cut by the bottom edge, with the
    beams drifting over it. */
-.site-footer{padding:72px 0 calc(var(--pad) + env(safe-area-inset-bottom));border-top:0}
-.footer-panel{--f-text:#e9eef5;--f-muted:rgba(233,238,245,.58);--f-blue:#6f9bff;--f-line:rgba(111,155,255,.24);position:relative;isolation:isolate;container-type:inline-size;padding:clamp(40px,6cqi,88px) clamp(24px,6.5cqi,104px) 0;border-radius:32px;background:radial-gradient(90% 70% at 88% -10%,rgba(38,82,210,.38),transparent 62%),radial-gradient(70% 60% at 10% 110%,rgba(24,56,150,.32),transparent 60%),linear-gradient(180deg,#071028,#04060d 72%);color:var(--f-text);overflow:hidden}
+.site-footer{padding:0;border-top:0}
+.site-footer>.wrap-full{max-width:none;padding:0}
+/* The footer sits flush under the page: the last section's bottom margin closes up against it */
+main>section:last-child{margin-bottom:0}
+.footer-panel{--f-text:#e9eef5;--f-muted:rgba(233,238,245,.58);--f-blue:#6f9bff;--f-line:rgba(111,155,255,.24);position:relative;isolation:isolate;container-type:inline-size;padding:clamp(48px,6cqi,96px) clamp(24px,6.5cqi,104px) 0;border-radius:0;background:radial-gradient(90% 70% at 88% -10%,rgba(38,82,210,.38),transparent 62%),radial-gradient(70% 60% at 10% 110%,rgba(24,56,150,.32),transparent 60%),linear-gradient(180deg,#071028,#04060d 72%);color:var(--f-text);overflow:hidden}
 .footer-beams{position:absolute;inset:-25% -15%;z-index:1;pointer-events:none;mix-blend-mode:screen}
 .footer-beams:before{content:"";position:absolute;inset:0;background:linear-gradient(118deg,transparent 22%,rgba(64,118,255,.14) 28%,transparent 34%),linear-gradient(118deg,transparent 40%,rgba(86,140,255,.24) 46%,rgba(120,170,255,.08) 49%,transparent 54%),linear-gradient(118deg,transparent 60%,rgba(64,118,255,.12) 65%,transparent 70%);filter:blur(22px);animation:footer-beams 16s ease-in-out infinite alternate}
 @keyframes footer-beams{from{transform:translateX(-5%)}to{transform:translateX(5%)}}
@@ -452,9 +455,7 @@ html{scrollbar-width:thin;scrollbar-color:rgba(13,17,20,.28) transparent}
   .practice-grid,.process-section .step-list{grid-template-columns:minmax(0,1fr)}
   .terms-grid,.testimonial-slots{grid-template-columns:minmax(0,1fr)}
   .plan-card{padding:24px}
-  .footer-panel{border-radius:24px}
   .footer-grid{gap:36px 16px}
-  .site-footer{padding-top:64px}
   .work-feature{grid-template-columns:minmax(0,1fr)}
   .range-list li{grid-template-columns:32px minmax(0,1fr);gap:12px 16px}
   .range-link{grid-column:2;justify-self:start}
