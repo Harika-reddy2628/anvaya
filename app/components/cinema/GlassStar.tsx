@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { frameBudget } from "../../lib/frameBudget";
 import { gsap } from "../../lib/motion";
 import { petalGeometry, studioEnvironment } from "./PetalScene";
 
@@ -65,8 +66,10 @@ export default function GlassStar({ active }: { active: number }) {
       renderer.render(scene, camera);
       target!.dataset.scene = "ready";
     }
-    const loop = () => { frame = requestAnimationFrame(loop); draw(); };
-    const start = () => { if (!running && !disposed) { running = true; clock.start(); loop(); } };
+    // Too slow even at 1x: stop for good and hide the star; the dial reads fine without it.
+    const budget = frameBudget(renderer, { resize: () => resize(), onTooSlow: () => { disposed = true; stop(); observer.disconnect(); sizes.disconnect(); target.dataset.scene = "failed"; } });
+    const loop = () => { frame = requestAnimationFrame(loop); draw(); budget.tick(); };
+    const start = () => { if (!running && !disposed) { running = true; clock.start(); budget.reset(); loop(); } };
     const stop = () => { running = false; cancelAnimationFrame(frame); };
     function resize() {
       const w = target!.clientWidth, h = target!.clientHeight;

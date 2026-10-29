@@ -65,8 +65,10 @@ export function MotionLayer() {
           .set(el, { visibility: "visible", opacity: 0, clipPath: "none" })
           .to(page(), { opacity: 0, y: -18, filter: "blur(8px)", duration: .42, ease: "power2.in" }, 0)
           .to(el, { opacity: 1, duration: .42, ease: "power2.inOut" }, 0)
-          .fromTo(el.querySelector(".curtain-word"), { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .5, ease: EASE_OUT }, .12)
-          .add(() => router.push(href));
+          .fromTo(el.querySelector(".curtain-word"), { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .5, ease: EASE_OUT }, .12);
+        // Navigate on a plain timer as the curtain settles, not a timeline callback: a struggling frame rate must
+        // never hold a click hostage.
+        setTimeout(() => router.push(href), 620);
         fallback.current = setTimeout(() => reveal(), 4500);
       };
       const reveal = () => {

@@ -152,6 +152,7 @@ main>section:not(.hero),main>.marquee,main.policy-page,.site-footer{position:rel
    page margin; its overhang is capped at the real gutter (less a scrollbar) so it never adds a horizontal scroll. */
 .is-dial .glass-star{display:block;position:absolute;right:calc(-1 * min(7vw, max(0px, (100vw - 100% - 16px) / 2)));top:54%;width:min(38vw,72vh,640px);aspect-ratio:1;height:auto;transform:translateY(-50%);z-index:1;pointer-events:none}
 .glass-star canvas{display:block;width:100%;height:100%}
+.is-dial .glass-star[data-scene=failed]{display:none}
 .cta-band{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px 48px;margin-top:96px;padding:48px;border-radius:var(--radius);background:var(--ink-2)}
 .cta-band p{font-family:var(--serif);font-size:clamp(25px,2.4vw,39px);line-height:1.15;letter-spacing:-.025em;max-width:28ch}
 

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { frameBudget } from "../../lib/frameBudget";
 
 /* A crystal butterfly that lives behind the page's text. It roams the hero, flutters along while the reader scrolls,
    and when scrolling stops it flies to the nearest spot with no text under it and lands. Faceted glass wings shade
@@ -271,8 +272,11 @@ export default function Butterfly({ path }: { path: string }) {
       sparkLife[i] = 1; sparkSize[i] = 5 + Math.random() * 7;
     }
 
+    // The butterfly is decoration: if it cannot hold the frame budget even at 1x, it leaves the page.
+    const budget = frameBudget(renderer, { resize: () => resize(), onTooSlow: () => { disposed = true; cancelAnimationFrame(frame); renderer.domElement.style.display = "none"; } });
     function step(now: number) {
       frame = requestAnimationFrame(step);
+      budget.tick();
       const dt = Math.min(.05, (now - last) / 1000), t = now / 1000; last = now;
       if (!width) return;
       // Steering: an easing seek with a slow wander while flying, slowing on approach; at rest it settles in place.
@@ -366,7 +370,7 @@ export default function Butterfly({ path }: { path: string }) {
       scrollTimer = setTimeout(() => { scrolling = false; takeOff(); }, 220);
     };
     const move = (event: PointerEvent) => pointer.set(event.clientX, event.clientY);
-    const visibility = () => { cancelAnimationFrame(frame); if (!document.hidden) { last = performance.now(); frame = requestAnimationFrame(step); } };
+    const visibility = () => { cancelAnimationFrame(frame); if (!document.hidden && !disposed) { last = performance.now(); budget.reset(); frame = requestAnimationFrame(step); } };
     addEventListener("resize", resize); addEventListener("scroll", scroll, { passive: true }); addEventListener("pointermove", move, { passive: true });
     document.addEventListener("visibilitychange", visibility);
     resize();
