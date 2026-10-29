@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import { contact, plans, practices, proof, socialIcons, terms } from "../../lib/site";
-import { LogoMark } from "./Logo";
 import { StudioClock } from "./Hero";
 
 export function Action({ href = "/project", children = "Start a Project", light = false, text = false }: { href?: string; children?: ReactNode; light?: boolean; text?: boolean }) {
@@ -33,35 +32,25 @@ function SocialIcon({ name, href }: { name: string; href: string }) {
     ? <a className="social-icon" href={href} target="_blank" rel="noopener noreferrer" aria-label={`Anvaya on ${name}`}>{svg}<span>{name}</span></a>
     : <span className="social-icon is-pending" title={`${name} — link coming soon`}>{svg}<span>{name}</span><span className="sr-only"> (coming soon)</span></span>;
 }
-/** A footer link in the mono style, with an arrow that slides on hover. */
-function FooterLink({ href, children }: { href: string; children: ReactNode }) {
-  return <Link href={href} className="footer-link"><span>{children}</span><span className="footer-arrow" aria-hidden="true">→</span></Link>;
-}
 export function Footer() {
   return <footer className="site-footer"><div className="wrap-full">
     <div className="footer-panel">
+      {/* Soft diagonal beams of blue light drifting across the panel, over the name and under the text. */}
+      <div className="footer-beams" aria-hidden="true" />
       <div className="footer-grid">
         <div className="footer-intro">
-          <Link href="/" className="footer-brand" aria-label="Anvaya home"><LogoMark className="footer-mark" /><span className="footer-devanagari indic" lang="hi">अन्वय</span></Link>
-          <p className="footer-line">A technology and design studio. Ambitious ideas, built to last.</p>
-          <p className="footer-definition"><b>anvaya</b>, Sanskrit: connection, relationship and continuity — the thread between an idea and its outcome.</p>
+          <p className="footer-heading">© 2026 Anvaya Digital Studio</p>
+          <div className="social-row">{socialIcons.map(s => <SocialIcon key={s.name} name={s.name} href={s.href} />)}</div>
+          <p className="footer-note">A technology and design studio. <b>Ambitious ideas, built to last.</b></p>
+          <address className="footer-note"><b>India</b> · Working globally · <StudioClock className="footer-clock" /></address>
+          <p className="footer-note"><Link href="/privacy">Privacy</Link> · <Link href="/terms">Terms</Link> · <Link href="/project">Start a Project</Link></p>
         </div>
-        <nav aria-label="Footer navigation"><p className="footer-heading">Explore</p><FooterLink href="/work">Works</FooterLink><FooterLink href="/services">Services</FooterLink><FooterLink href="/pricing">Pricing</FooterLink><FooterLink href="/blog">Blog</FooterLink><FooterLink href="/studio">Studio</FooterLink></nav>
-        <nav aria-label="Footer services"><p className="footer-heading">Services</p>{practices.map(p => <FooterLink key={p.id} href={`/services/${p.slug}`}>{p.name}</FooterLink>)}</nav>
-        <div className="footer-social"><p className="footer-heading">Follow</p><div className="social-row">{socialIcons.map(s => <SocialIcon key={s.name} name={s.name} href={s.href} />)}</div></div>
-        <div className="footer-contact">
-          <p className="footer-heading">Studio</p>
-          <Link href="/project" className="footer-cta"><span>Start a Project</span><span className="footer-cta-arrow" aria-hidden="true">↗</span></Link>
-          <address>{contact.address.map(line => <span key={line}>{line}</span>)}<span>Working globally</span></address>
-          {contact.email && <a href={`mailto:${contact.email}`}>{contact.email}</a>}
-          <p className="footer-motto">Make. Move. <em>Matter.</em></p>
-        </div>
+        <nav aria-label="Footer navigation"><p className="footer-heading">Explore</p><Link href="/work">Works</Link><Link href="/services">Services</Link><Link href="/pricing">Pricing</Link><Link href="/blog">Blog</Link><Link href="/studio">Studio</Link></nav>
+        <nav aria-label="Footer services"><p className="footer-heading">Services</p>{practices.map(p => <Link key={p.id} href={`/services/${p.slug}`}>{p.name}</Link>)}</nav>
       </div>
-      {/* The wordmark, huge and bold, standing on the panel's bottom edge and sliced through the middle by a cut that
-          carries the blue thread. */}
-      <Link href="/" className="footer-wordmark" aria-label="Anvaya home" tabIndex={-1}><span className="footer-word">ANVAYA</span><span className="footer-slice" aria-hidden="true" /></Link>
+      {/* The name, huge and blue, fading into the dark and cut by the panel's bottom edge. */}
+      <Link href="/" className="footer-wordmark" aria-label="Anvaya home" tabIndex={-1}><span className="footer-word">Anvaya</span></Link>
     </div>
-    <div className="footer-bottom"><p>© 2026 Anvaya Digital Studio</p><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><span className="footer-local">India · <StudioClock className="footer-clock" /></span><a href="#main-content" className="footer-top-link">Back to top ↑</a></div>
   </div></footer>;
 }
 /** Practical pricing: three published offers, each with range, timeline and review rounds, then the shared terms. */

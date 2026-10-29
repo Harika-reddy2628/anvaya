@@ -272,23 +272,16 @@ function buildPage(delay: number) {
     .fromTo(feature.querySelectorAll(".tour-plan path"), { strokeDasharray: 2000, strokeDashoffset: 2000 }, { strokeDashoffset: 0, duration: 2.2, ease: "power2.inOut" }, .4));
   q(".range-list").forEach(list => gsap.from(list.children, { opacity: 0, x: -40, duration: 1, stagger: .1, ease: EASE_OUT, scrollTrigger: once(list, "top 88%") }));
 
-  // Footer: the columns rise in, then the wordmark rises letter by letter onto the panel edge and the slice cuts across it.
+  // Footer: the light beams sweep in across the panel, the columns rise, then the name rises letter by letter out of
+  // the bottom edge.
   const footer = document.querySelector(".site-footer");
   const word = footer?.querySelector(".footer-word");
   if (footer && word) {
     const chars = SplitText.create(word, { type: "chars", mask: "chars", charsClass: "split-char" }).chars;
-    // Hand each letter its offset within the word, in em, so the shared gradient lines up across the letters.
-    const size = parseFloat(getComputedStyle(word).fontSize), box = word.getBoundingClientRect();
-    chars.forEach(char => {
-      const el = char as HTMLElement;
-      el.style.setProperty("--gx", ((el.getBoundingClientRect().left - box.left) / size).toFixed(4));
-      el.style.setProperty("--gw", (box.width / size).toFixed(4));
-    });
-    gsap.from(footer.querySelectorAll(".footer-grid > *"), { opacity: 0, y: 24, duration: 1, stagger: .08, ease: EASE_OUT, scrollTrigger: once(footer, "top 85%") });
-    gsap.timeline({ scrollTrigger: once(footer.querySelector(".footer-wordmark") ?? footer, "top 92%") })
-      .from(chars, { yPercent: 110, duration: 1.3, stagger: .05, ease: EASE_OUT })
-      .from(footer.querySelector(".footer-slice"), { scaleX: 0, duration: 1.2, ease: "power3.inOut" }, .7)
-      .from(footer.querySelector(".footer-bottom"), { opacity: 0, duration: .8 }, .8);
+    gsap.timeline({ scrollTrigger: once(footer, "top 85%") })
+      .from(footer.querySelector(".footer-beams"), { opacity: 0, xPercent: -18, duration: 2.6, ease: "power2.out" })
+      .from(footer.querySelectorAll(".footer-grid > *"), { opacity: 0, y: 24, duration: 1, stagger: .08, ease: EASE_OUT }, .2);
+    gsap.from(chars, { yPercent: 110, duration: 1.4, stagger: .06, ease: EASE_OUT, scrollTrigger: once(footer.querySelector(".footer-wordmark") ?? footer, "top 95%") });
   }
 }
 
