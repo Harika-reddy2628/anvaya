@@ -343,18 +343,15 @@ main>section:not(.hero),main>.marquee,main.policy-page,.site-footer{position:rel
 .slot-meta{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ivory-3);opacity:.7}
 
 /* Footer, after the owner's Fargo reference, in the site's own ink and accent blues: an ink panel crossed by soft
-   diagonal beams of accent light, continuous with the closing call to action above it. The
+   diagonal beams of accent light, set apart from the page above by a band of canvas. The
    left block has the © line over a hairline, square social buttons and quiet notes; two link columns have blue
    headings over hairlines; and the huge "Anvaya" in blue fades into the dark and is cut by the bottom edge, with the
    beams drifting over it. */
 .site-footer{padding:0;border-top:0}
 .site-footer>.wrap-full{max-width:none;padding:0}
-/* The footer sits flush under the page: the last section's bottom margin closes up against it */
-main>section:last-child{margin-bottom:0}
-/* When the closing call to action ends the page it widens to full bleed and squares off its foot, so it and the
-   footer read as one continuous ink ending, divided only by a hairline. */
-main>.final-cta:last-child{margin-inline:0;border-radius:32px 32px 0 0}
-.footer-panel{--f-text:#f2f4f6;--f-muted:rgba(242,244,246,.58);--f-blue:#8cc8f0;--f-line:rgba(255,255,255,.12);position:relative;isolation:isolate;container-type:inline-size;padding:clamp(48px,6cqi,96px) clamp(24px,6.5cqi,104px) 0;border-top:1px solid rgba(255,255,255,.08);border-radius:0;background:radial-gradient(80% 60% at 86% 0%,rgba(31,95,139,.34),transparent 64%),radial-gradient(60% 55% at 8% 104%,rgba(31,95,139,.22),transparent 62%),var(--dark);color:var(--f-text);overflow:hidden}
+/* A clear band of page canvas between the last section (usually the closing call to action) and the footer */
+main>section:last-child{margin-bottom:clamp(56px,7vw,112px)}
+.footer-panel{--f-text:#f2f4f6;--f-muted:rgba(242,244,246,.58);--f-blue:#8cc8f0;--f-line:rgba(255,255,255,.12);position:relative;isolation:isolate;container-type:inline-size;padding:clamp(48px,6cqi,96px) clamp(24px,6.5cqi,104px) 0;border-radius:0;background:radial-gradient(80% 60% at 86% 0%,rgba(31,95,139,.34),transparent 64%),radial-gradient(60% 55% at 8% 104%,rgba(31,95,139,.22),transparent 62%),var(--dark);color:var(--f-text);overflow:hidden}
 .footer-beams{position:absolute;inset:-25% -15%;z-index:1;pointer-events:none;mix-blend-mode:screen}
 .footer-beams:before{content:"";position:absolute;inset:0;background:linear-gradient(118deg,transparent 22%,rgba(140,200,240,.07) 28%,transparent 34%),linear-gradient(118deg,transparent 40%,rgba(140,200,240,.13) 46%,rgba(140,200,240,.04) 49%,transparent 54%),linear-gradient(118deg,transparent 60%,rgba(140,200,240,.06) 65%,transparent 70%);filter:blur(22px);animation:footer-beams 16s ease-in-out infinite alternate}
 @keyframes footer-beams{from{transform:translateX(-5%)}to{transform:translateX(5%)}}
@@ -474,7 +471,6 @@ html{scrollbar-width:thin;scrollbar-color:rgba(13,17,20,.28) transparent}
   .process-section .step-list li{min-height:0;gap:32px}
   .cta-band{padding:32px 24px}
   .why-section,.belief-section,.final-cta{border-radius:24px}
-  main>.final-cta:last-child{border-radius:24px 24px 0 0}
   .principles>article{padding:24px}
   .faq-item summary{grid-template-columns:32px minmax(0,1fr) 16px;font-size:18px}
   .faq-answer{padding:0 0 24px 48px}
