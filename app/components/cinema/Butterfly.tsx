@@ -462,5 +462,22 @@ export default function Butterfly({ path }: { path: string }) {
   }, []);
   // A route change keeps the same butterfly: it flies on and finds a clear spot on the new page once the curtain lifts.
   useEffect(() => { onRoute.current(); }, [path]);
+  // On phones the page has little empty space, so the butterfly stays with the opening screen: once the page's first
+  // section has scrolled mostly away it fades out, and it returns when the reader scrolls back up.
+  useEffect(() => {
+    const layer = host.current, phone = matchMedia("(max-width: 760px)");
+    if (!layer) return;
+    let observer: IntersectionObserver | undefined;
+    const watch = () => {
+      observer?.disconnect(); layer.classList.remove("is-away");
+      const opening = document.querySelector("main > section");
+      if (!phone.matches || !opening) return;
+      observer = new IntersectionObserver(([entry]) => layer.classList.toggle("is-away", entry.intersectionRatio < .35), { threshold: [0, .35, 1] });
+      observer.observe(opening);
+    };
+    const settle = setTimeout(watch, 300);
+    phone.addEventListener("change", watch);
+    return () => { clearTimeout(settle); observer?.disconnect(); phone.removeEventListener("change", watch); };
+  }, [path]);
   return <div className="butterfly-layer" ref={host} aria-hidden="true" />;
 }

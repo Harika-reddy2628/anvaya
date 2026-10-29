@@ -56,19 +56,23 @@ export function MotionLayer() {
       // Route changes cross-fade: the page softens and lifts away under a frosted veil, and the next page settles out
       // of the same blur. The butterfly layer stays put, so it carries on across the change.
       const page = () => document.querySelectorAll("main, .site-footer");
+      // Blurring the whole page is heavy for phone GPUs, so small screens get a plain fade and lift.
+      const soft = () => matchMedia("(max-width: 760px)").matches ? {} : { filter: "blur(8px)" };
       const leave = (href: string) => {
         const el = curtain.current;
         if (!el || leaving.current) return;
         leaving.current = true;
+        // Start loading the next page at the click, so it is ready by the time the curtain has settled.
+        router.prefetch(href);
         lenis.stop();
         gsap.timeline()
           .set(el, { visibility: "visible", opacity: 0, clipPath: "none" })
-          .to(page(), { opacity: 0, y: -18, filter: "blur(8px)", duration: .42, ease: "power2.in" }, 0)
-          .to(el, { opacity: 1, duration: .42, ease: "power2.inOut" }, 0)
-          .fromTo(el.querySelector(".curtain-word"), { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .5, ease: EASE_OUT }, .12);
+          .to(page(), { opacity: 0, y: -14, ...soft(), duration: .34, ease: "power2.in" }, 0)
+          .to(el, { opacity: 1, duration: .34, ease: "power2.inOut" }, 0)
+          .fromTo(el.querySelector(".curtain-word"), { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .4, ease: EASE_OUT }, .08);
         // Navigate on a plain timer as the curtain settles, not a timeline callback: a struggling frame rate must
         // never hold a click hostage.
-        setTimeout(() => router.push(href), 620);
+        setTimeout(() => router.push(href), 440);
         fallback.current = setTimeout(() => reveal(), 4500);
       };
       const reveal = () => {
@@ -76,8 +80,9 @@ export function MotionLayer() {
         leaving.current = false;
         lenis.start();
         lenis.resize();
-        gsap.fromTo(page(), { opacity: 0, y: 26, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: .85, delay: .08, ease: "power3.out", clearProps: "opacity,transform,filter" });
-        gsap.to(curtain.current, { opacity: 0, duration: .6, delay: .1, ease: "power2.out", onComplete: () => gsap.set(curtain.current, { visibility: "hidden" }) });
+        const blur = matchMedia("(max-width: 760px)").matches ? [{}, {}] : [{ filter: "blur(8px)" }, { filter: "blur(0px)" }];
+        gsap.fromTo(page(), { opacity: 0, y: 20, ...blur[0] }, { opacity: 1, y: 0, ...blur[1], duration: .65, delay: .04, ease: "power3.out", clearProps: "opacity,transform,filter" });
+        gsap.to(curtain.current, { opacity: 0, duration: .45, delay: .05, ease: "power2.out", onComplete: () => gsap.set(curtain.current, { visibility: "hidden" }) });
       };
       revealRef.current = reveal;
       const click = (event: MouseEvent) => {
