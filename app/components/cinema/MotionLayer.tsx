@@ -276,22 +276,23 @@ function buildPage(delay: number) {
     .fromTo(feature.querySelectorAll(".tour-plan path"), { strokeDasharray: 2000, strokeDashoffset: 2000 }, { strokeDashoffset: 0, duration: 2.2, ease: "power2.inOut" }, .4));
   q(".range-list").forEach(list => gsap.from(list.children, { opacity: 0, x: -40, duration: 1, stagger: .1, ease: EASE_OUT, scrollTrigger: once(list, "top 88%") }));
 
-  // Footer: the wordmark rises letter by letter, the thread draws across to its bindu, the meaning and columns follow.
+  // Footer: the columns rise in, then the wordmark rises letter by letter onto the panel edge and the slice cuts across it.
   const footer = document.querySelector(".site-footer");
   const word = footer?.querySelector(".footer-word");
   if (footer && word) {
     const chars = SplitText.create(word, { type: "chars", mask: "chars", charsClass: "split-char" }).chars;
-    gsap.from(footer.querySelectorAll(".footer-head > *, .footer-grid > *"), { opacity: 0, y: 24, duration: 1, stagger: .08, ease: EASE_OUT, scrollTrigger: once(footer, "top 85%") });
-    const signature = footer.querySelector(".footer-signature") ?? footer;
-    gsap.timeline({ scrollTrigger: once(signature, "top 90%") })
+    // Hand each letter its offset within the word, in em, so the shared gradient lines up across the letters.
+    const size = parseFloat(getComputedStyle(word).fontSize), box = word.getBoundingClientRect();
+    chars.forEach(char => {
+      const el = char as HTMLElement;
+      el.style.setProperty("--gx", ((el.getBoundingClientRect().left - box.left) / size).toFixed(4));
+      el.style.setProperty("--gw", (box.width / size).toFixed(4));
+    });
+    gsap.from(footer.querySelectorAll(".footer-grid > *"), { opacity: 0, y: 24, duration: 1, stagger: .08, ease: EASE_OUT, scrollTrigger: once(footer, "top 85%") });
+    gsap.timeline({ scrollTrigger: once(footer.querySelector(".footer-wordmark") ?? footer, "top 92%") })
       .from(chars, { yPercent: 110, duration: 1.3, stagger: .05, ease: EASE_OUT })
-      .fromTo(footer.querySelector(".footer-thread path"), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" }, .2)
-      .from(footer.querySelector(".footer-thread circle"), { scale: 0, transformOrigin: "50% 50%", duration: .6, ease: "back.out(3)" }, 1.5)
-      .from(footer.querySelectorAll(".footer-meaning > *"), { opacity: 0, y: 18, duration: .9, stagger: .08, ease: EASE_OUT }, .3)
-      .fromTo(footer.querySelector(".footer-ghost"), { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.8, ease: EASE_OUT }, .1)
+      .from(footer.querySelector(".footer-slice"), { scaleX: 0, duration: 1.2, ease: "power3.inOut" }, .7)
       .from(footer.querySelector(".footer-bottom"), { opacity: 0, duration: .8 }, .8);
-    // A slow drift on the ghosted अन्वय as the footer scrolls in.
-    gsap.fromTo(footer.querySelector(".footer-ghost"), { xPercent: 6 }, { xPercent: -6, ease: "none", scrollTrigger: { trigger: footer, start: "top bottom", end: "bottom bottom", scrub: true } });
   }
 }
 

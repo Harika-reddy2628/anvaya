@@ -340,48 +340,65 @@ main>section:not(.hero),main>.marquee,main.policy-page,.site-footer{position:rel
 .testimonial-slots p{flex:1;color:var(--ivory-3);font-size:16px}
 .slot-meta{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ivory-3);opacity:.7}
 
-/* Footer: brand line and action, four tidy columns, social icons, a quiet wordmark and a single base row */
+/* Footer: one rounded panel holding the brand line, mono link columns with arrows, social chips and the project
+   action, with the giant ANVAYA standing on its bottom edge. A quiet base row below carries the legal links and the
+   studio's time in India. */
 .site-footer{padding:96px 0 calc(var(--pad) + env(safe-area-inset-bottom));border-top:1px solid var(--hair)}
-.footer-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:24px 48px;padding-bottom:48px;border-bottom:1px solid var(--hair)}
-.footer-brand{display:inline-flex;align-items:center;gap:12px;color:var(--ivory)}
-.footer-mark{width:28px;height:28px}
+.footer-panel{position:relative;container-type:inline-size;padding:clamp(28px,4vw,56px) clamp(24px,4vw,56px) 0;border:1px solid var(--hair);border-radius:calc(var(--radius) * 1.5);background:var(--ink-2);overflow:hidden}
+.footer-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,.7fr) minmax(0,1.1fr) minmax(0,1fr) minmax(0,1.1fr);gap:40px 32px}
+.footer-grid nav,.footer-contact,.footer-social,.footer-intro{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0}
+.footer-intro{gap:20px}
+.footer-brand{display:inline-flex;align-items:center;gap:14px;color:var(--ivory)}
+.footer-mark{width:30px;height:30px}
 .footer-mark path{stroke-dasharray:none}
-.footer-line{max-width:none;color:var(--ivory-2);font-size:16px}
-.footer-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px;padding:48px 0}
-.footer-grid nav,.footer-contact,.footer-social{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
-.footer-heading{margin-bottom:12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ivory-3)}
-.footer-grid a{display:inline-flex;align-items:center;min-height:36px;font-size:15px;color:var(--ivory-2);transition:color .3s}
-.footer-grid a:hover{color:var(--ivory)}
-.footer-contact address{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;font-style:normal;font-size:15px;line-height:1.5;color:var(--ivory)}
-.footer-contact address span:last-child{color:var(--ivory-3)}
-.social-row{display:flex;flex-wrap:wrap;gap:8px}
-.social-icon{display:grid;place-items:center;width:44px;height:44px;border:1px solid var(--hair-2);border-radius:50%;color:var(--ivory);transition:background-color .3s,color .3s,border-color .3s}
-.social-icon svg{width:18px;height:18px}
+.footer-devanagari{font-size:30px;line-height:1;color:var(--accent)}
+.footer-line{max-width:19ch;font-family:var(--serif);font-weight:380;font-size:clamp(24px,2.1vw,32px);line-height:1.12;letter-spacing:-.03em;color:var(--ivory)}
+.footer-definition{max-width:34ch;font-size:13px;line-height:1.6;color:var(--ivory-3)}
+.footer-definition b{font-family:var(--serif);font-style:italic;font-weight:400;font-size:16px;color:var(--ivory-2)}
+.footer-heading{margin-bottom:14px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ivory-3)}
+.site-footer .footer-link{display:inline-flex;align-items:center;gap:10px;min-height:38px;font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;color:var(--ivory-2);transition:color .3s}
+.footer-arrow{display:inline-block;color:var(--ivory-3);transition:transform .45s var(--ease-out),color .3s}
+.footer-link:hover{color:var(--ivory)}
+.footer-link:hover .footer-arrow{transform:translateX(5px);color:var(--accent)}
+.social-row{display:grid;grid-template-columns:repeat(2,max-content);gap:8px}
+.social-icon{display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 8px;border:1px solid var(--hair-2);border-radius:999px;background:var(--ink);font-size:12px;color:var(--ivory);transition:background-color .3s,color .3s,border-color .3s}
+.social-icon svg{width:14px;height:14px;flex:none}
 a.social-icon:hover{background:var(--ivory);color:var(--ink);border-color:var(--ivory)}
-.social-icon.is-pending{opacity:.42;cursor:default}
+.social-icon.is-pending{opacity:.5;cursor:default}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-/* Signature: the name's meaning beside a solid wordmark, a ghosted अन्वय behind it and the thread that ends in the bindu */
-.footer-signature{display:grid;grid-template-columns:minmax(220px,.32fr) minmax(0,1fr);align-items:end;gap:32px 64px;padding-top:48px;border-top:1px solid var(--hair)}
-.footer-meaning{display:flex;flex-direction:column;gap:10px;padding-bottom:12px}
-.footer-devanagari{font-size:44px;line-height:1;color:var(--accent)}
-.footer-term{display:flex;align-items:baseline;gap:12px;max-width:none}
-.footer-term b{font-family:var(--serif);font-style:italic;font-weight:400;font-size:24px;letter-spacing:-.02em}
-.footer-term span{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ivory-3)}
-.footer-definition{max-width:32ch;font-size:15px;line-height:1.55;color:var(--ivory-2)}
-.footer-motto{margin-top:6px;font-family:var(--serif);font-size:20px;letter-spacing:-.02em}
+.footer-contact{gap:14px}
+.site-footer .footer-cta{display:inline-flex;align-items:center;gap:14px;font-family:var(--serif);font-weight:380;font-size:clamp(22px,1.9vw,28px);line-height:1;letter-spacing:-.03em;white-space:nowrap;color:var(--ivory);transition:color .3s}
+.footer-cta-arrow{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;font-family:var(--sans);font-size:16px;transition:transform .5s var(--ease-out)}
+.footer-cta:hover{color:var(--accent)}
+.footer-cta:hover .footer-cta-arrow{transform:rotate(45deg) scale(1.06)}
+.footer-contact address{display:flex;flex-direction:column;gap:2px;font-style:normal;font-size:14px;line-height:1.5;color:var(--ivory)}
+.footer-contact address span:last-child{color:var(--ivory-3)}
+.footer-contact>a:not(.footer-cta){font-size:14px;color:var(--ivory-2)}
+.footer-motto{font-family:var(--serif);font-size:20px;letter-spacing:-.02em}
 .footer-motto em{color:var(--accent)}
-.site-footer .footer-wordmark{position:relative;display:block;margin:0;text-align:right;overflow:visible}
-.footer-ghost{position:absolute;right:2%;bottom:18%;z-index:-1;font-size:min(16vw,280px);line-height:1;color:rgba(31,95,139,.06);pointer-events:none}
-.site-footer .footer-word{display:inline-block;font-size:min(11.5vw,210px);letter-spacing:.14em;margin-right:-.14em;font-weight:600;line-height:1;color:var(--ivory);-webkit-text-stroke:0}
-.site-footer .footer-word i{color:var(--accent);-webkit-text-stroke:0}
-.footer-thread{display:block;width:100%;height:28px;margin-top:12px;overflow:visible}
-.footer-thread path{fill:none;stroke:var(--accent);stroke-width:1.5;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:0}
-.footer-thread circle{fill:var(--accent)}
-.site-footer .footer-bottom{display:flex;align-items:center;flex-wrap:wrap;gap:8px 24px;margin-top:24px;padding-top:24px;border-top:1px solid var(--hair);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ivory-3)}
-.site-footer .footer-bottom p{margin:0 auto 0 0}
-.site-footer .footer-bottom .indic{margin-left:0;font-size:16px;letter-spacing:0;text-transform:none;color:var(--ivory-2)}
+/* The wordmark: semibold capitals in a blue colour grade, filling the panel's width and standing on its bottom edge, sliced through the middle
+   by a cut in the panel colour. The blue thread runs along the cut, with a slow glint travelling it. */
+.site-footer .footer-wordmark{position:relative;display:block;margin:clamp(48px,6cqi,96px) 0 -.06em;font-size:23.2cqi;line-height:1;text-align:center;white-space:nowrap;overflow:visible}
+.site-footer .footer-word{display:inline-block;font-family:var(--sans);font-size:1em;font-weight:580;letter-spacing:-.02em;margin-right:-.02em;line-height:inherit;color:var(--ivory);-webkit-text-stroke:0}
+/* A colour grade in the site's own blues across the name: deep navy ink, the accent, a sky highlight (the butterfly's
+   blues) and back to the accent, like light sliding over glass. Once the name is split into letters,
+   each letter carries the whole word's gradient, offset by its own position (set in em by MotionLayer), so the colour
+   runs continuously across the word instead of restarting per letter. */
+.site-footer .footer-word,.site-footer .footer-word .split-char{background-image:linear-gradient(90deg,#0f2a44 0%,#1f5f8b 30%,#3a8fcc 56%,#6fb8f2 72%,#2f78b4 88%,#1f5f8b 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.site-footer .footer-word .split-char{background-size:calc(var(--gw,1) * 1em) 100%;background-position:calc(var(--gx,0) * -1em) 0;background-repeat:no-repeat}
+.footer-slice{position:absolute;left:-4%;right:-4%;top:.47em;height:.075em;background:linear-gradient(var(--ink-2) 0 44%,var(--accent) 44% 56%,var(--ink-2) 56%);transform-origin:0 50%;overflow:hidden;pointer-events:none}
+.footer-slice:after{content:"";position:absolute;top:0;bottom:0;left:0;width:14%;background:radial-gradient(closest-side,rgba(111,184,242,.95),rgba(111,184,242,0));transform:translateX(-120%);animation:footer-slice-glint 7s 2.4s cubic-bezier(.45,0,.55,1) infinite}
+@keyframes footer-slice-glint{to{transform:translateX(820%)}}
+@media (prefers-reduced-motion:reduce){.footer-slice:after{animation:none;opacity:0}}
+.site-footer .footer-bottom{display:flex;align-items:center;flex-wrap:wrap;gap:8px 24px;margin-top:20px;padding:0 8px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ivory-3)}
+.site-footer .footer-bottom>p:first-child{margin:0 auto 0 0}
 .site-footer .footer-bottom a{min-height:44px;font-size:11px;color:var(--ivory-2)}
 .site-footer .footer-bottom a:hover{color:var(--ivory)}
+.footer-local{display:inline-flex;align-items:center;gap:10px;padding:6px 12px;border:1px solid var(--hair);border-radius:999px}
+.footer-local:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(31,95,139,.45);animation:footer-pulse 2.8s ease-out infinite}
+@keyframes footer-pulse{70%,100%{box-shadow:0 0 0 7px rgba(31,95,139,0)}}
+@media (prefers-reduced-motion:reduce){.footer-local:before{animation:none}}
+.site-footer .footer-clock{margin:0;font-size:inherit;letter-spacing:inherit;color:var(--ivory-3)}
 
 /* Finish: a slim ink scrollbar, branded selection and a light sheen across primary actions on hover */
 html{scrollbar-width:thin;scrollbar-color:rgba(13,17,20,.28) transparent}
@@ -424,7 +441,8 @@ html{scrollbar-width:thin;scrollbar-color:rgba(13,17,20,.28) transparent}
   .proof-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
   .proof-stats div:nth-child(3){padding-left:0;border-left:0}
   .proof-stats div:nth-child(n+3){border-top:1px solid var(--hair)}
-  .footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .footer-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .footer-intro,.footer-contact{grid-column:1/-1}
   .engagement-card{min-height:0}
   .engagement-card .action{margin-top:24px}
   .faq-layout{grid-template-columns:minmax(0,1fr)}
@@ -455,11 +473,9 @@ html{scrollbar-width:thin;scrollbar-color:rgba(13,17,20,.28) transparent}
   .practice-grid,.process-section .step-list{grid-template-columns:minmax(0,1fr)}
   .terms-grid,.testimonial-slots{grid-template-columns:minmax(0,1fr)}
   .plan-card{padding:24px}
-  .footer-head{grid-template-columns:minmax(0,1fr)}
-  .footer-signature{grid-template-columns:minmax(0,1fr)}
-  .site-footer .footer-wordmark{text-align:left}
-  .site-footer .footer-word{font-size:15vw}
-  .footer-cta{justify-self:start}
+  .footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 16px}
+  .footer-grid>*{grid-column:1/-1}
+  .site-footer .footer-bottom>p:first-child{flex-basis:100%}
   .site-footer{padding-top:64px}
   .work-feature{grid-template-columns:minmax(0,1fr)}
   .range-list li{grid-template-columns:32px minmax(0,1fr);gap:12px 16px}

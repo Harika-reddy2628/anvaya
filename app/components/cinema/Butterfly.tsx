@@ -2,10 +2,10 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
-/* A crystal butterfly that lives behind the page's text. It roams the hero, flutters along while the reader scrolls,
-   and when scrolling stops it flies to the nearest spot with no text under it and lands. Faceted glass wings shade
-   from deep blue at the root to ice at the edges, catch moving glints, and leave a short trail of sparkles in flight.
-   Everything is procedural: no image files. */
+/* A blue butterfly that lives behind the page's text. It drifts around the whole viewport on slow, curving paths,
+   flapping in short bursts and gliding between them, then lands on a spot with no text under it and basks. Behind it
+   a soft blue shine trails and fades. The wings are painted at runtime on a canvas (deep navy root, morpho blue, ice
+   edge, dark margin with pale spots and an eyespot on each tail), so there are still no image files. */
 
 // Text-bearing elements the butterfly must never sit on.
 const TEXT = "h1, h2, h3, p, li, a, button, summary, label, input, textarea, select, .action, .pill, .practice-card, .engagement-card, .faq-item, .service-block, .marquee";
@@ -13,71 +13,98 @@ const TEXT = "h1, h2, h3, p, li, a, button, summary, label, input, textarea, sel
 /** Right-hand wing outlines in wing space: x runs out from the body, y forward (+) and back (−). */
 function forewing() {
   const s = new THREE.Shape();
-  s.moveTo(.02, .06);
-  s.bezierCurveTo(.22, .5, .7, .95, 1.16, 1.02);
-  s.bezierCurveTo(1.32, 1.02, 1.34, .84, 1.24, .64);
-  s.bezierCurveTo(1.06, .34, .72, .12, .34, .02);
-  s.lineTo(.02, .06);
+  s.moveTo(.03, .05);
+  s.bezierCurveTo(.2, .45, .62, .92, 1.08, 1.06);
+  s.bezierCurveTo(1.26, 1.1, 1.38, .98, 1.32, .8);
+  s.bezierCurveTo(1.24, .56, 1.02, .3, .74, .14);
+  s.bezierCurveTo(.5, .02, .24, -.02, .03, .05);
   return s;
 }
 function hindwing() {
   const s = new THREE.Shape();
   s.moveTo(.03, -.02);
-  s.bezierCurveTo(.44, .04, .94, -.12, 1, -.46);
-  s.bezierCurveTo(1.04, -.76, .84, -.94, .62, -1);
-  s.bezierCurveTo(.54, -1.08, .46, -1.18, .38, -1.3);
-  s.bezierCurveTo(.32, -1.12, .22, -.9, .06, -.5);
+  s.bezierCurveTo(.36, .06, .8, -.02, .98, -.3);
+  // A scalloped outer margin: each bump bulges away from the wing's middle.
+  const margin = [[.98, -.3], [.97, -.52], [.89, -.73], [.75, -.9], [.6, -1.02]];
+  for (let i = 1; i < margin.length; i++) {
+    const [ax, ay] = margin[i - 1], [bx, by] = margin[i], mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const out = new THREE.Vector2(mx - .42, my + .5).normalize().multiplyScalar(.06);
+    s.quadraticCurveTo(mx + out.x, my + out.y, bx, by);
+  }
+  // A slender swallowtail.
+  s.bezierCurveTo(.56, -1.12, .5, -1.32, .45, -1.46);
+  s.bezierCurveTo(.4, -1.52, .32, -1.48, .33, -1.37);
+  s.bezierCurveTo(.32, -1.1, .2, -.8, .06, -.42);
   s.lineTo(.03, -.02);
   return s;
 }
 
-const DEEP = new THREE.Color("#174f7a"), MID = new THREE.Color("#4aa8e0"), ICE = new THREE.Color("#dff3ff");
-
-/** Facets a wing: a fan from an inner point to a raised inner ring, then slivers out to the curved outline.
-    Colour runs from deep blue at the root to ice at the rim, with each facet slightly lighter or darker. */
-function wingGeometry(shape: THREE.Shape, seed: number) {
-  const outline = shape.getPoints(14).slice(0, -1);
-  const n = outline.length, k = 11;
-  const rand = (i: number) => { const v = Math.sin(i * 12.9898 + seed * 78.233) * 43758.5453; return v - Math.floor(v); };
-  const centroid = outline.reduce((s, p) => s.add(p.clone().divideScalar(n)), new THREE.Vector2());
-  const centre = centroid.clone().multiplyScalar(.62);
+/** Paints a wing on a canvas in wing units and returns it as a texture plus the UV bounds it was painted in. */
+function wingTexture(shape: THREE.Shape, hind: boolean) {
+  const outline = shape.getPoints(24);
+  const box = new THREE.Box2().setFromPoints(outline).expandByScalar(.04);
+  const w = box.max.x - box.min.x, h = box.max.y - box.min.y, k = 512 / Math.max(w, h);
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.ceil(w * k); canvas.height = Math.ceil(h * k);
+  const ctx = canvas.getContext("2d")!;
+  ctx.setTransform(k, 0, 0, -k, -box.min.x * k, box.max.y * k);
+  const centroid = outline.reduce((s, p) => s.add(p.clone().divideScalar(outline.length)), new THREE.Vector2());
   const reach = Math.max(...outline.map(p => p.length()));
-  const ring = Array.from({ length: k }, (_, i) => {
-    const o = outline[Math.floor((i / k) * n)], p = centre.clone().lerp(o, .58);
-    return new THREE.Vector3(p.x, p.y, (rand(i) - .5) * .09);
-  });
-  const positions: number[] = [], colors: number[] = [];
-  const tint = new THREE.Color();
-  const tri = (a: THREE.Vector3, b: THREE.Vector3, c: THREE.Vector3, facet: number) => {
-    for (const p of [a, b, c]) {
-      const t = Math.min(1, Math.hypot(p.x, p.y) / reach);
-      tint.copy(DEEP).lerp(MID, Math.min(1, t * 1.6)).lerp(ICE, Math.max(0, t - .55) * 1.8).multiplyScalar(.86 + rand(facet) * .3);
-      // Wings lie in the x–z plane; z is the body's forward axis.
-      positions.push(p.x, p.z, -p.y); colors.push(tint.r, tint.g, tint.b);
-    }
-  };
-  const c3 = new THREE.Vector3(centre.x, centre.y, .05), o3 = (p: THREE.Vector2) => new THREE.Vector3(p.x, p.y, 0);
-  for (let i = 0; i < k; i++) tri(c3, ring[i], ring[(i + 1) % k], i);
-  for (let i = 0; i < n; i++) {
-    const r = Math.floor((i / n) * k), next = Math.floor(((i + 1) / n) * k) % k;
-    tri(ring[r], o3(outline[i]), o3(outline[(i + 1) % n]), 20 + i);
-    if (next !== r) tri(ring[r], o3(outline[(i + 1) % n]), ring[next], 80 + i);
+  const inset = (p: THREE.Vector2, d: number) => p.clone().add(centroid.clone().sub(p).normalize().multiplyScalar(d));
+  const trace = (pts: THREE.Vector2[]) => { ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)); ctx.closePath(); };
+  const dot = (p: THREE.Vector2, r: number, color: string) => { ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill(); };
+
+  trace(outline); ctx.save(); ctx.clip();
+  // Ground: deep navy at the root opening into luminous morpho blue, ice toward the edge.
+  const ground = ctx.createRadialGradient(0, 0, 0, 0, 0, reach);
+  ground.addColorStop(0, "#0a1d4a"); ground.addColorStop(.22, "#123f9c"); ground.addColorStop(.5, "#2477e6");
+  ground.addColorStop(.74, "#4fb8ff"); ground.addColorStop(.9, "#a6e4ff");
+  ctx.fillStyle = ground; ctx.fillRect(box.min.x, box.min.y, w, h);
+  // A pearly sheen across the middle of the wing.
+  const sheen = ctx.createRadialGradient(centroid.x * 1.1, centroid.y * 1.1, 0, centroid.x * 1.1, centroid.y * 1.1, reach * .45);
+  sheen.addColorStop(0, "rgba(220,245,255,.38)"); sheen.addColorStop(1, "rgba(220,245,255,0)");
+  ctx.fillStyle = sheen; ctx.fillRect(box.min.x, box.min.y, w, h);
+  // Veins: gently curved spokes from the root, and a submarginal line following the edge.
+  ctx.strokeStyle = "rgba(6,22,58,.5)"; ctx.lineWidth = .014; ctx.lineCap = "round";
+  const spokes = outline.filter(p => p.length() > reach * .45).filter((_, i, all) => i % Math.max(1, Math.round(all.length / 9)) === 0);
+  for (const p of spokes) {
+    const end = inset(p, .02), mid = end.clone().multiplyScalar(.5).add(new THREE.Vector2(-end.y, end.x).multiplyScalar(.08));
+    ctx.beginPath(); ctx.moveTo(.03, 0); ctx.quadraticCurveTo(mid.x, mid.y, end.x, end.y); ctx.stroke();
   }
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-  geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
-  geometry.computeVertexNormals();
-  // Silver veins: the rim, the inner ring and spokes from the root.
-  const veins: number[] = [];
-  const v = (a: THREE.Vector3, b: THREE.Vector3) => veins.push(a.x, a.z, -a.y, b.x, b.z, -b.y);
-  for (let i = 0; i < n; i++) v(o3(outline[i]), o3(outline[(i + 1) % n]));
-  for (let i = 0; i < k; i++) { v(ring[i], ring[(i + 1) % k]); v(new THREE.Vector3(.02, 0, 0), ring[i]); v(ring[i], o3(outline[Math.floor((i / k) * n)])); }
-  const lines = new THREE.BufferGeometry();
-  lines.setAttribute("position", new THREE.Float32BufferAttribute(veins, 3));
-  return { geometry, lines };
+  ctx.lineWidth = .01; trace(outline.filter(p => p.length() > reach * .3).map(p => inset(p, .2))); ctx.stroke();
+  // A dark velvet margin with a row of pale spots, and on the hindwing a second row of blue crescents.
+  ctx.strokeStyle = "#0b1838"; ctx.lineWidth = .17; ctx.lineJoin = "round"; trace(outline); ctx.stroke();
+  const rim = outline.filter((p, i) => p.length() > reach * .42 && i % 2 === 0);
+  rim.forEach(p => dot(inset(p, .045), .019, "rgba(226,246,255,.95)"));
+  if (hind) {
+    rim.forEach((p, i) => i % 2 || dot(inset(p, .13), .028, "rgba(120,205,255,.85)"));
+    // An eyespot at the base of the tail.
+    const eye = new THREE.Vector2(.5, -.98);
+    dot(eye, .085, "#0b1838"); dot(eye, .06, "#4fb8ff"); dot(eye, .035, "#0b1838"); dot(eye.clone().add(new THREE.Vector2(.012, .014)), .014, "#f2fbff");
+  } else {
+    // Pale flecks near the apex.
+    for (const [x, y, r] of [[1.08, .9, .03], [1.0, .8, .024], [1.16, .78, .022], [.92, .72, .018]]) dot(new THREE.Vector2(x, y), r, "rgba(232,248,255,.9)");
+  }
+  ctx.restore();
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace; texture.anisotropy = 4;
+  return { texture, box };
 }
 
-/** A small procedural studio so the facets catch varied light; it rotates over time to sweep glints across them. */
+/** The wing as a flat mesh lying in the x–z plane (z is the body's forward axis), UV-mapped to its painted texture. */
+function wingGeometry(shape: THREE.Shape, box: THREE.Box2) {
+  const geometry = new THREE.ShapeGeometry(shape, 16);
+  const position = geometry.attributes.position, uv = geometry.attributes.uv;
+  for (let i = 0; i < position.count; i++) {
+    const x = position.getX(i), y = position.getY(i);
+    uv.setXY(i, (x - box.min.x) / (box.max.x - box.min.x), (y - box.min.y) / (box.max.y - box.min.y));
+    position.setXYZ(i, x, 0, -y);
+  }
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
+/** A small procedural studio so the wings catch varied light; it rotates over time to sweep glints across them. */
 function studio(renderer: THREE.WebGLRenderer) {
   const env = new THREE.Scene(), trash: { dispose(): void }[] = [];
   const box = (s: [number, number, number], p: [number, number, number], color: string, k: number, back = false) => {
@@ -96,29 +123,72 @@ function studio(renderer: THREE.WebGLRenderer) {
   return texture;
 }
 
-/** A soft radial glow, drawn on a canvas at runtime. */
+/** A soft blue radial glow, drawn on a canvas at runtime. Blue (not white) so it reads on the light pages too. */
 function glowTexture() {
   const canvas = document.createElement("canvas"); canvas.width = canvas.height = 128;
   const ctx = canvas.getContext("2d")!, g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-  g.addColorStop(0, "rgba(190,232,255,.9)"); g.addColorStop(.35, "rgba(120,190,240,.35)"); g.addColorStop(1, "rgba(120,190,240,0)");
+  g.addColorStop(0, "rgba(120,195,255,.6)"); g.addColorStop(.4, "rgba(70,150,250,.22)"); g.addColorStop(1, "rgba(70,150,250,0)");
   ctx.fillStyle = g; ctx.fillRect(0, 0, 128, 128);
   const texture = new THREE.CanvasTexture(canvas); texture.colorSpace = THREE.SRGBColorSpace;
   return texture;
 }
 
-const SPARKS = 90;
+const pointVertex = `attribute float aLife; attribute float aSize; uniform float uDpr; varying float vLife;
+  void main(){ vLife = aLife; vec4 mv = modelViewMatrix * vec4(position, 1.); gl_PointSize = aSize * uDpr * (.55 + .45 * aLife); gl_Position = projectionMatrix * mv; }`;
+
+/** The shine: soft blue blobs left along the path, a bright pale core inside a wide glow, fading out over time. */
+const TRAIL = 160;
+const trailShader = {
+  vertexShader: pointVertex,
+  fragmentShader: `varying float vLife;
+    void main(){
+      float d = length(gl_PointCoord - .5) * 2.; if (d > 1.) discard;
+      float glow = exp(-d * d * 4.) * .13, core = exp(-d * d * 22.) * .34, a = (glow + core) * vLife * vLife;
+      vec3 color = mix(vec3(.16, .52, 1.), vec3(.7, .92, 1.), core / (glow + core + 1e-4));
+      gl_FragColor = vec4(color, a);
+    }`,
+};
+/** A few four-point twinkles shed from the wing tips. */
+const SPARKS = 40;
 const sparkShader = {
-  vertexShader: `attribute float aLife; attribute float aSize; varying float vLife;
-    void main(){ vLife = aLife; vec4 mv = modelViewMatrix * vec4(position, 1.); gl_PointSize = aSize * aLife * (1500. / -mv.z); gl_Position = projectionMatrix * mv; }`,
-  // A four-point twinkle with a soft core.
+  vertexShader: pointVertex,
   fragmentShader: `varying float vLife;
     void main(){
       vec2 p = gl_PointCoord - .5; float d = length(p);
       float star = max(0., 1. - abs(p.x) * 14.) * max(0., 1. - abs(p.y) * 2.2) + max(0., 1. - abs(p.y) * 14.) * max(0., 1. - abs(p.x) * 2.2);
-      float a = (smoothstep(.5, 0., d) * .55 + star) * vLife;
-      gl_FragColor = vec4(mix(vec3(.55, .82, 1.), vec3(1.), .6) * a, a);
+      float a = min(1., smoothstep(.5, 0., d) * .4 + star) * vLife * .85;
+      gl_FragColor = vec4(mix(vec3(.2, .56, 1.), vec3(.9, .97, 1.), star * .5), a);
     }`,
 };
+
+/** A ring buffer of fading points in the butterfly's pixel-space world. */
+function pointPool(count: number, shader: { vertexShader: string; fragmentShader: string }, dpr: number) {
+  const pos = new Float32Array(count * 3), life = new Float32Array(count), size = new Float32Array(count), vel = new Float32Array(count * 2);
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+  geometry.setAttribute("aLife", new THREE.BufferAttribute(life, 1));
+  geometry.setAttribute("aSize", new THREE.BufferAttribute(size, 1));
+  const material = new THREE.ShaderMaterial({ ...shader, uniforms: { uDpr: { value: dpr } }, transparent: true, depthWrite: false });
+  const points = new THREE.Points(geometry, material); points.frustumCulled = false;
+  let next = 0;
+  return {
+    points, geometry, material,
+    emit(x: number, y: number, z: number, s: number, vx = 0, vy = 0) {
+      const i = next; next = (next + 1) % count;
+      pos.set([x, y, z], i * 3); vel.set([vx, vy], i * 2); life[i] = 1; size[i] = s;
+    },
+    update(dt: number, fade: number) {
+      for (let i = 0; i < count; i++) {
+        if (life[i] <= 0) continue;
+        life[i] = Math.max(0, life[i] - dt * fade);
+        pos[i * 3] += vel[i * 2] * dt; pos[i * 3 + 1] += vel[i * 2 + 1] * dt;
+      }
+      geometry.attributes.position.needsUpdate = true; geometry.attributes.aLife.needsUpdate = true; geometry.attributes.aSize.needsUpdate = true;
+    },
+  };
+}
+
+const wrap = (a: number) => ((a + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
 
 export default function Butterfly({ path }: { path: string }) {
   const host = useRef<HTMLDivElement>(null);
@@ -128,7 +198,8 @@ export default function Butterfly({ path }: { path: string }) {
     if (!target) return;
     let renderer: THREE.WebGLRenderer;
     try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "low-power" }); } catch { return; }
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    const dpr = Math.min(devicePixelRatio, 2);
+    renderer.setPixelRatio(dpr);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.NeutralToneMapping;
     renderer.setClearColor(0x000000, 0);
@@ -138,70 +209,72 @@ export default function Butterfly({ path }: { path: string }) {
     const scene = new THREE.Scene(), environment = studio(renderer);
     scene.environment = environment;
     const camera = new THREE.PerspectiveCamera(30, 1, 10, 5000);
-    const crystal = new THREE.MeshPhysicalMaterial({
-      vertexColors: true, metalness: .2, roughness: .04, flatShading: true, transparent: true, opacity: .93, side: THREE.DoubleSide,
-      iridescence: .6, iridescenceIOR: 1.55, iridescenceThicknessRange: [200, 700], clearcoat: 1, clearcoatRoughness: .02,
-      envMapIntensity: 2.6, emissive: "#0d4a72", emissiveIntensity: .22, specularIntensity: 1,
-    });
-    // A bright rim where the facets turn away, like light caught in the edge of cut glass.
-    crystal.onBeforeCompile = shader => {
-      shader.fragmentShader = shader.fragmentShader.replace("#include <opaque_fragment>", `#include <opaque_fragment>
-        float rim = pow(1.0 - abs(dot(normalize(normal), normalize(vViewPosition))), 2.5);
-        gl_FragColor.rgb += vec3(.62, .86, 1.) * rim * .55;`);
+    const disposables: { dispose(): void }[] = [environment];
+
+    // Painted wings under an iridescent clearcoat, with a pale blue rim where they turn away from the viewer.
+    const wingMaterial = (map: THREE.Texture) => {
+      const m = new THREE.MeshPhysicalMaterial({
+        map, emissiveMap: map, emissive: "#ffffff", emissiveIntensity: .32, roughness: .32, metalness: .12, side: THREE.DoubleSide,
+        iridescence: .9, iridescenceIOR: 1.4, iridescenceThicknessRange: [300, 800], clearcoat: .8, clearcoatRoughness: .08,
+        sheen: .6, sheenColor: new THREE.Color("#8fdcff"), envMapIntensity: 1.4,
+      });
+      m.onBeforeCompile = shader => {
+        shader.fragmentShader = shader.fragmentShader.replace("#include <opaque_fragment>", `#include <opaque_fragment>
+          float rim = pow(1.0 - abs(dot(normalize(normal), normalize(vViewPosition))), 2.5);
+          gl_FragColor.rgb += vec3(.55, .82, 1.) * rim * .35;`);
+      };
+      return m;
     };
-    const silver = new THREE.LineBasicMaterial({ color: "#f2f9ff", transparent: true, opacity: .85 });
-    const metal = new THREE.MeshStandardMaterial({ color: "#b9d4e6", metalness: 1, roughness: .18, envMapIntensity: 1.8 });
-    const eyeMaterial = new THREE.MeshStandardMaterial({ color: "#0c1a24", metalness: .6, roughness: .1 });
+    const velvet = new THREE.MeshStandardMaterial({ color: "#14213b", roughness: .55, metalness: .3, emissive: "#0a2a55", emissiveIntensity: .35, envMapIntensity: 1.2 });
+    const eyeMaterial = new THREE.MeshStandardMaterial({ color: "#05080f", metalness: .6, roughness: .1 });
+    const feeler = new THREE.LineBasicMaterial({ color: "#1b2a44" });
     const glow = glowTexture();
-    const haloMaterial = new THREE.SpriteMaterial({ map: glow, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, opacity: .3 });
+    const haloMaterial = new THREE.SpriteMaterial({ map: glow, depthWrite: false, transparent: true, opacity: .4 });
     const halo = new THREE.Sprite(haloMaterial);
-    const disposables: { dispose(): void }[] = [crystal, silver, metal, eyeMaterial, environment, glow, haloMaterial];
+    disposables.push(velvet, eyeMaterial, feeler, glow, haloMaterial);
 
     // Assemble: the body runs along −z (head forward); each wing hinges on the body axis.
     const butterfly = new THREE.Group(), body = new THREE.Group();
-    butterfly.add(body); scene.add(butterfly, halo);
+    butterfly.add(body);
     const wings: { group: THREE.Group; side: number; hind: boolean }[] = [];
-    for (const side of [1, -1]) {
-      for (const hind of [false, true]) {
-        // The same seed on both sides keeps the facets mirror-symmetric.
-        const { geometry, lines } = wingGeometry(hind ? hindwing() : forewing(), hind ? 2 : 1);
-        disposables.push(geometry, lines);
+    for (const hind of [false, true]) {
+      const shape = hind ? hindwing() : forewing(), { texture, box } = wingTexture(shape, hind);
+      const geometry = wingGeometry(shape, box), material = wingMaterial(texture);
+      disposables.push(texture, geometry, material);
+      for (const side of [1, -1]) {
         const group = new THREE.Group();
-        group.add(new THREE.Mesh(geometry, crystal), new THREE.LineSegments(lines, silver));
+        group.add(new THREE.Mesh(geometry, material));
         group.scale.x = side;
         body.add(group); wings.push({ group, side, hind });
       }
     }
-    const thoraxGeo = new THREE.CapsuleGeometry(.065, .3, 6, 14), abdomenGeo = new THREE.CapsuleGeometry(.05, .5, 6, 14), headGeo = new THREE.SphereGeometry(.075, 18, 12), eyeGeo = new THREE.SphereGeometry(.03, 10, 8);
-    disposables.push(thoraxGeo, abdomenGeo, headGeo, eyeGeo);
-    const thorax = new THREE.Mesh(thoraxGeo, metal); thorax.rotation.x = Math.PI / 2; thorax.position.z = -.08;
-    const abdomen = new THREE.Mesh(abdomenGeo, metal); abdomen.rotation.x = Math.PI / 2; abdomen.position.z = .42; abdomen.scale.set(.9, 1, .9);
-    const head = new THREE.Mesh(headGeo, metal); head.position.z = -.33;
+    const thoraxGeo = new THREE.CapsuleGeometry(.07, .3, 6, 14), abdomenGeo = new THREE.CapsuleGeometry(.05, .55, 6, 14), headGeo = new THREE.SphereGeometry(.075, 18, 12), eyeGeo = new THREE.SphereGeometry(.032, 10, 8), clubGeo = new THREE.SphereGeometry(.024, 8, 6);
+    disposables.push(thoraxGeo, abdomenGeo, headGeo, eyeGeo, clubGeo);
+    const thorax = new THREE.Mesh(thoraxGeo, velvet); thorax.rotation.x = Math.PI / 2; thorax.position.z = -.08;
+    const abdomen = new THREE.Mesh(abdomenGeo, velvet); abdomen.rotation.x = Math.PI / 2; abdomen.position.z = .44; abdomen.scale.set(.9, 1, .9);
+    const head = new THREE.Mesh(headGeo, velvet); head.position.z = -.33;
     const eyes = [-1, 1].map(s => { const e = new THREE.Mesh(eyeGeo, eyeMaterial); e.position.set(.05 * s, .02, -.37); return e; });
-    const antennae = new THREE.BufferGeometry().setFromPoints([-1, 1].flatMap(s => {
-      const pts = new THREE.QuadraticBezierCurve3(new THREE.Vector3(.03 * s, .03, -.4), new THREE.Vector3(.14 * s, .14, -.7), new THREE.Vector3(.27 * s, .1, -.95)).getPoints(12);
+    const tips = [-1, 1].map(s => new THREE.Vector3(.3 * s, .1, -.98));
+    const antennae = new THREE.BufferGeometry().setFromPoints([-1, 1].flatMap((s, j) => {
+      const pts = new THREE.QuadraticBezierCurve3(new THREE.Vector3(.03 * s, .03, -.4), new THREE.Vector3(.12 * s, .16, -.72), tips[j]).getPoints(12);
       return pts.slice(0, -1).flatMap((p, i) => [p, pts[i + 1]]);
     }));
     disposables.push(antennae);
-    body.add(thorax, abdomen, head, ...eyes, new THREE.LineSegments(antennae, silver));
+    const clubs = tips.map(p => { const c = new THREE.Mesh(clubGeo, velvet); c.position.copy(p); return c; });
+    body.add(thorax, abdomen, head, ...eyes, ...clubs, new THREE.LineSegments(antennae, feeler));
 
-    // Sparkle trail, in the same pixel-space world as the butterfly.
-    const sparkPos = new Float32Array(SPARKS * 3), sparkLife = new Float32Array(SPARKS), sparkSize = new Float32Array(SPARKS), sparkVel = new Float32Array(SPARKS * 2);
-    const sparkGeo = new THREE.BufferGeometry();
-    sparkGeo.setAttribute("position", new THREE.BufferAttribute(sparkPos, 3));
-    sparkGeo.setAttribute("aLife", new THREE.BufferAttribute(sparkLife, 1));
-    sparkGeo.setAttribute("aSize", new THREE.BufferAttribute(sparkSize, 1));
-    const sparkMat = new THREE.ShaderMaterial({ ...sparkShader, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
-    const sparks = new THREE.Points(sparkGeo, sparkMat); sparks.frustumCulled = false; scene.add(sparks);
-    disposables.push(sparkGeo, sparkMat);
-    let nextSpark = 0, sparkDebt = 0;
+    const trail = pointPool(TRAIL, trailShader, dpr), sparks = pointPool(SPARKS, sparkShader, dpr);
+    disposables.push(trail.geometry, trail.material, sparks.geometry, sparks.material);
+    scene.add(trail.points, halo, butterfly, sparks.points);
+    let trailGap = 0, sparkDebt = 0;
     const tip = new THREE.Vector3();
 
-    // Flight state, in screen pixels.
-    const pos = new THREE.Vector2(innerWidth + 80, innerHeight * .28), vel = new THREE.Vector2(-120, 20), aim = pos.clone();
-    let mode: "fly" | "rest" = "fly", heading = -1.2, bank = 0, flyMix = 1, phase = 0, width = 0, height = 0, frame = 0, last = performance.now(), disposed = false;
+    // Flight state, in screen pixels. Heading 0 points up the screen; the butterfly always flies along its heading.
+    const pos = new THREE.Vector2(innerWidth + 80, innerHeight * .3), aim = new THREE.Vector2(innerWidth * .7, innerHeight * .35), pointer = new THREE.Vector2(-999, -999);
+    let mode: "fly" | "land" | "rest" = "fly", heading = -Math.PI / 2, look = heading, bank = 0, speed = 0, legs = 2;
+    let flyMix = 1, phase = 0, beats = 4, gliding = false, glideMix = 0, glideFrom = 0, glideUntil = 0, bob = 0;
+    let width = 0, height = 0, frame = 0, last = performance.now(), disposed = false;
     let size = 40, restUntil = 0, scrolling = false, scrollTimer: ReturnType<typeof setTimeout> | undefined, routeTimer: ReturnType<typeof setTimeout> | undefined;
-    const pointer = new THREE.Vector2(-999, -999);
 
     /** Is the point, and the span of the wings around it, clear of text and inside the usable area? */
     function clear(x: number, y: number) {
@@ -213,120 +286,120 @@ export default function Butterfly({ path }: { path: string }) {
       }
       return true;
     }
-    /** The nearest clear spot to (x, y), searched on widening rings; in the hero, only within its visible part. */
-    function landing(x: number, y: number, minHop = 0) {
-      const hero = document.querySelector<HTMLElement>(".hero")?.getBoundingClientRect();
-      const inHero = hero && hero.bottom > height * .55;
-      for (let r = minHop; r < Math.max(width, height); r += 36) {
+    /** The nearest clear spot to (x, y), searched on widening rings. */
+    function landing(x: number, y: number) {
+      for (let r = 0; r < Math.max(width, height); r += 36) {
         const steps = Math.max(10, Math.round(r / 16)), start = Math.random() * Math.PI * 2;
         for (let i = 0; i < steps; i++) {
           const a = start + (i / steps) * Math.PI * 2, px = x + Math.cos(a) * r, py = y + Math.sin(a) * r;
-          if (inHero && (py > hero.bottom - size * 2 || py < hero.top)) continue;
           if (clear(px, py)) return new THREE.Vector2(px, py);
         }
       }
       return new THREE.Vector2(width * .86, height * .3);
     }
-    function takeOff(minHop = 0) { mode = "fly"; aim.copy(landing(pos.x, pos.y, minHop)); }
-    /** Where the reader goes next: the next section below the fold, or the closing call to action at the end. */
-    const guide = new THREE.Vector2();
-    function nextStop() {
-      const sections = [...document.querySelectorAll<HTMLElement>("main > section, main > .marquee")];
-      const next = sections.find(s => s.getBoundingClientRect().top > height * .55);
-      if (next) { const r = next.getBoundingClientRect(); return guide.set(width / 2, r.top + 40); }
-      const cta = document.querySelector<HTMLElement>(".final-cta .action, .site-footer");
-      const r = cta?.getBoundingClientRect();
-      return r ? guide.set(r.left + r.width / 2, r.top + r.height / 2) : guide.set(width / 2, height + 200);
+    /** A waypoint somewhere well across the viewport, so it roams the whole page rather than circling one spot. */
+    function wander() {
+      const m = size * 3, p = new THREE.Vector2();
+      for (let i = 0; i < 12; i++) {
+        p.set(m + Math.random() * (width - m * 2), m + 80 + Math.random() * (height - m * 2 - 80));
+        if (p.distanceTo(pos) > Math.min(width, height) * .55) break;
+      }
+      return p;
     }
-    /** In the hero, after a while at rest it moves beside the scroll cue, ready to lead the way down. */
-    function cueSpot() {
-      const cue = document.querySelector<HTMLElement>(".hero-scroll")?.getBoundingClientRect();
-      return cue && cue.top < height && cue.bottom > 0 ? landing(cue.left + 90, cue.top - size * 1.2) : null;
-    }
-    let restCount = 0, nudgeAt = 0;
-    onRoute.current = () => { clearTimeout(routeTimer); mode = "fly"; routeTimer = setTimeout(() => takeOff(60), 1100); };
-
-    function emit(x: number, y: number, z: number) {
-      const i = nextSpark; nextSpark = (nextSpark + 1) % SPARKS;
-      sparkPos.set([x + (Math.random() - .5) * 6, y + (Math.random() - .5) * 6, z], i * 3);
-      sparkVel.set([(Math.random() - .5) * 16 - vel.x * .08, -10 - Math.random() * 14 + vel.y * .08], i * 2);
-      sparkLife[i] = 1; sparkSize[i] = 5 + Math.random() * 7;
-    }
+    function takeOff(trips = 5 + Math.floor(Math.random() * 4)) { mode = "fly"; legs = trips; aim.copy(wander()); }
+    // The first call is the mount itself, not a route change.
+    let mounted = false;
+    onRoute.current = () => { if (!mounted) { mounted = true; return; } clearTimeout(routeTimer); routeTimer = setTimeout(() => takeOff(), 900); if (mode === "rest") takeOff(); };
 
     function step(now: number) {
       frame = requestAnimationFrame(step);
       const dt = Math.min(.05, (now - last) / 1000), t = now / 1000; last = now;
       if (!width) return;
-      // Steering: an easing seek with a slow wander while flying, slowing on approach; at rest it settles in place.
-      const to = aim.clone().sub(pos), dist = to.length(), speedCap = size * 7;
-      if (mode === "fly") {
-        const desired = to.normalize().multiplyScalar(Math.min(speedCap, dist * 1.8));
-        desired.add(new THREE.Vector2(Math.sin(t * 1.9) * 26, Math.cos(t * 1.4) * 22));
-        vel.lerp(desired, Math.min(1, dt * 1.8));
-        if (dist < 4 && !scrolling) { mode = "rest"; restUntil = t + 6 + Math.random() * 4; restCount++; nudgeAt = t + 1.6; }
+      const cruise = size * 2.6;
+      const to = aim.clone().sub(pos), dist = to.length();
+      let turnRate = 0;
+
+      if (mode === "rest") {
+        speed = 0; pos.lerp(aim, Math.min(1, dt * 3));
+        if (t > restUntil || pos.distanceTo(pointer) < size * 2.2) takeOff();
       } else {
-        vel.multiplyScalar(Math.pow(.01, dt)); pos.lerp(aim, Math.min(1, dt * 2.5));
-        // Every few seconds a small hop toward the next stop, as if leading the way.
-        if (t > nudgeAt) {
-          nudgeAt = t + 2.4;
-          const lead = nextStop().clone().sub(pos);
-          if (lead.length() > size * 3) { vel.addScaledVector(lead.normalize(), size * 3.2); }
+        // Steering: turn toward the waypoint at a limited rate, plus a slow meander, so the path is a chain of soft arcs.
+        const near = THREE.MathUtils.clamp(1 - dist / (size * 5), 0, 1);
+        const maxRate = mode === "land" ? .9 + near * 3.5 : .8 + near * 1.6;
+        const meander = (Math.sin(t * .83) * .5 + Math.sin(t * 2.1 + 1.3) * .28 + Math.sin(t * .37 + 4) * .4) * (1 - near);
+        turnRate = THREE.MathUtils.clamp(wrap(Math.atan2(to.x, -to.y) - heading) * 1.4, -maxRate, maxRate) + meander;
+        heading = wrap(heading + turnRate * dt);
+        // Speed breathes a little, eases off in a glide and slows right down for a landing.
+        let want = cruise * (.85 + Math.sin(t * .6) * .15) * (1 - glideMix * .2);
+        if (mode === "land") want *= THREE.MathUtils.clamp(dist / (size * 4), .1, 1);
+        speed += (want - speed) * Math.min(1, dt * 1.5);
+        pos.x += Math.sin(heading) * speed * dt; pos.y -= Math.cos(heading) * speed * dt;
+
+        if (mode === "fly" && dist < size * 2) {
+          if (--legs > 0 || scrolling) aim.copy(wander());
+          else { mode = "land"; aim.copy(landing(pos.x, pos.y)); }
         }
-        if (t > restUntil) {
-          const cue = restCount % 2 === 1 ? cueSpot() : null;
-          if (cue && cue.distanceTo(pos) > size * 2) { mode = "fly"; aim.copy(cue); } else takeOff(160);
+        if (mode === "land") {
+          // On the final approach it settles straight onto the spot.
+          if (dist < size * .6) pos.lerp(aim, Math.min(1, dt * 3));
+          if (dist < 2) { mode = "rest"; restUntil = t + 3 + Math.random() * 2; }
         }
       }
-      pos.addScaledVector(vel, dt);
       pos.set(THREE.MathUtils.clamp(pos.x, -120, width + 120), THREE.MathUtils.clamp(pos.y, -120, height + 120));
-      if (mode === "rest" && pos.distanceTo(pointer) < size * 2.2) takeOff(240);
+      flyMix += ((mode === "rest" ? 0 : 1) - flyMix) * Math.min(1, dt * 3);
 
-      const speed = vel.length();
-      flyMix += ((mode === "fly" ? 1 : 0) - flyMix) * Math.min(1, dt * 3);
-      // Heading follows travel and banks into turns; at rest it eases to a gentle angle.
-      const stop = mode === "rest" ? nextStop() : null;
-      const want = mode === "fly" && speed > 25 ? Math.atan2(vel.x, -vel.y) : stop ? Math.atan2(stop.x - pos.x, -(stop.y - pos.y)) : -.3;
-      const turn = ((want - heading + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
-      heading += turn * Math.min(1, dt * 4);
-      bank += (THREE.MathUtils.clamp(turn * 1.2, -.6, .6) * flyMix - bank) * Math.min(1, dt * 5);
-
-      // Wings: quick downstrokes with a slower recovery in flight; at rest it basks, wings open, with a slow gentle beat.
-      phase += dt * Math.PI * 2 * (flyMix * (5.5 + Math.min(2, speed / 160)) + (1 - flyMix) * .45);
+      // Wings: unhurried bursts of a few beats (quick downstroke, slower recovery), then a short glide with the wings held in a
+      // shallow V. On the final approach it keeps flapping; at rest it slowly opens and closes them.
+      if (mode === "fly" && !gliding) {
+        const before = Math.floor(phase / (Math.PI * 2));
+        phase += dt * Math.PI * 2 * 2.4;
+        if (Math.floor(phase / (Math.PI * 2)) > before && --beats <= 0) { gliding = true; glideFrom = t; glideUntil = t + .6 + Math.random() * 1; }
+      } else if (gliding) {
+        if (t > glideUntil || mode !== "fly") { gliding = false; beats = 2 + Math.floor(Math.random() * 4); }
+      } else phase += dt * Math.PI * 2 * (flyMix * 2.4 + (1 - flyMix) * .3);
+      glideMix += ((gliding ? 1 : 0) - glideMix) * Math.min(1, dt * 7);
       const stroke = (s: number) => Math.pow((Math.sin(s) + 1) / 2, 1.35);
       wings.forEach(w => {
-        const s = phase - (w.hind ? .35 : 0);
-        const flying = -.35 + stroke(s) * 1.45, resting = .04 + stroke(s) * .42;
-        w.group.rotation.z = w.side * THREE.MathUtils.lerp(resting, flying, flyMix);
-        w.group.rotation.y = w.side * (w.hind ? -.08 : .06);
+        const s = phase - (w.hind ? .3 : 0);
+        const flapping = -.4 + stroke(s) * 1.5, glide = w.hind ? .22 : .3, basking = .08 + stroke(s) * .75;
+        w.group.rotation.z = w.side * THREE.MathUtils.lerp(basking, THREE.MathUtils.lerp(flapping, glide, glideMix), flyMix);
+        w.group.rotation.y = w.side * (w.hind ? -.1 : .06);
       });
-      body.position.y = flyMix * Math.sin(phase + 1.4) * .06;
+      // Each downstroke lifts it a little; in a glide it sinks gently.
+      const bobTo = flyMix * ((1 - glideMix) * Math.sin(phase + 1.2) * size * .1 + glideMix * size * .3 * Math.min(1, (t - glideFrom) / .9));
+      bob += (bobTo - bob) * Math.min(1, dt * 6);
+
+      look += wrap(heading - look) * Math.min(1, dt * 5);
+      bank += (THREE.MathUtils.clamp(turnRate * .35, -.5, .5) * flyMix - bank) * Math.min(1, dt * 4);
+      body.position.y = flyMix * (1 - glideMix) * Math.sin(phase + 1.4) * .05;
       body.rotation.z = bank;
 
-      const x = pos.x - width / 2, y = height / 2 - pos.y + flyMix * Math.sin(t * 2.6) * 5;
+      const x = pos.x - width / 2, y = height / 2 - pos.y - bob;
       butterfly.position.set(x, y, 0);
       // Seen mostly from above, tilted toward the viewer, then turned to its heading.
-      butterfly.rotation.set(1.28, 0, -heading, "ZYX");
+      butterfly.rotation.set(1.28, 0, -look, "ZYX");
       butterfly.scale.setScalar(size);
-      halo.position.set(x, y, -20); halo.scale.setScalar(size * 4.2);
-      haloMaterial.opacity = .14 + flyMix * .2;
-      // Glints sweep across the facets, faster while flying.
-      scene.environmentRotation.y += dt * (.25 + flyMix * 1.1);
+      halo.position.set(x, y, -20); halo.scale.setScalar(size * (3.2 + flyMix * .8));
+      haloMaterial.opacity = .3 + flyMix * .35;
+      // Glints sweep across the wings, a little faster in flight.
+      scene.environmentRotation.y += dt * (.2 + flyMix * .5);
       scene.environmentRotation.x = Math.sin(t * .7) * .3;
 
-      // Sparkles shed from the wing tips while flying.
-      sparkDebt += dt * flyMix * Math.min(60, 12 + speed * .12);
+      // The shine: a soft blue blob every few pixels travelled, laid just behind the body.
+      trailGap += speed * dt * flyMix;
+      if (trailGap > 5) {
+        trailGap = 0;
+        trail.emit(x - Math.sin(look) * size * .35, y - Math.cos(look) * size * .35, -10, size * 2, 0, 5);
+      }
+      trail.update(dt, .5);
+      sparkDebt += dt * flyMix * 5;
       while (sparkDebt > 1) {
         sparkDebt -= 1;
         const w = wings[Math.floor(Math.random() * wings.length)];
-        tip.set(w.hind ? .55 : 1.15, 0, w.hind ? 1.05 : -.9); w.group.localToWorld(tip);
-        emit(tip.x, tip.y, tip.z + 5);
+        tip.set(w.hind ? .42 : 1.25, 0, w.hind ? 1.45 : -.85); w.group.localToWorld(tip);
+        sparks.emit(tip.x, tip.y, tip.z + 5, 6 + Math.random() * 6, (Math.random() - .5) * 12, -8 - Math.random() * 10);
       }
-      for (let i = 0; i < SPARKS; i++) {
-        if (sparkLife[i] <= 0) continue;
-        sparkLife[i] = Math.max(0, sparkLife[i] - dt * 1.25);
-        sparkPos[i * 3] += sparkVel[i * 2] * dt; sparkPos[i * 3 + 1] += sparkVel[i * 2 + 1] * dt;
-      }
-      sparkGeo.attributes.position.needsUpdate = true; sparkGeo.attributes.aLife.needsUpdate = true; sparkGeo.attributes.aSize.needsUpdate = true;
+      sparks.update(dt, 1);
       renderer.render(scene, camera);
     }
     function resize() {
@@ -337,14 +410,14 @@ export default function Butterfly({ path }: { path: string }) {
       camera.position.set(0, 0, height / 2 / Math.tan(THREE.MathUtils.degToRad(15)));
       camera.far = camera.position.z * 3; camera.updateProjectionMatrix();
     }
-    // Scrolling: it flutters along with a little lag, then lands wherever the reader stops.
+    // Scrolling lifts it off any perch and it keeps roaming, drifting slightly with the page, until the reader stops.
     let lastY = scrollY;
     const scroll = () => {
-      const dy = THREE.MathUtils.clamp(scrollY - lastY, -80, 80); lastY = scrollY;
-      mode = "fly"; scrolling = true;
-      aim.set(THREE.MathUtils.clamp(pos.x + Math.sin(performance.now() / 420) * 26, size * 2, width - size * 2), THREE.MathUtils.clamp(pos.y - dy * 1.2, size * 2 + 80, height - size * 2));
+      const dy = THREE.MathUtils.clamp(scrollY - lastY, -60, 60); lastY = scrollY;
+      if (mode !== "fly") takeOff();
+      pos.y -= dy * .15; scrolling = true;
       clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => { scrolling = false; takeOff(); }, 220);
+      scrollTimer = setTimeout(() => { scrolling = false; }, 600);
     };
     const move = (event: PointerEvent) => pointer.set(event.clientX, event.clientY);
     const visibility = () => { cancelAnimationFrame(frame); if (!document.hidden) { last = performance.now(); frame = requestAnimationFrame(step); } };
@@ -363,7 +436,7 @@ export default function Butterfly({ path }: { path: string }) {
       disposables.forEach(d => d.dispose()); renderer.dispose(); renderer.domElement.remove();
     };
   }, []);
-  // A route change keeps the same butterfly: it glides to a clear spot on the new page once the curtain lifts.
+  // A route change keeps the same butterfly: it flies on and finds a clear spot on the new page once the curtain lifts.
   useEffect(() => { onRoute.current(); }, [path]);
   return <div className="butterfly-layer" ref={host} aria-hidden="true" />;
 }
