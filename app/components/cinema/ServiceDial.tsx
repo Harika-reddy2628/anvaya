@@ -12,9 +12,8 @@ const STEP = 24; // Degrees between numbers on the dial.
 /* What we do, after the owner's reference: the dial stage pins while a dial of service numbers turns down the left edge;
    the active service's title, line and tags change beside it and a glass star turns on the right.
    Scroll-driven, never scroll-jacked: ordinary scrolling (wheel, trackpad, keys, touch) turns the dial through the
-   services and, when the reader pauses, it settles on the nearest one. Earlier stepped gesture detection could hold a
-   steady mouse wheel on the first service, so the page never moved on. Without motion, or below 1100px, it is a plain
-   list. */
+   services at a constant rate. Snapping to the nearest service was removed because it made the dial lurch ahead after
+   a pause and crawl while scrolling. Without motion, or below 1100px, it is a plain list. */
 export function ServiceDial() {
   const root = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
@@ -30,11 +29,11 @@ export function ServiceDial() {
       const turn = { value: 0 };
       let index = 0;
       const trigger = ScrollTrigger.create({
-        trigger: element, start: "top top", pin: element, pinSpacing: true, // About 1.3 screens of scroll per service, so each one holds long enough to read.
-        end: () => `+=${innerHeight * last * 1.3}`,
-        snap: { snapTo: 1 / last, duration: { min: .45, max: 1 }, delay: .18, ease: "power3.inOut" },
+        // A steady 0.85 screen of scroll per service and no snapping: the dial follows the reader's own pace, so it never
+        // jumps ahead or stalls, and every service holds for the same distance.
+        trigger: element, start: "top top", pin: element, pinSpacing: true, end: () => `+=${innerHeight * last * .85}`,
         onUpdate: self => {
-          gsap.to(turn, { value: self.progress * last, duration: .8, ease: "power3.out", overwrite: true, onUpdate: () => element.style.setProperty("--turn", `${-turn.value * STEP}deg`) });
+          gsap.to(turn, { value: self.progress * last, duration: .45, ease: "power2.out", overwrite: true, onUpdate: () => element.style.setProperty("--turn", `${-turn.value * STEP}deg`) });
           const nearest = Math.round(self.progress * last);
           if (nearest !== index) { index = nearest; setActive(nearest); }
         },
