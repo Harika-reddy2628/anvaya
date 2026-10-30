@@ -1,14 +1,14 @@
 "use client";
 import { useEffect, useRef, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { INTRO_DONE, INTRO_KEY, gsap, introWillPlay } from "../../lib/motion";
+import { INTRO_DONE, gsap, introWillPlay, markIntroPlayed } from "../../lib/motion";
 import { letterInkTop } from "../../lib/perch";
 import { ButterflyGlyph } from "./ButterflyGlyph";
 import { Wordmark } from "./Logo";
 
 /* The opening: on ink, "Step into" fades in and "Anvaya" writes itself while a blue light rises from below. A butterfly
    lands on the point of the "A" and sits there, slowly opening and closing its wings. It only flies when the reader tries to scroll
-   (or the screen lifts), so the opening stays still. Nominal 2.3s, hard limit 2.7s. */
+   (or the screen lifts), so the opening stays still. Nominal 3.5s, hard limit 4.3s: unhurried, so the words can be read. It plays every time the site is opened. */
 export function Intro({ children }: { children: ReactNode }) {
   const path = usePathname();
   const screen = useRef<HTMLDivElement>(null);
@@ -29,8 +29,9 @@ export function Intro({ children }: { children: ReactNode }) {
     document.body.style.overflow = "hidden";
     overlay.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true });
     const q = gsap.utils.selector(overlay);
-    const timeline = gsap.timeline({ defaults: { ease: "expo.out" } });
-    function finish() {
+    const timeline = gsap.timeline({ defaults: { ease: "expo.out" } }).timeScale(.65);
+    // A real finish (skip, scroll, the screen lifting or the safeguard) counts as played; React unmounting it does not.
+    function finish(played = true) {
       if (finished) return;
       finished = true;
       clearTimeout(timeout);
@@ -41,7 +42,7 @@ export function Intro({ children }: { children: ReactNode }) {
       underlying!.inert = false;
       document.body.style.overflow = overflow;
       root.dataset.intro = "done";
-      try { sessionStorage.setItem(INTRO_KEY, "1"); } catch { /* Storage is optional. */ }
+      if (played) markIntroPlayed();
       window.dispatchEvent(new Event(INTRO_DONE));
       if (hadFocus) {
         const target = previousFocus && previousFocus !== document.body ? previousFocus : underlying!.querySelector<HTMLElement>("main");
@@ -51,8 +52,8 @@ export function Intro({ children }: { children: ReactNode }) {
       }
     }
     finishRef.current = finish;
-    // Nominal 2.3s; the safeguard keeps the whole transition under three seconds.
-    const timeout = setTimeout(finish, 2700);
+    // Played at 0.65x speed: nominal 3.5s; the safeguard keeps the whole transition under 4.3s.
+    const timeout = setTimeout(finish, 4300);
     const butterfly = q(".intro-butterfly")[0] as HTMLElement, wings = q(".bf-wings")[0] as Element;
     // The butterfly sits on the point of the "A" that starts "Anvaya", its feet on the very top of the letter.
     const place = () => {
@@ -105,7 +106,7 @@ export function Intro({ children }: { children: ReactNode }) {
     const changed = () => { if (preference.matches) finish(); };
     window.addEventListener("keydown", key);
     preference.addEventListener("change", changed);
-    return () => { finish(); wingTween?.kill(); window.removeEventListener("wheel", leave); window.removeEventListener("touchmove", leave); window.removeEventListener("keydown", intent); window.removeEventListener("keydown", key); preference.removeEventListener("change", changed); finishRef.current = () => {}; };
+    return () => { finish(false); wingTween?.kill(); window.removeEventListener("wheel", leave); window.removeEventListener("touchmove", leave); window.removeEventListener("keydown", intent); window.removeEventListener("keydown", key); preference.removeEventListener("change", changed); finishRef.current = () => {}; };
   }, [path]);
   return <><div ref={screen} className="intro-screen" hidden role="dialog" aria-modal="true" aria-label="Preparing the Anvaya experience">
     <div className="intro-row"><Wordmark /><button type="button" className="pill" onClick={() => finishRef.current()}>Skip intro ↗</button></div>

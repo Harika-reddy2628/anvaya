@@ -25,7 +25,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { themeColor: "#ffffff", colorScheme: "light" };
 // Runs before first paint: if the Home opening will play, mark it now so the intro screen covers the page from the
 // first frame instead of appearing after hydration. Mirrors introWillPlay() and INTRO_KEY in lib/motion (a client module, so not importable here).
-const PREPAINT = `try{if(location.pathname==="/"&&!location.hash&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&sessionStorage.getItem("anvaya-intention-intro")!=="1")document.documentElement.dataset.intro="playing"}catch(e){}`;
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+const PREPAINT = `try{var p=location.pathname,b=${JSON.stringify(BASE_PATH)};if(b&&p.indexOf(b)===0)p=p.slice(b.length);if(p.replace(/\\/+$/,"")===""&&!location.hash&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&sessionStorage.getItem("anvaya-intention-intro")!=="1")document.documentElement.dataset.intro="playing"}catch(e){}`;
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <html lang="en" className={`${serif.variable} ${sans.variable} ${mono.variable} ${hind.variable}`} suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: PREPAINT }} /></head><body><Intro><a href="#main-content" className="skip-link" tabIndex={0}>Skip to content</a><Header /><ButterflyLayer />{children}<Footer /></Intro><MotionLayer /></body></html>;
 }

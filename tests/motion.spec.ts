@@ -8,7 +8,7 @@ test("the loading transition reveals the Anvaya title and releases the page", as
   await expect(intro.locator(".intro-line-1")).toContainText("Step into");
   await expect(intro.locator(".intro-line-1")).toContainText("Anvaya");
   await expect(intro.locator(".intro-butterfly")).toBeAttached();
-  await expect(intro).toBeHidden({ timeout: 2900 });
+  await expect(intro).toBeHidden({ timeout: 4600 });
   await expect(page.locator("html")).toHaveAttribute("data-intro", "done");
 });
 

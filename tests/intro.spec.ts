@@ -1,15 +1,15 @@
 import { expect, test } from "@playwright/test";
-test("intro is skippable, restores focus and never repeats within the session", async ({ page }) => {
+test("intro is skippable, restores focus and plays again every time the site is opened", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" }); await page.goto("/");
   const intro = page.getByRole("dialog", { name: "Preparing the Anvaya experience" }); await expect(intro).toBeVisible();
   await page.getByRole("button", { name: "Skip intro" }).click(); await expect(intro).toBeHidden();
   await expect(page.locator("main")).toBeFocused(); expect(await page.evaluate(() => document.body.style.overflow)).not.toBe("hidden");
-  await page.reload(); await expect(intro).toBeHidden();
+  await page.reload(); await expect(intro).toBeVisible();
 });
-test("intro completes in under three seconds after it starts", async ({ page }) => {
+test("intro completes in under four and a half seconds after it starts", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" }); await page.goto("/");
   const intro = page.getByRole("dialog", { name: "Preparing the Anvaya experience" }); await expect(intro).toBeVisible();
-  await expect(intro).toBeHidden({ timeout: 2900 });
+  await expect(intro).toBeHidden({ timeout: 4600 });
   expect(await page.evaluate(() => document.querySelector("main")?.closest("[inert]"))).toBeNull();
 });
 test("reduced motion, deep links and inner pages bypass the intro", async ({ page }) => {

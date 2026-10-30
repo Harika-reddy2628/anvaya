@@ -22,9 +22,18 @@ export function prefersReducedMotion() {
   return typeof window !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-/** The loading transition plays once per session on Home only, never for reduced motion or deep links. */
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+/** Is this the home page? Accepts the router's path ("/") and the browser's, which carries the static host's base path. */
+const isHome = (path: string) => (BASE && path.startsWith(BASE) ? path.slice(BASE.length) : path).replace(/\/+$/, "") === "";
+/** In memory only, so it resets on every page load: the opening plays each time the site is opened, but not again when
+    the reader navigates back to Home inside the same load. */
+let introPlayed = false;
+export const markIntroPlayed = () => { introPlayed = true; };
+
+/** The loading transition plays every time the site is opened on Home, never for reduced motion or deep links. The
+    session key is no longer written; it stays readable only so tests and previews can switch the opening off. */
 export function introWillPlay(path: string) {
-  if (typeof window === "undefined" || path !== "/" || location.hash || prefersReducedMotion()) return false;
+  if (typeof window === "undefined" || !isHome(path) || location.hash || prefersReducedMotion() || introPlayed) return false;
   try { return sessionStorage.getItem(INTRO_KEY) !== "1"; } catch { return true; }
 }
 
@@ -33,7 +42,7 @@ export function afterIntro(path: string, callback: () => void) {
   if (!introWillPlay(path) || document.documentElement.dataset.intro === "done") { callback(); return () => {}; }
   let called = false;
   const run = () => { if (called) return; called = true; clearTimeout(fallback); callback(); };
-  const fallback = setTimeout(run, 3200);
+  const fallback = setTimeout(run, 4800);
   window.addEventListener(INTRO_DONE, run, { once: true });
   return () => { called = true; clearTimeout(fallback); window.removeEventListener(INTRO_DONE, run); };
 }
