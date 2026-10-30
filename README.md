@@ -78,3 +78,7 @@ touch out/.nojekyll   # serve the _next/ folder
 ```
 
 The contents of `out/` are published to the `gh-pages` branch.
+
+## Logo files
+
+`public/brand/` holds the Anvaya logo: `anvaya-logo.svg` (mark, wordmark and अन्वय, for light backgrounds), `anvaya-logo-dark.svg` (for dark backgrounds), and `anvaya-mark.svg` / `anvaya-mark-light.svg` (the AN monogram in a rounded tile), each with a transparent PNG at 4x. The wordmark and अन्वय are outlined from the site's own Inter (600) and Hind fonts, so the SVGs need no fonts installed. The mark is the one in the header: an A and an N joined by a blue thread running from the A's crossbar into the N's stem.
