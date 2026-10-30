@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { ReachingHands } from "../components/cinema/ReachingHands";
+import { ConnectionField } from "../components/cinema/ConnectionField";
 import { FinalCTA } from "../components/cinema/Shared";
 
 export const metadata: Metadata = { title: "Studio", description: "Connection, with intent. Meet Anvaya, a technology and design studio in India, working globally." };
 export default function StudioPage() {
   return <main id="main-content" tabIndex={-1}>
-    {/* The hero is a night panel: two dot-matrix hands reach in behind the heading — अन्वय, connection. */}
-    <section className="page-hero about-hero" id="intro"><ReachingHands /><div className="wrap-full page-hero-grid">
+    {/* The hero is a night panel: a living network of linked nodes behind the heading — अन्वय, connection. */}
+    <section className="page-hero about-hero" id="intro"><ConnectionField /><div className="wrap-full page-hero-grid">
       <div className="page-hero-copy">
         <p className="about-kicker"><span lang="hi" className="indic">अन्वय</span><span>connection, relationship and continuity</span></p>
         <h1>About Anvaya.</h1>
