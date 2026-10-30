@@ -60,7 +60,7 @@ h2{font-size:clamp(40px,5.2vw,84px);line-height:1;max-width:16ch}
    hidden until it has found its first letter (Butterfly.tsx adds is-here). */
 .butterfly-layer{position:fixed;inset:0;z-index:6;pointer-events:none;opacity:0;transition:opacity .9s var(--ease-out)}
 .butterfly-layer.is-here{opacity:1}
-/* On phones there is little empty space, so the butterfly keeps to the opening screen and fades once the reader
+/* The butterfly keeps to the opening screen and fades once the reader
    scrolls into the content (Butterfly.tsx toggles is-away). */
 .butterfly-layer.is-here.is-away{opacity:0}
 .butterfly-layer canvas{display:block}
