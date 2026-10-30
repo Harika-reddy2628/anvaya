@@ -48,7 +48,7 @@ h2{font-size:clamp(40px,5.2vw,84px);line-height:1;max-width:16ch}
 .header-inner nav{gap:4px;padding:4px;border:1px solid var(--hair);border-radius:999px;background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
 .nav-link{position:relative;display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border-radius:999px;font-size:15px;color:var(--ivory-2);transition:color .3s,background-color .3s}
 .nav-link:hover{background:rgba(255,255,255,.7)}
-.brand .brand-mark{width:28px;height:28px;color:var(--ivory)}
+.brand .brand-mark{width:36px;height:36px;color:var(--ivory)}
 .brand .logo-mark path{stroke-dasharray:none}
 .nav-link:hover,.nav-link[aria-current]{color:var(--ivory)}
 .nav-link[aria-current]:after{content:"";position:absolute;left:50%;bottom:5px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--accent)}
@@ -473,7 +473,7 @@ html{scrollbar-width:thin;scrollbar-color:rgba(11,24,56,.28) transparent}
   .nav-link{flex:none;padding:0 6px;font-size:13px}
   .header-inner nav{gap:0;padding:3px}
   .nav-pages{gap:3px}
-  .brand .brand-mark{width:24px;height:24px}
+  .brand .brand-mark{width:30px;height:30px}
   .site-header .pill{font-size:13px}
   .hero{min-height:max(720px,100svh);justify-content:flex-start;padding:176px var(--pad) 120px}
   .hero-center{max-width:none;align-items:center;text-align:center}

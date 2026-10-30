@@ -16,7 +16,7 @@ test("the header and footer carry the wordmark and the favicon is the mark", asy
   await page.addInitScript(skipIntro); await page.goto("/studio");
   await expect(page.locator("header .brand .wordmark")).toBeVisible();
   await expect(page.locator("footer .footer-word")).toHaveCount(1);
-  const icon = await request.get("/icon.svg"); expect(await icon.text()).toContain("#c4673f");
+  const icon = await request.get("/icon.svg"); expect(await icon.text()).toContain("#4fb8ff");
 });
 
 test("route curtains navigate with history intact and never stay over the page", async ({ page }) => {

@@ -63,8 +63,8 @@ p{max-width:62ch}
 .wordmark i{font-style:normal;color:var(--accent)}
 .logo-mark{width:34px;height:34px;overflow:visible}
 .logo-mark path{fill:none;stroke-dasharray:1;stroke-linecap:round}
-.logo-mark .logo-arch{stroke:currentColor;stroke-width:3.6}.logo-mark .logo-inner{stroke:currentColor;stroke-width:1.6;opacity:.42}
-.logo-mark .logo-thread{stroke:var(--accent);stroke-width:2.4}.logo-mark .logo-bindu{fill:var(--accent)}
+.logo-mark .logo-arch,.logo-mark .logo-n{stroke:currentColor;stroke-width:4.4;stroke-linejoin:round}
+.logo-mark .logo-thread{stroke:var(--accent);stroke-width:3.2}.logo-mark .logo-bindu{fill:var(--accent)}
 
 /* Pills and actions */
 .pill{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--hair-2);background:rgba(11,10,9,.32);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--ivory);white-space:nowrap;transition:background-color .45s var(--ease),color .45s var(--ease),border-color .45s var(--ease)}
