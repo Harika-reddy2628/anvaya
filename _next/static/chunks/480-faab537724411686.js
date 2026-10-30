@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[480],{3480:(e,n,s)=>{s.d(n,{LR:()=>t});var a=s(5155);function t(){return(0,a.jsx)("span",{className:"practice-status",children:"Coming soon"})}s(8500),s(5075),s(7235),s(1273),a.Fragment,a.Fragment,a.Fragment}}]);

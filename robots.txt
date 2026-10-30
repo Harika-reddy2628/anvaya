@@ -1,0 +1,4 @@
+User-Agent: *
+Allow: /
+
+Sitemap: https://harika-reddy2628.github.io/anvaya/anvaya/sitemap.xml
