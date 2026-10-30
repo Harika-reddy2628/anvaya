@@ -60,7 +60,8 @@ export function Footer() {
 export function PricingPlans({ catalogHref = "/pricing#add-ons" }: { catalogHref?: string }) {
   return <>
     <div className="offer-banner" role="note"><b>{foundingOffer.title}</b><span>{foundingOffer.detail}</span></div>
-    <div className="plan-grid">{plans.map(plan => <article className={`plan-card${plan.available ? "" : " is-soon"}`} key={plan.id}>
+    {/* The middle plan is set on the dark navy panel for rhythm only; it carries no "popular" claim. */}
+    <div className="plan-grid">{plans.map(plan => <article className={`plan-card${plan.available ? "" : " is-soon"}${plan.id === "tour" ? " is-featured" : ""}`} key={plan.id}>
       <p className="plan-practice">{plan.practice}{!plan.available && <> <ComingSoon /></>}</p>
       <h3>{plan.name}</h3>
       <div className="plan-price">
