@@ -366,7 +366,7 @@ export default function Butterfly({ path }: { path: string }) {
     function settle() { if (!pickPerch()) { perch = null; aim.copy(landing(width * .8, height * .3)); } mode = "land"; }
     // The first call is the mount itself, not a route change.
     let mounted = false;
-    onRoute.current = () => { if (!mounted) { mounted = true; return; } clearTimeout(routeTimer); routeTimer = setTimeout(settle, 1100); };
+    onRoute.current = () => { if (!mounted) { mounted = true; return; } clearTimeout(routeTimer); routeTimer = setTimeout(settle, 700); };
 
     // The butterfly is decoration: if it cannot hold the frame budget even at 1x, it leaves the page.
     const budget = frameBudget(renderer, { resize: () => resize(), onTooSlow: () => { disposed = true; cancelAnimationFrame(frame); renderer.domElement.style.display = "none"; } });
@@ -375,12 +375,12 @@ export default function Butterfly({ path }: { path: string }) {
       budget.tick();
       const dt = Math.min(.05, (now - last) / 1000), t = now / 1000; last = now;
       if (!width) return;
-      const cruise = size * 2.6;
+      const cruise = mode === "land" ? size * 7 : size * 2.6;
       const to = aim.clone().sub(pos), dist = to.length();
       let turnRate = 0;
 
       // With no letter yet (the headings may still be animating in), keep looking once a second.
-      if (mode === "rest" && !perch && t - lookedAt > 1) { lookedAt = t; if (pickPerch()) mode = "land"; }
+      if (mode === "rest" && !perch && t - lookedAt > .4) { lookedAt = t; if (pickPerch()) mode = "land"; }
       // Resting or landing, it stays on its letter as the page moves; if the letter has gone, it picks another.
       if (perch && mode !== "fly") {
         const r = perch.range.getBoundingClientRect();
@@ -392,26 +392,26 @@ export default function Butterfly({ path }: { path: string }) {
       } else {
         // Steering: turn toward the waypoint at a limited rate, plus a slow meander, so the path is a chain of soft arcs.
         const near = THREE.MathUtils.clamp(1 - dist / (size * 5), 0, 1);
-        const maxRate = mode === "land" ? .9 + near * 3.5 : .8 + near * 1.6;
+        const maxRate = mode === "land" ? 3 + near * 5 : .8 + near * 1.6;
         const meander = (Math.sin(t * .83) * .5 + Math.sin(t * 2.1 + 1.3) * .28 + Math.sin(t * .37 + 4) * .4) * (1 - near);
         turnRate = THREE.MathUtils.clamp(wrap(Math.atan2(to.x, -to.y) - heading) * 1.4, -maxRate, maxRate) + meander;
         heading = wrap(heading + turnRate * dt);
         // Speed breathes a little, eases off in a glide and slows right down for a landing.
         let want = cruise * (.85 + Math.sin(t * .6) * .15) * (1 - glideMix * .2);
-        if (mode === "land") want *= THREE.MathUtils.clamp(dist / (size * 4), .1, 1);
-        speed += (want - speed) * Math.min(1, dt * 1.5);
+        if (mode === "land") want *= THREE.MathUtils.clamp(dist / (size * 2), .5, 1);
+        speed += (want - speed) * Math.min(1, dt * (mode === "land" ? 6 : 1.5));
         pos.x += Math.sin(heading) * speed * dt; pos.y -= Math.cos(heading) * speed * dt;
 
         // Flying: while the reader is still scrolling it keeps roaming; once they stop it heads for a letter.
         if (mode === "fly" && dist < size * 2) { if (scrolling) aim.copy(wander()); else settle(); }
         if (mode === "land") {
           // On the final approach it settles straight onto the letter.
-          if (dist < size * .6) pos.lerp(aim, Math.min(1, dt * 3));
-          if (dist < 2) { mode = "rest"; weave(pos); }
+          if (dist < size * .9) pos.lerp(aim, Math.min(1, dt * 9));
+          if (dist < 3) { mode = "rest"; weave(pos); }
         }
       }
       pos.set(THREE.MathUtils.clamp(pos.x, -120, width + 120), THREE.MathUtils.clamp(pos.y, -120, height + 120));
-      flyMix += ((mode === "rest" ? 0 : 1) - flyMix) * Math.min(1, dt * 3);
+      flyMix += ((mode === "rest" ? 0 : 1) - flyMix) * Math.min(1, dt * 7);
 
       // Wings: unhurried bursts of a few beats (quick downstroke, slower recovery), then a short glide with the wings held in a
       // shallow V. On the final approach it keeps flapping; at rest it slowly opens and closes them.
@@ -486,7 +486,7 @@ export default function Butterfly({ path }: { path: string }) {
       if (mode !== "fly") takeOff();
       pos.y -= dy * .15; scrolling = true;
       clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => { scrolling = false; if (mode === "fly") settle(); }, 450);
+      scrollTimer = setTimeout(() => { scrolling = false; if (mode === "fly") settle(); }, 140);
     };
     const visibility = () => { cancelAnimationFrame(frame); if (!document.hidden && !disposed) { last = performance.now(); budget.reset(); frame = requestAnimationFrame(step); } };
     addEventListener("resize", resize); addEventListener("scroll", scroll, { passive: true });
@@ -497,12 +497,12 @@ export default function Butterfly({ path }: { path: string }) {
     let tries = 0, enter: ReturnType<typeof setTimeout>;
     const arrive = () => {
       if (disposed) return;
-      if (!pickPerch() && ++tries <= 6) { enter = setTimeout(arrive, 500); return; }
+      if (!pickPerch() && ++tries <= 8) { enter = setTimeout(arrive, 250); return; }
       if (!perch) aim.copy(landing(width * .8, height * .3));
       pos.copy(aim); mode = "rest"; weave(pos);
       target.classList.add("is-here");
     };
-    enter = setTimeout(arrive, 1000);
+    enter = setTimeout(arrive, 500);
     frame = requestAnimationFrame(step);
 
     return () => {
