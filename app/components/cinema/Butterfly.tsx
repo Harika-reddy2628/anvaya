@@ -196,12 +196,13 @@ const wrap = (a: number) => ((a + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
 export default function Butterfly({ path }: { path: string }) {
   const host = useRef<HTMLDivElement>(null);
   const onRoute = useRef<() => void>(() => {});
+  const onAway = useRef<(away: boolean) => void>(() => {});
   useEffect(() => {
     const target = host.current;
     if (!target) return;
     let renderer: THREE.WebGLRenderer;
     try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "low-power" }); } catch { return; }
-    const dpr = Math.min(devicePixelRatio, 2);
+    const dpr = Math.min(devicePixelRatio, 1.25); // A small figure on a full-screen canvas: sharpness is cheap to give up, frames are not.
     renderer.setPixelRatio(dpr);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.NeutralToneMapping;
@@ -296,8 +297,8 @@ export default function Butterfly({ path }: { path: string }) {
     let mode: "fly" | "land" | "rest" = "rest", heading = -Math.PI / 2, look = heading, bank = 0, speed = 0;
     const qFly = new THREE.Quaternion(), qRest = new THREE.Quaternion(), eFly = new THREE.Euler(), eRest = new THREE.Euler();
     let flyMix = 1, phase = 0, beats = 4, gliding = false, glideMix = 0, glideFrom = 0, glideUntil = 0, bob = 0;
-    let width = 0, height = 0, frame = 0, last = performance.now(), disposed = false;
-    let lookedAt = 0, size = 40, scrolling = false, scrollTimer: ReturnType<typeof setTimeout> | undefined, routeTimer: ReturnType<typeof setTimeout> | undefined;
+    let width = 0, height = 0, frame = 0, last = performance.now(), disposed = false, away = false;
+    let skip = false, drift = 0, rectAt = 0, lookedAt = 0, size = 40, scrolling = false, scrollTimer: ReturnType<typeof setTimeout> | undefined, routeTimer: ReturnType<typeof setTimeout> | undefined;
 
     /** Is the point, and the span of the wings around it, clear of text and inside the usable area? */
     function clear(x: number, y: number) {
@@ -372,8 +373,11 @@ export default function Butterfly({ path }: { path: string }) {
 
     // The butterfly is decoration: if it cannot hold the frame budget even at 1x, it leaves the page.
     const budget = frameBudget(renderer, { resize: () => resize(), onTooSlow: () => { disposed = true; cancelAnimationFrame(frame); renderer.domElement.style.display = "none"; } });
+    let perchRect = new DOMRect();
     function step(now: number) {
       frame = requestAnimationFrame(step);
+      // Perched, nothing but the slow wing breathing changes, so half the frames are enough: this keeps scrolling smooth.
+      if (mode === "rest" && flyMix < .02 && (skip = !skip)) return;
       budget.tick();
       const dt = Math.min(.05, (now - last) / 1000), t = now / 1000; last = now;
       if (!width) return;
@@ -385,7 +389,9 @@ export default function Butterfly({ path }: { path: string }) {
       if (mode === "rest" && !perch && t - lookedAt > .4) { lookedAt = t; if (pickPerch()) mode = "land"; }
       // Resting or landing, it stays on its letter as the page moves; if the letter has gone, it picks another.
       if (perch && mode !== "fly") {
-        const r = perch.range.getBoundingClientRect();
+        // Reading the layout every frame can force a recalculation while the page scrolls, so a perched butterfly only
+        // checks its letter a few times a second; the page moves at most a few pixels between checks.
+        const r = mode === "rest" && t - rectAt < .15 ? perchRect : (rectAt = t, perchRect = perch.range.getBoundingClientRect());
         if (r.width < 1 || r.bottom < 96 || r.top > height - 40) { if (!pickPerch()) perch = null; }
         else aim.set(r.left + r.width / 2, r.top + perch.ink * r.height - size * .07);
       }
@@ -412,6 +418,8 @@ export default function Butterfly({ path }: { path: string }) {
           if (dist < 3) { mode = "rest"; weave(pos); }
         }
       }
+      // The page's own movement nudges it gently, eased over a few frames instead of in jumps.
+      const nudge = drift * Math.min(1, dt * 8); drift -= nudge; pos.y -= nudge;
       pos.set(THREE.MathUtils.clamp(pos.x, -120, width + 120), THREE.MathUtils.clamp(pos.y, -120, height + 120));
       flyMix += ((mode === "rest" ? 0 : 1) - flyMix) * Math.min(1, dt * 7);
 
@@ -486,11 +494,16 @@ export default function Butterfly({ path }: { path: string }) {
     const scroll = () => {
       const dy = THREE.MathUtils.clamp(scrollY - lastY, -60, 60); lastY = scrollY;
       if (mode !== "fly") takeOff();
-      pos.y -= dy * .15; scrolling = true;
+      drift += dy * .15; scrolling = true;
       clearTimeout(scrollTimer);
       scrollTimer = setTimeout(() => { scrolling = false; if (mode === "fly") settle(); }, 140);
     };
-    const visibility = () => { cancelAnimationFrame(frame); if (!document.hidden && !disposed) { last = performance.now(); budget.reset(); frame = requestAnimationFrame(step); } };
+    // Scrolled past the opening screen it is invisible, so it stops drawing altogether until the reader comes back.
+    onAway.current = isAway => {
+      away = isAway; cancelAnimationFrame(frame);
+      if (!isAway && !disposed && !document.hidden) { last = performance.now(); budget.reset(); frame = requestAnimationFrame(step); }
+    };
+    const visibility = () => { cancelAnimationFrame(frame); if (!document.hidden && !disposed && !away) { last = performance.now(); budget.reset(); frame = requestAnimationFrame(step); } };
     addEventListener("resize", resize); addEventListener("scroll", scroll, { passive: true });
     document.addEventListener("visibilitychange", visibility);
     resize();
@@ -511,7 +524,7 @@ export default function Butterfly({ path }: { path: string }) {
       disposed = true; cancelAnimationFrame(frame); clearTimeout(scrollTimer); clearTimeout(routeTimer); clearTimeout(enter);
       removeEventListener("resize", resize); removeEventListener("scroll", scroll);
       document.removeEventListener("visibilitychange", visibility);
-      onRoute.current = () => {};
+      onRoute.current = () => {}; onAway.current = () => {};
       disposables.forEach(d => d.dispose()); renderer.dispose(); renderer.domElement.remove();
     };
   }, []);
@@ -527,7 +540,7 @@ export default function Butterfly({ path }: { path: string }) {
       observer?.disconnect(); layer.classList.remove("is-away");
       const opening = document.querySelector("main > section");
       if (!opening) return;
-      observer = new IntersectionObserver(([entry]) => layer.classList.toggle("is-away", entry.intersectionRatio < .35), { threshold: [0, .35, 1] });
+      observer = new IntersectionObserver(([entry]) => { const gone = entry.intersectionRatio < .35; layer.classList.toggle("is-away", gone); onAway.current(gone); }, { threshold: [0, .35, 1] });
       observer.observe(opening);
     };
     const settle = setTimeout(watch, 300);
