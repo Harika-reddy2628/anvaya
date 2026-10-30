@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { frameBudget } from "../../lib/frameBudget";
+import { letterInkTop } from "../../lib/perch";
 
 /* A blue butterfly that sits still on a letter of a heading, slowly opening and closing its wings. It only flies while the
    reader scrolls: it lifts off, roams the viewport on slow curving paths with a soft blue shine behind it, and when the
@@ -293,6 +294,7 @@ export default function Butterfly({ path }: { path: string }) {
     // Flight state, in screen pixels. Heading 0 points up the screen; the butterfly always flies along its heading.
     const pos = new THREE.Vector2(innerWidth * .7, innerHeight * .3), aim = new THREE.Vector2(innerWidth * .7, innerHeight * .3);
     let mode: "fly" | "land" | "rest" = "rest", heading = -Math.PI / 2, look = heading, bank = 0, speed = 0;
+    const qFly = new THREE.Quaternion(), qRest = new THREE.Quaternion(), eFly = new THREE.Euler(), eRest = new THREE.Euler();
     let flyMix = 1, phase = 0, beats = 4, gliding = false, glideMix = 0, glideFrom = 0, glideUntil = 0, bob = 0;
     let width = 0, height = 0, frame = 0, last = performance.now(), disposed = false;
     let lookedAt = 0, size = 40, scrolling = false, scrollTimer: ReturnType<typeof setTimeout> | undefined, routeTimer: ReturnType<typeof setTimeout> | undefined;
@@ -329,30 +331,34 @@ export default function Butterfly({ path }: { path: string }) {
     }
     function takeOff() { mode = "fly"; perch = null; aim.copy(wander()); }
 
-    // Where it sits: on top of one letter of a heading that is fully on screen, tracked as the page moves.
-    let perch: Range | null = null, perchHeading: Element | null = null;
+    // Where it sits: on the first or the last letter of a heading that is fully on screen, tracked as the page moves.
+    // It perches on the very top of the letter's ink and faces into the text.
+    let perch: { range: Range; ink: number; face: number } | null = null, perchHeading: Element | null = null, face = -Math.PI / 2;
     const readable = (el: HTMLElement) => {
       const r = el.getBoundingClientRect();
       return r.width > 40 && r.top > 96 && r.bottom < height - 40 && !el.closest("[aria-hidden=true]") && el.checkVisibility?.({ visibilityProperty: true }) !== false;
     };
-    /** Picks a heading near the upper middle of the screen, then a letter in it. Returns false if the page has none. */
+    /** Picks a heading near the upper middle of the screen, then its first or last letter. False if the page has none. */
     function pickPerch() {
       const heads = [...document.querySelectorAll<HTMLElement>("main h1, main h2, main h3")].filter(readable)
         .sort((a, b) => Math.abs(a.getBoundingClientRect().top - height * .34) - Math.abs(b.getBoundingClientRect().top - height * .34));
-      const head = heads.find(h => h !== perchHeading) ?? heads[0];
-      if (!head) return false;
-      const letters: [Text, number][] = [];
-      const walker = document.createTreeWalker(head, NodeFilter.SHOW_TEXT);
-      for (let node = walker.nextNode() as Text | null; node; node = walker.nextNode() as Text | null) {
-        [...node.data].forEach((c, i) => { if (/\p{L}/u.test(c)) letters.push([node!, i]); });
-      }
-      for (let tries = 0; letters.length && tries < 12; tries++) {
-        const [node, i] = letters.splice(Math.floor(Math.random() * letters.length), 1)[0];
-        const range = document.createRange(); range.setStart(node, i); range.setEnd(node, i + 1);
-        const r = range.getBoundingClientRect();
-        if (r.width < 6 || r.left < 40 || r.right > width - 40 || r.top < 96 || r.bottom > height - 40) continue;
-        perch = range; perchHeading = head; aim.set(r.left + r.width / 2, r.top + r.height * .2);
-        return true;
+      for (const head of [...heads.filter(h => h !== perchHeading), ...heads.filter(h => h === perchHeading)]) {
+        const letters: [Text, number][] = [];
+        const walker = document.createTreeWalker(head, NodeFilter.SHOW_TEXT);
+        for (let node = walker.nextNode() as Text | null; node; node = walker.nextNode() as Text | null) {
+          [...node.data].forEach((c, i) => { if (/\p{L}/u.test(c)) letters.push([node!, i]); });
+        }
+        if (!letters.length) continue;
+        for (const end of Math.random() < .5 ? [0, letters.length - 1] : [letters.length - 1, 0]) {
+          const [node, i] = letters[end];
+          const range = document.createRange(); range.setStart(node, i); range.setEnd(node, i + 1);
+          const r = range.getBoundingClientRect();
+          if (r.width < 6 || r.left < 8 || r.right > width - 8 || r.top < 96 || r.bottom > height - 40) continue;
+          perch = { range, ink: (letterInkTop(range, node.data[i], head) - r.top) / r.height, face: end === 0 ? -Math.PI / 2 : Math.PI / 2 };
+          perchHeading = head; face = perch.face;
+          aim.set(r.left + r.width / 2, r.top + perch.ink * r.height - size * .07);
+          return true;
+        }
       }
       return false;
     }
@@ -377,9 +383,9 @@ export default function Butterfly({ path }: { path: string }) {
       if (mode === "rest" && !perch && t - lookedAt > 1) { lookedAt = t; if (pickPerch()) mode = "land"; }
       // Resting or landing, it stays on its letter as the page moves; if the letter has gone, it picks another.
       if (perch && mode !== "fly") {
-        const r = perch.getBoundingClientRect();
+        const r = perch.range.getBoundingClientRect();
         if (r.width < 1 || r.bottom < 96 || r.top > height - 40) { if (!pickPerch()) perch = null; }
-        else aim.set(r.left + r.width / 2, r.top + r.height * .2);
+        else aim.set(r.left + r.width / 2, r.top + perch.ink * r.height - size * .07);
       }
       if (mode === "rest") {
         speed = 0; pos.lerp(aim, Math.min(1, dt * 6));
@@ -420,7 +426,7 @@ export default function Butterfly({ path }: { path: string }) {
       const stroke = (s: number) => Math.pow((Math.sin(s) + 1) / 2, 1.35);
       wings.forEach(w => {
         const s = phase - (w.hind ? .3 : 0);
-        const flapping = -.4 + stroke(s) * 1.5, glide = w.hind ? .22 : .3, basking = .08 + stroke(s) * .75;
+        const flapping = -.4 + stroke(s) * 1.5, glide = w.hind ? .22 : .3, basking = (w.hind ? .95 : 1.1) + stroke(s) * .3;
         w.group.rotation.z = w.side * THREE.MathUtils.lerp(basking, THREE.MathUtils.lerp(flapping, glide, glideMix), flyMix);
         w.group.rotation.y = w.side * (w.hind ? -.1 : .06);
       });
@@ -435,11 +441,14 @@ export default function Butterfly({ path }: { path: string }) {
 
       const x = pos.x - width / 2, y = height / 2 - pos.y - bob;
       butterfly.position.set(x, y, 0);
-      // Seen mostly from above, tilted toward the viewer, then turned to its heading.
-      butterfly.rotation.set(1.28, 0, -look, "ZYX");
+      // In flight it is seen mostly from above, tilted toward the viewer and turned to its heading. Perched it is seen
+      // from the side, wings raised and body flat on the letter, facing into the text.
+      qFly.setFromEuler(eFly.set(1.28, 0, -look, "ZYX")); qRest.setFromEuler(eRest.set(.5, face, 0, "XYZ"));
+      const settled = 1 - flyMix;
+      butterfly.quaternion.copy(qFly).slerp(qRest, settled * settled * (3 - 2 * settled));
       butterfly.scale.setScalar(size);
       halo.position.set(x, y, -20); halo.scale.setScalar(size * (3.2 + flyMix * .8));
-      haloMaterial.opacity = .3 + flyMix * .35;
+      haloMaterial.opacity = .16 + flyMix * .5;
       // Glints sweep across the wings, a little faster in flight.
       scene.environmentRotation.y += dt * (.2 + flyMix * .5);
       scene.environmentRotation.x = Math.sin(t * .7) * .3;
