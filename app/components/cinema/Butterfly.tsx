@@ -325,7 +325,7 @@ export default function Butterfly({ path }: { path: string }) {
       const m = size * 3, p = new THREE.Vector2();
       for (let i = 0; i < 12; i++) {
         p.set(m + Math.random() * (width - m * 2), m + 80 + Math.random() * (height - m * 2 - 80));
-        if (p.distanceTo(pos) > Math.min(width, height) * .3) break;
+        if (p.distanceTo(pos) > Math.min(width, height) * .55) break;
       }
       return p;
     }
@@ -447,8 +447,8 @@ export default function Butterfly({ path }: { path: string }) {
       const settled = 1 - flyMix;
       butterfly.quaternion.copy(qFly).slerp(qRest, settled * settled * (3 - 2 * settled));
       butterfly.scale.setScalar(size);
-      halo.position.set(x, y, -20); halo.scale.setScalar(size * (2.4 + flyMix * .4));
-      haloMaterial.opacity = .08 + flyMix * .22;
+      halo.position.set(x, y, -20); halo.scale.setScalar(size * (3.2 + flyMix * .8));
+      haloMaterial.opacity = .16 + flyMix * .5;
       // Glints sweep across the wings, a little faster in flight.
       scene.environmentRotation.y += dt * (.2 + flyMix * .5);
       scene.environmentRotation.x = Math.sin(t * .7) * .3;
@@ -457,10 +457,10 @@ export default function Butterfly({ path }: { path: string }) {
       trailGap += speed * dt * flyMix;
       if (trailGap > 5) {
         trailGap = 0;
-        trail.emit(x - Math.sin(look) * size * .35, y - Math.cos(look) * size * .35, -10, size * 1.4, 0, 5);
+        trail.emit(x - Math.sin(look) * size * .35, y - Math.cos(look) * size * .35, -10, size * 2, 0, 5);
       }
-      trail.update(dt, 1.1);
-      sparkDebt = 0;
+      trail.update(dt, .5);
+      sparkDebt += dt * flyMix * 5;
       while (sparkDebt > 1) {
         sparkDebt -= 1;
         const w = wings[Math.floor(Math.random() * wings.length)];
@@ -473,7 +473,7 @@ export default function Butterfly({ path }: { path: string }) {
     }
     function resize() {
       width = innerWidth; height = innerHeight;
-      size = width < 761 ? 19 : 27;
+      size = width < 761 ? 28 : 40;
       renderer.setSize(width, height);
       camera.aspect = width / height;
       camera.position.set(0, 0, height / 2 / Math.tan(THREE.MathUtils.degToRad(15)));

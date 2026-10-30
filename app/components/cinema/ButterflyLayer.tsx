@@ -15,7 +15,7 @@ function canAfford() {
   return !hints.connection?.saveData && !(hints.deviceMemory !== undefined && hints.deviceMemory < 4);
 }
 
-/** Loads the butterfly only for motion-allowed visitors; a live preference change removes it. */
+/** Loads the butterfly only on the home page, and only for motion-allowed visitors; a live preference change removes it. */
 export function ButterflyLayer() {
   const path = usePathname();
   const [live, setLive] = useState(false);
@@ -35,5 +35,6 @@ export function ButterflyLayer() {
       if (idle > 0) cancelIdleCallback(idle); else clearTimeout(-idle);
     };
   }, []);
-  return live ? <Butterfly path={path} /> : null;
+  // The butterfly lives on the home page only; leaving it unmounts the butterfly and returning brings it back.
+  return live && path === "/" ? <Butterfly path={path} /> : null;
 }
