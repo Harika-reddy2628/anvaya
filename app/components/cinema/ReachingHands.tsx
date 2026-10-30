@@ -4,48 +4,54 @@ import * as THREE from "three";
 import { frameBudget } from "../../lib/frameBudget";
 import { gsap, prefersReducedMotion, ScrollTrigger } from "../../lib/motion";
 
-// Each hand is drawn once into a small offscreen canvas and sampled on a dot grid, so the figure reads as a
-// dot-matrix print. Coordinates are in that canvas's pixels, with the forearm entering from the left edge.
-const W = 320, H = 110, STEP = 2.2, TIP = 278, SHIFT = 100;
-type Stroke = [number, number][];
-const LEFT: { width: number; path: Stroke }[] = [
-  { width: 34, path: [[-110, 50], [70, 55], [96, 56]] }, // forearm
-  { width: 30, path: [[94, 56], [118, 55]] }, // palm
-  { width: 11, path: [[108, 46], [122, 38], [134, 36]] }, // thumb
-  { width: 9.5, path: [[124, 50], [150, 47], [174, 47]] }, // index, reaching
-  { width: 9.5, path: [[125, 58], [146, 60], [156, 70]] }, // middle, relaxed
-  { width: 9, path: [[122, 63], [140, 70], [146, 80]] }, // ring
-  { width: 8, path: [[116, 67], [130, 75], [133, 84]] }, // little
+// Two hands in the pose of Michelangelo's Creation of Adam (public domain), drawn as our own outlines: each part is an
+// SVG path in a 400 × 160 box with the arm entering from the left and the index fingertip near x = TIP. They are
+// filled into an offscreen canvas, each part cut from its neighbours by a hairline, and sampled in horizontal rows of
+// dots so the figure reads as a dot-matrix print.
+const W = 400, H = 160, SHIFT = 140, SX = 2, SY = 2.6, SCALE = 55;
+// The relaxed, receiving hand: fingers drooping, the index barely lifted.
+const RECEIVING = [
+  "M-140,30 C-40,30 80,40 170,54 C196,58 214,60 232,60 C252,58 272,58 290,62 C296,70 296,84 290,96 C272,104 254,108 238,108 C226,108 214,104 204,100 C150,94 40,86 -140,84 Z", // forearm and back of the hand
+  "M236,62 C248,52 262,44 280,40 C292,37 304,38 310,42 C314,46 311,51 304,52 C290,54 278,58 266,66 C258,71 248,72 240,70 Z", // thumb
+  "M286,60 C306,59 326,60 346,63 C356,64 366,66 372,68 C378,70 378,77 371,78 C360,78 348,77 336,77 C318,77 302,77 289,77 Z", // index, reaching
+  "M288,78 C304,79 318,82 330,87 C340,91 347,97 349,104 C350,110 344,112 340,108 C334,102 324,98 312,96 C302,94 292,93 286,93 Z", // middle, relaxed
+  "M284,94 C298,96 310,100 318,106 C326,112 330,120 328,126 C326,131 320,130 318,125 C314,117 306,112 296,109 C290,107 284,107 278,107 Z", // ring
+  "M272,108 C284,111 292,116 297,122 C301,128 302,134 299,137 C295,140 291,137 290,132 C288,126 283,122 276,119 C272,118 268,118 264,117 Z", // little
 ];
-// The other hand: a mirrored pose with a firmer reach and a little more curl.
-const RIGHT = LEFT.map(({ width, path }, i) => ({
-  width,
-  path: path.map(([x, y]): [number, number] => [x, y + (i === 3 ? -2 : i > 3 ? 3 : 0)]),
-}));
+// The giving hand: the index straight and firm, the other fingers curled beneath.
+const GIVING = [
+  "M-140,20 C-40,22 80,36 170,48 C196,52 216,54 236,54 C258,54 278,56 294,60 C300,70 300,84 296,94 C278,100 258,102 240,102 C226,102 212,100 200,96 C140,90 40,82 -140,76 Z", // forearm and back of the hand
+  "M292,59 C312,58 334,58 356,60 C368,61 378,62 384,64 C390,66 390,73 383,74 C370,75 356,75 342,75 C324,75 308,76 295,76 Z", // index, pointing
+  "M294,77 C312,78 328,80 342,85 C352,88 360,93 362,99 C363,105 357,107 352,104 C344,99 334,96 322,94 C312,93 302,93 294,93 Z", // middle
+  "M292,94 C306,96 318,100 328,106 C336,111 340,117 338,122 C336,127 330,126 327,122 C321,115 312,111 302,108 C296,107 290,106 286,106 Z", // ring
+  "M282,106 C294,109 302,114 307,120 C311,125 312,131 308,133 C304,135 300,132 299,128 C296,122 290,119 283,117 C279,116 275,116 271,116 Z", // little
+  "M236,100 C250,106 266,110 282,111 C292,111 300,110 304,112 C308,115 305,120 299,120 C284,121 266,120 250,116 C242,114 236,111 232,107 Z", // thumb, beneath
+];
 const DUST = 520;
 
 /** Samples a hand into dot positions (x right, y up, z towards the viewer), centred on its fingertip. */
-function sampleHand(strokes: typeof LEFT, mirror: boolean) {
+function sampleHand(paths: string[], tip: number, mirror: boolean) {
+  const width = W + SHIFT;
   const canvas = document.createElement("canvas");
-  canvas.width = W; canvas.height = H;
+  canvas.width = width; canvas.height = H;
   const ctx = canvas.getContext("2d")!;
-  ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#fff";
-  for (const { width, path } of strokes) {
-    ctx.lineWidth = width; ctx.beginPath();
-    path.forEach(([x, y], i) => i ? ctx.lineTo(x + SHIFT, y) : ctx.moveTo(x + SHIFT, y));
-    ctx.stroke();
+  ctx.translate(SHIFT, 0); ctx.fillStyle = "#fff"; ctx.lineJoin = "round"; ctx.lineWidth = 2.4;
+  for (const d of paths) {
+    const shape = new Path2D(d);
+    // Cut a hairline around each part first, so overlapping fingers stay separate.
+    ctx.globalCompositeOperation = "destination-out"; ctx.stroke(shape);
+    ctx.globalCompositeOperation = "source-over"; ctx.fill(shape);
   }
-  const data = ctx.getImageData(0, 0, W, H).data;
+  const data = ctx.getImageData(0, 0, width, H).data;
   // Floor, not round: a sample near the right edge must not wrap into the next row.
-  const inside = (x: number, y: number) => x >= 0 && y >= 0 && x < W && y < H && data[(Math.floor(y) * W + Math.floor(x)) * 4 + 3] > 128;
+  const inside = (x: number, y: number) => x >= 0 && y >= 0 && x < width && y < H && data[(Math.floor(y) * width + Math.floor(x)) * 4 + 3] > 128;
   const points: number[] = [];
-  for (let y = STEP / 2; y < H; y += STEP) for (let x = STEP / 2; x < W; x += STEP) {
+  for (let y = SY / 2; y < H; y += SY) for (let x = SX / 2; x < width; x += SX) {
     if (!inside(x, y)) continue;
     // Depth from how far the dot sits inside the outline, so fingers and the forearm round towards the viewer.
     let depth = 0;
-    for (let r = 1; r <= 6 && inside(x + r * STEP, y) && inside(x - r * STEP, y) && inside(x, y + r * STEP) && inside(x, y - r * STEP); r++) depth = r;
-    const px = (x - TIP) / 40 * (mirror ? -1 : 1);
-    points.push(px, (H / 2 - y) / 40, depth * .07);
+    for (let r = 1; r <= 8 && inside(x + r * SX, y) && inside(x - r * SX, y) && inside(x, y + r * SY) && inside(x, y - r * SY); r++) depth = r;
+    points.push((x - SHIFT - tip) / SCALE * (mirror ? -1 : 1), (H / 2 - y) / SCALE, Math.sqrt(depth) * .09);
   }
   return new Float32Array(points);
 }
@@ -59,7 +65,7 @@ export function ReachingHands() {
     const target = host.current;
     if (!target) return;
     const still = prefersReducedMotion();
-    const left = sampleHand(LEFT, false), right = sampleHand(RIGHT, true);
+    const left = sampleHand(RECEIVING, 378, false), right = sampleHand(GIVING, 390, true);
 
     let renderer: THREE.WebGLRenderer;
     try { renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: "high-performance" }); } catch { drawFlat(target, left, right); return; }
@@ -98,7 +104,7 @@ export function ReachingHands() {
           float d = length(gl_PointCoord - .5);
           if (d > .5) discard;
           vec3 c = mix(vec3(.80, .86, .97), vec3(.62, .88, 1.), vGlow);
-          gl_FragColor = vec4(c, smoothstep(.5, .25, d) * mix(.5, 1., vGlow) * (.45 + .55 * vAlpha));
+          gl_FragColor = vec4(c, smoothstep(.5, .2, d) * mix(.72, 1., vGlow) * (.62 + .38 * vAlpha));
         }`,
     });
     const handGeometry = new THREE.BufferGeometry();
@@ -181,8 +187,8 @@ export function ReachingHands() {
       camera.updateProjectionMatrix();
       // Sit the hands in the upper half, clear of the heading at the foot of the hero.
       const visibleHalf = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z;
-      state.lift = visibleHalf * (camera.aspect < 1 ? .42 : .3);
-      uniforms.uScale.value = h * renderer.getPixelRatio() * .058 * Math.min(1, 5.2 / halfWidth * .85);
+      state.lift = visibleHalf * (camera.aspect < 1 ? .44 : .4);
+      uniforms.uScale.value = h * renderer.getPixelRatio() * .046 * Math.min(1, 5.2 / halfWidth * .85);
       if (!running) draw();
     }
     const sizes = new ResizeObserver(resize);
@@ -236,8 +242,8 @@ function drawFlat(target: HTMLDivElement, left: Float32Array, right: Float32Arra
   canvas.width = w * ratio; canvas.height = h * ratio;
   canvas.style.width = `${w}px`; canvas.style.height = `${h}px`;
   const ctx = canvas.getContext("2d")!;
-  const unit = w < h ? w / 5.2 : w < h * 1.6 ? w / 7.2 : w / 10.4, dot = Math.max(.8, unit * .015) * ratio;
-  const cy = h * (w < h ? .3 : .38);
+  const unit = w < h ? w / 5.2 : w < h * 1.6 ? w / 7.2 : w / 10.4, dot = Math.max(.7, unit * .011) * ratio;
+  const cy = h * (w < h ? .28 : .3);
   const glow = ctx.createRadialGradient(w / 2 * ratio, cy * ratio, 0, w / 2 * ratio, cy * ratio, unit * .5 * ratio);
   glow.addColorStop(0, "rgba(160,220,255,.55)"); glow.addColorStop(1, "rgba(79,184,255,0)");
   ctx.fillStyle = glow; ctx.fillRect(0, 0, canvas.width, canvas.height);
