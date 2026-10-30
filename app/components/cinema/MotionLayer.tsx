@@ -44,7 +44,7 @@ export function MotionLayer() {
       const header = document.querySelector<HTMLElement>(".site-header");
       let last = scrollY;
       const onScroll = () => {
-        const y = scrollY, hero = document.querySelector<HTMLElement>(".hero");
+        const y = scrollY, hero = document.querySelector<HTMLElement>(".hero, .about-hero");
         header?.classList.toggle("is-solid", y > (hero ? hero.offsetHeight - 110 : 12));
         header?.classList.toggle("is-hidden", y > last && y > 420);
         last = y;

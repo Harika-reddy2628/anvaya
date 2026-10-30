@@ -709,7 +709,60 @@ html[data-intro=playing] .intro-screen[hidden]{display:grid;animation:intro-fail
 }
 @media(prefers-reduced-motion:reduce){.offer-banner b:before{animation:none}}
 
-/* Studio: two dot-matrix hands reach across a navy panel as the name section scrolls through (ReachingHands). */
-.reaching-hands{position:relative;margin-top:clamp(56px,7vw,96px);aspect-ratio:2.4/1;border-radius:32px;overflow:hidden;background:radial-gradient(50% 70% at 50% 50%,rgba(79,184,255,.16),transparent 70%),linear-gradient(170deg,#12306b 0%,#0b1838 60%);box-shadow:0 40px 80px -48px rgba(11,24,56,.7)}
+/* About: a full-height night hero with the dot-matrix hands (ReachingHands) moving behind the heading. */
+.about-hero{--ink:#050b1c;--ink-2:#0b1838;--ivory:#f2f6fb;--ivory-2:rgba(242,246,251,.76);--ivory-3:rgba(242,246,251,.56);--hair:rgba(255,255,255,.12);--hair-2:rgba(255,255,255,.28);--accent:#4fb8ff;
+  position:relative;isolation:isolate;overflow:hidden;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding-top:160px;padding-bottom:clamp(48px,7vw,96px);color:var(--ivory);color-scheme:dark;
+  background:radial-gradient(60% 50% at 50% 34%,rgba(30,102,208,.28),transparent 70%),radial-gradient(120% 90% at 50% 120%,#0b1838 0%,#050b1c 60%)}
+.about-hero:after{content:"";position:absolute;inset:auto 0 0;height:55%;z-index:0;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(5,11,28,.72) 55%,#050b1c)}
+.about-hero .reaching-hands{position:absolute;inset:0;z-index:0}
 .reaching-hands canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-@media(max-width:760px){.reaching-hands{aspect-ratio:1.5/1;border-radius:24px}}
+.about-hero .page-hero-grid{position:relative;z-index:1}
+.about-hero h1{max-width:12ch;color:var(--ivory)}
+.about-hero .page-intro{max-width:56ch;margin-top:28px;color:var(--ivory-2)}
+.about-hero .page-intro p+p{margin-top:12px}
+.about-kicker{display:inline-flex;align-items:center;gap:12px;margin:0 0 28px;padding:8px 18px 8px 14px;border:1px solid var(--hair-2);border-radius:999px;background:rgba(255,255,255,.06);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-size:13px;color:var(--ivory-2)}
+.about-kicker .indic{font-size:17px;color:var(--ivory)}
+/* Over the night hero the header reads light until it turns solid. */
+body:has(.about-hero) .site-header:not(.is-solid){--ivory:#f2f6fb;--ivory-2:rgba(242,246,251,.78);--hair:rgba(255,255,255,.16);color:var(--ivory)}
+body:has(.about-hero) .site-header:not(.is-solid) .header-inner nav{background:rgba(255,255,255,.06)}
+body:has(.about-hero) .site-header:not(.is-solid) .nav-link:hover{background:rgba(255,255,255,.1)}
+body:has(.about-hero) .site-header:not(.is-solid) .header-project{background:#f2f6fb;color:#0b1838;border-color:#f2f6fb}
+@media(max-width:760px){.about-hero{padding-top:140px}.about-kicker{font-size:12px}}
+
+/* Services: "Not sure what you need" becomes a navy panel printed with a faint dot matrix. */
+.connection-section{background:transparent}
+.connection-section .connection-grid{--ivory:#f2f6fb;--ivory-2:rgba(242,246,251,.78);--ivory-3:rgba(242,246,251,.58);--hair:rgba(255,255,255,.14);--hair-2:rgba(255,255,255,.32);--accent:#4fb8ff;
+  position:relative;isolation:isolate;overflow:hidden;align-items:center;padding:clamp(40px,6vw,88px);border-radius:36px;color:var(--ivory);
+  background:radial-gradient(55% 80% at 100% 0%,rgba(79,184,255,.3),transparent 70%),radial-gradient(40% 60% at 0% 100%,rgba(30,102,208,.35),transparent 70%),linear-gradient(160deg,#12306b 0%,#0b1838 60%);
+  box-shadow:0 50px 100px -50px rgba(11,24,56,.75)}
+.connection-section .connection-grid:before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle,rgba(255,255,255,.16) 1px,transparent 1.6px) 0 0/22px 22px;-webkit-mask-image:radial-gradient(70% 90% at 30% 50%,#000,transparent 75%);mask-image:radial-gradient(70% 90% at 30% 50%,#000,transparent 75%)}
+.connection-section h2{color:var(--ivory);font-size:clamp(40px,4.6vw,72px)}
+.connection-section .section-copy{padding:clamp(24px,3vw,36px);border:1px solid var(--hair);border-radius:24px;background:rgba(255,255,255,.05);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.connection-section .section-copy p{color:var(--ivory-2)}
+.connection-section .section-copy p+p{color:var(--ivory)}
+.connection-section .action-text{min-height:52px;padding:0 24px;border:1px solid #f2f6fb;border-radius:999px;background:#f2f6fb;color:#0b1838;overflow:hidden}
+.connection-section .action-text:before{inset:-1px;height:auto;border-radius:inherit;background:#4fb8ff;transform:translateY(101%);transform-origin:center}
+.connection-section .action-text:hover{color:#0b1838}.connection-section .action-text:hover:before{transform:none}
+
+/* Services: three ways to work, as cards with a small diagram each — one point, two joined, an ongoing orbit. */
+.working-model{gap:20px;margin-top:56px}
+.working-model>div{position:relative;overflow:hidden;display:flex;flex-direction:column;min-height:340px;padding:32px;border:1px solid var(--hair);border-radius:28px;background:linear-gradient(180deg,#fff 0%,var(--ink-2) 100%);box-shadow:inset 0 1px 0 #fff,0 28px 56px -40px rgba(11,24,56,.35);transition:translate .7s var(--ease-out),box-shadow .7s var(--ease-out),border-color .4s}
+.working-model>div:hover{translate:0 -6px;border-color:rgba(30,102,208,.28);box-shadow:inset 0 1px 0 #fff,0 40px 70px -40px rgba(11,24,56,.45)}
+.working-model>div:after{content:"";position:absolute;top:28px;right:28px;width:64px;height:64px;background:center/contain no-repeat;transition:transform .9s var(--ease-out)}
+.working-model>div:hover:after{transform:scale(1.12) rotate(-8deg)}
+.working-model>div:nth-child(1):after{background-image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27 fill=%27none%27 stroke=%27%231e66d0%27 stroke-width=%271.5%27%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2722%27 stroke-opacity=%27.25%27/%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%276%27 fill=%27%231e66d0%27/%3E%3C/svg%3E")}
+.working-model>div:nth-child(2):after{background-image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27 fill=%27none%27 stroke=%27%234fb8ff%27 stroke-width=%271.5%27%3E%3Cpath d=%27M16 40 C26 18 38 46 48 24%27 stroke-dasharray=%273 4%27/%3E%3Ccircle cx=%2716%27 cy=%2740%27 r=%275%27 fill=%27%234fb8ff%27/%3E%3Ccircle cx=%2748%27 cy=%2724%27 r=%275%27 fill=%27%23f2f6fb%27/%3E%3C/svg%3E")}
+.working-model>div:nth-child(3):after{background-image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27 fill=%27none%27 stroke=%27%231e66d0%27 stroke-width=%271.5%27%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2720%27 stroke-dasharray=%272 5%27/%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2710%27 stroke-opacity=%27.35%27/%3E%3Ccircle cx=%2752%27 cy=%2732%27 r=%275%27 fill=%27%231e66d0%27/%3E%3C/svg%3E")}
+.working-model>div>span{margin-bottom:auto;padding-right:.1em;font-size:clamp(76px,6.4vw,112px);line-height:.8;letter-spacing:-.05em;background:linear-gradient(140deg,#0b1838 0%,var(--accent) 55%,#4fb8ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent;align-self:flex-start}
+.working-model h3{margin:72px 0 12px;padding-top:24px;border-top:1px solid var(--hair);font-family:var(--serif);font-size:clamp(30px,2.6vw,42px);font-weight:380;letter-spacing:-.03em;line-height:1.05;text-transform:none;color:var(--ivory)}
+.working-model p{font-size:16px;line-height:1.6}
+.working-model>div:nth-child(2){--ink-2:#0b1838;--ivory:#f2f6fb;--ivory-2:rgba(242,246,251,.76);--hair:rgba(255,255,255,.14);--accent:#4fb8ff;
+  border-color:#0b1838;background:radial-gradient(90% 55% at 100% 0%,rgba(79,184,255,.28),transparent 70%),linear-gradient(170deg,#12306b 0%,#0b1838 55%);box-shadow:0 40px 80px -40px rgba(11,24,56,.7)}
+.working-model>div:nth-child(2)>span{background-image:linear-gradient(140deg,#f2f6fb 0%,#9fd8ff 50%,#4fb8ff 100%)}
+@media(max-width:760px){
+  .connection-section .connection-grid{border-radius:28px}
+  .working-model>div{min-height:0}
+  .working-model h3{margin-top:48px}
+}
+.working-section h2{max-width:20ch}
+.working-model p{min-height:3.2em}
