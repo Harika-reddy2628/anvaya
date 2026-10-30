@@ -30,10 +30,11 @@ export function ServiceDial() {
       const turn = { value: 0 };
       let index = 0;
       const trigger = ScrollTrigger.create({
-        trigger: element, start: "top top", pin: element, pinSpacing: true, end: () => `+=${innerHeight * last * .7}`,
-        snap: { snapTo: 1 / last, duration: { min: .25, max: .7 }, delay: .1, ease: "power2.inOut" },
+        trigger: element, start: "top top", pin: element, pinSpacing: true, // About 1.3 screens of scroll per service, so each one holds long enough to read.
+        end: () => `+=${innerHeight * last * 1.3}`,
+        snap: { snapTo: 1 / last, duration: { min: .45, max: 1 }, delay: .18, ease: "power3.inOut" },
         onUpdate: self => {
-          gsap.to(turn, { value: self.progress * last, duration: .35, ease: "power2.out", overwrite: true, onUpdate: () => element.style.setProperty("--turn", `${-turn.value * STEP}deg`) });
+          gsap.to(turn, { value: self.progress * last, duration: .8, ease: "power3.out", overwrite: true, onUpdate: () => element.style.setProperty("--turn", `${-turn.value * STEP}deg`) });
           const nearest = Math.round(self.progress * last);
           if (nearest !== index) { index = nearest; setActive(nearest); }
         },

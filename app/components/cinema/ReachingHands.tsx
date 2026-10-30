@@ -4,54 +4,32 @@ import * as THREE from "three";
 import { frameBudget } from "../../lib/frameBudget";
 import { gsap, prefersReducedMotion, ScrollTrigger } from "../../lib/motion";
 
-// Two hands in the pose of Michelangelo's Creation of Adam (public domain), drawn as our own outlines: each part is an
-// SVG path in a 400 × 160 box with the arm entering from the left and the index fingertip near x = TIP. They are
-// filled into an offscreen canvas, each part cut from its neighbours by a hairline, and sampled in horizontal rows of
-// dots so the figure reads as a dot-matrix print.
-const W = 400, H = 160, SHIFT = 140, SX = 2, SY = 2.6, SCALE = 55;
-// The relaxed, receiving hand: fingers drooping, the index barely lifted.
-const RECEIVING = [
-  "M-140,30 C-40,30 80,40 170,54 C196,58 214,60 232,60 C252,58 272,58 290,62 C296,70 296,84 290,96 C272,104 254,108 238,108 C226,108 214,104 204,100 C150,94 40,86 -140,84 Z", // forearm and back of the hand
-  "M236,62 C248,52 262,44 280,40 C292,37 304,38 310,42 C314,46 311,51 304,52 C290,54 278,58 266,66 C258,71 248,72 240,70 Z", // thumb
-  "M286,60 C306,59 326,60 346,63 C356,64 366,66 372,68 C378,70 378,77 371,78 C360,78 348,77 336,77 C318,77 302,77 289,77 Z", // index, reaching
-  "M288,78 C304,79 318,82 330,87 C340,91 347,97 349,104 C350,110 344,112 340,108 C334,102 324,98 312,96 C302,94 292,93 286,93 Z", // middle, relaxed
-  "M284,94 C298,96 310,100 318,106 C326,112 330,120 328,126 C326,131 320,130 318,125 C314,117 306,112 296,109 C290,107 284,107 278,107 Z", // ring
-  "M272,108 C284,111 292,116 297,122 C301,128 302,134 299,137 C295,140 291,137 290,132 C288,126 283,122 276,119 C272,118 268,118 264,117 Z", // little
-];
-// The giving hand: the index straight and firm, the other fingers curled beneath.
-const GIVING = [
-  "M-140,20 C-40,22 80,36 170,48 C196,52 216,54 236,54 C258,54 278,56 294,60 C300,70 300,84 296,94 C278,100 258,102 240,102 C226,102 212,100 200,96 C140,90 40,82 -140,76 Z", // forearm and back of the hand
-  "M292,59 C312,58 334,58 356,60 C368,61 378,62 384,64 C390,66 390,73 383,74 C370,75 356,75 342,75 C324,75 308,76 295,76 Z", // index, pointing
-  "M294,77 C312,78 328,80 342,85 C352,88 360,93 362,99 C363,105 357,107 352,104 C344,99 334,96 322,94 C312,93 302,93 294,93 Z", // middle
-  "M292,94 C306,96 318,100 328,106 C336,111 340,117 338,122 C336,127 330,126 327,122 C321,115 312,111 302,108 C296,107 290,106 286,106 Z", // ring
-  "M282,106 C294,109 302,114 307,120 C311,125 312,131 308,133 C304,135 300,132 299,128 C296,122 290,119 283,117 C279,116 275,116 271,116 Z", // little
-  "M236,100 C250,106 266,110 282,111 C292,111 300,110 304,112 C308,115 305,120 299,120 C284,121 266,120 250,116 C242,114 236,111 232,107 Z", // thumb, beneath
-];
+// The two hands, after the owner's dot-matrix reference of Michelangelo's Creation of Adam (supplied 30 Oct 2026):
+// each hand is stored as the runs of its dot rows ("y:x0-x1,x0-x1;…") in the reference's 736 px frame, traced once
+// with a script; no image ships. Dots are re-laid along each run at PITCH, and rows sit ROW apart.
+const PITCH = 4.0, ROW = 8, SCALE = 70, MID = 420;
+const LEFT_ROWS = "322:72-124;330:55-161;338:38-202;346:22-169,175-181,204-205;354:2-210,216-222;362:2-66,72-234;370:2-25,40-41,48-53,60-61,77-78,85-90,97-234,241-246,253-259;378:2-29,35-66,72-267;386:2-21,48-49,77-78,85-90,97-102,109-165,241-264,270-271;394:2-29,36-66,72-176,184-185,192-210,216-247,253-279;402:2-5,40-41,48-53,60-65,77-78,84-87,112-128,134-140,146-177,195-198,221-222,229-234,241-247,253-259,266-283;410:2-4,40-41,48-53,60-65,72-78,117-128,134-139,146-181,204-205,221-222,229-234,241-247,253-259,270-271,278-283,290-291;418:48-53,60-61,67-70,125-198,241-242,278-279,290-291;426:23-29,40-41,48-62,146-205,241-247,253-259,266-267,282-300;434:51-54,166-202,245-246,290-301;442:2-29,35-46,175-222,245-247,253-271;450:30-33,207-214,221-227,253-254,266-271;458:2-21,196-205,216-222;466:2-8";
+const RIGHT_ROWS = "338:698-734;346:673-734;354:645-734;362:616-734;370:558-734;378:517-734;386:443-582,591-602,636-734;394:419-569,575-606,612-614,621-630,636-734;402:402-429,439-495,506-507,513-568,575-581,592-593,600-601,670-676,683-688,695-700,707-713,719-734;410:394-420,448-449,468-495,502-557,563-569,575-581,592-593,600-605,658-663,675-676,683-688,695-700,707-713,719-725,732-733;418:399-400,406-417,455-458,468-471,494-495,501-527,538-545,551-556,563-568,592-593,683-688,695-696,720-725,732-733;426:477-482,492-519,526-532,539-569,575-581,588-593,600-605,612-618,625-626,650-651,658-663,670-676,683-688,695-700,707-713,719-733;434:472-499,563-564,595-602,702-734;442:464-495,502-520,526-569,575-594,727-734;450:455-479,506-507,514-532,539-556,563-568,575-586;458:447-532,538-578;466:452-471,477-487,494-495,502-508,526-532,538-565;474:460-470,477-495,501-503,518-520,526-536;482:460-462,480-483,497-499,529-532;490:460-470,477-483,489-499,514-520,526-532;498:460-470,481-486,493-498,514-519,526-527";
 const DUST = 520;
 
-/** Samples a hand into dot positions (x right, y up, z towards the viewer), centred on its fingertip. */
-function sampleHand(paths: string[], tip: number, mirror: boolean) {
-  const width = W + SHIFT;
-  const canvas = document.createElement("canvas");
-  canvas.width = width; canvas.height = H;
-  const ctx = canvas.getContext("2d")!;
-  ctx.translate(SHIFT, 0); ctx.fillStyle = "#fff"; ctx.lineJoin = "round"; ctx.lineWidth = 2.4;
-  for (const d of paths) {
-    const shape = new Path2D(d);
-    // Cut a hairline around each part first, so overlapping fingers stay separate.
-    ctx.globalCompositeOperation = "destination-out"; ctx.stroke(shape);
-    ctx.globalCompositeOperation = "source-over"; ctx.fill(shape);
-  }
-  const data = ctx.getImageData(0, 0, width, H).data;
-  // Floor, not round: a sample near the right edge must not wrap into the next row.
-  const inside = (x: number, y: number) => x >= 0 && y >= 0 && x < width && y < H && data[(Math.floor(y) * width + Math.floor(x)) * 4 + 3] > 128;
+/** Lays a hand's rows into dot positions (x right, y up, z towards the viewer), centred on its fingertip. */
+function sampleHand(rows: string, side: -1 | 1) {
+  const runs = rows.split(";").map(row => {
+    const [y, list] = row.split(":");
+    return { y: +y, spans: list.split(",").map(span => span.split("-").map(Number) as [number, number]) };
+  });
+  // The fingertip is the run end nearest the other hand.
+  const ends = runs.flatMap(r => r.spans.map(([a, b]) => side < 0 ? b : a));
+  const tip = side < 0 ? Math.max(...ends) : Math.min(...ends);
+  const covered = (y: number, x: number) => runs.some(r => r.y === y && r.spans.some(([a, b]) => x >= a && x <= b));
   const points: number[] = [];
-  for (let y = SY / 2; y < H; y += SY) for (let x = SX / 2; x < width; x += SX) {
-    if (!inside(x, y)) continue;
-    // Depth from how far the dot sits inside the outline, so fingers and the forearm round towards the viewer.
-    let depth = 0;
-    for (let r = 1; r <= 8 && inside(x + r * SX, y) && inside(x - r * SX, y) && inside(x, y + r * SY) && inside(x, y - r * SY); r++) depth = r;
-    points.push((x - SHIFT - tip) / SCALE * (mirror ? -1 : 1), (H / 2 - y) / SCALE, Math.sqrt(depth) * .09);
+  for (const { y, spans } of runs) for (const [a, b] of spans) for (let x = a + 1; x <= b; x += PITCH) {
+    // Depth from how far the dot sits inside its run and between the rows above and below, so the hand rounds
+    // towards the viewer.
+    let rows = 0;
+    while (rows < 4 && covered(y - (rows + 1) * ROW, x) && covered(y + (rows + 1) * ROW, x)) rows++;
+    const depth = Math.min((x - a) / PITCH, (b - x) / PITCH, rows * 2, 6);
+    points.push((x - tip) / SCALE, (MID - y) / SCALE, Math.sqrt(Math.max(depth, 0)) * .07);
   }
   return new Float32Array(points);
 }
@@ -65,7 +43,7 @@ export function ReachingHands() {
     const target = host.current;
     if (!target) return;
     const still = prefersReducedMotion();
-    const left = sampleHand(RECEIVING, 378, false), right = sampleHand(GIVING, 390, true);
+    const left = sampleHand(LEFT_ROWS, -1), right = sampleHand(RIGHT_ROWS, 1);
 
     let renderer: THREE.WebGLRenderer;
     try { renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: "high-performance" }); } catch { drawFlat(target, left, right); return; }
@@ -86,11 +64,11 @@ export function ReachingHands() {
         attribute float aSide; attribute vec4 aRand; varying float vGlow; varying float vAlpha;
         void main() {
           vec3 p = position;
-          // Each hand slides in from its edge; the gap at the fingertips narrows to a hair as uReach reaches 1.
-          p.x += aSide * mix(2.4, .07, uReach);
+          // Each hand slides in from its edge until the fingertips are a hand's breadth apart, as in the reference.
+          p.x += aSide * mix(2.6, .62, uReach);
           // A slow ripple runs along the arms towards the fingertips.
           float wave = sin(p.x * 1.5 * aSide + uTime * 1.4);
-          p.z += wave * .035; p.y += sin(p.x * .8 + uTime * .5) * .025;
+          p.z += wave * .03; p.y += sin(p.x * .8 + uTime * .5) * .01;
           // Scrolling away scatters the dots outward like dust.
           p += (aRand.xyz - .5) * vec3(3., 2.4, 4.) * uScatter * (.6 + aRand.w);
           vGlow = smoothstep(2.6, 0., abs(p.x)) * (.3 + .7 * uReach);
@@ -181,14 +159,14 @@ export function ReachingHands() {
       renderer.setSize(w, h);
       camera.aspect = w / h;
       // Narrow screens crop the forearms rather than shrinking the hands.
-      const halfWidth = camera.aspect < 1 ? 2.6 : camera.aspect < 1.6 ? 3.6 : 5.2;
+      const halfWidth = camera.aspect < 1 ? 2.6 : camera.aspect < 1.6 ? 3.6 : 4.6;
       const half = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect;
       camera.position.z = Math.max(halfWidth / half, 5.5);
       camera.updateProjectionMatrix();
       // Sit the hands in the upper half, clear of the heading at the foot of the hero.
       const visibleHalf = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z;
-      state.lift = visibleHalf * (camera.aspect < 1 ? .44 : .4);
-      uniforms.uScale.value = h * renderer.getPixelRatio() * .046 * Math.min(1, 5.2 / halfWidth * .85);
+      state.lift = visibleHalf * (camera.aspect < 1 ? .4 : .3);
+      uniforms.uScale.value = h * renderer.getPixelRatio() * .1 * Math.min(1, 4.6 / halfWidth * .85);
       if (!running) draw();
     }
     const sizes = new ResizeObserver(resize);
@@ -242,15 +220,16 @@ function drawFlat(target: HTMLDivElement, left: Float32Array, right: Float32Arra
   canvas.width = w * ratio; canvas.height = h * ratio;
   canvas.style.width = `${w}px`; canvas.style.height = `${h}px`;
   const ctx = canvas.getContext("2d")!;
-  const unit = w < h ? w / 5.2 : w < h * 1.6 ? w / 7.2 : w / 10.4, dot = Math.max(.7, unit * .011) * ratio;
-  const cy = h * (w < h ? .28 : .3);
+  // Fit the span the 3D camera shows: about 4.6 units either side on wide screens, cropped on narrow ones.
+  const unit = w < h ? w / 6 : Math.min(w / 9.2, h / 6), dot = Math.max(.9, unit * .019) * ratio;
+  const cy = h * (w < h ? .3 : .36);
   const glow = ctx.createRadialGradient(w / 2 * ratio, cy * ratio, 0, w / 2 * ratio, cy * ratio, unit * .5 * ratio);
   glow.addColorStop(0, "rgba(160,220,255,.55)"); glow.addColorStop(1, "rgba(79,184,255,0)");
   ctx.fillStyle = glow; ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "rgba(200,216,245,.72)";
   for (const [points, side] of [[left, -1], [right, 1]] as const) for (let i = 0; i < points.length; i += 3) {
     ctx.beginPath();
-    ctx.arc((w / 2 + (points[i] + side * .07) * unit) * ratio, (cy - points[i + 1] * unit) * ratio, dot, 0, Math.PI * 2);
+    ctx.arc((w / 2 + (points[i] + side * .62) * unit) * ratio, (cy - points[i + 1] * unit) * ratio, dot, 0, Math.PI * 2);
     ctx.fill();
   }
   target.dataset.scene = "flat";
