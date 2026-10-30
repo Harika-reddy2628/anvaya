@@ -5,8 +5,9 @@ test("the loading transition reveals the Anvaya title and releases the page", as
   await page.emulateMedia({ reducedMotion: "no-preference" }); await page.goto("/");
   const intro = page.getByRole("dialog", { name: "Preparing the Anvaya experience" });
   await expect(intro.locator(".wordmark")).toBeVisible();
-  await expect(intro.locator(".intro-line-1")).toContainText("Ambitious");
-  await expect(intro.locator(".intro-line-2")).toContainText("Built to last.");
+  await expect(intro.locator(".intro-line-1")).toContainText("Step into");
+  await expect(intro.locator(".intro-line-1")).toContainText("Anvaya");
+  await expect(intro.locator(".intro-butterfly")).toBeAttached();
   await expect(intro).toBeHidden({ timeout: 2900 });
   await expect(page.locator("html")).toHaveAttribute("data-intro", "done");
 });

@@ -3,10 +3,11 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { frameBudget } from "../../lib/frameBudget";
 
-/* A blue butterfly that lives behind the page's text. It drifts around the whole viewport on slow, curving paths,
-   flapping in short bursts and gliding between them, then lands on a spot with no text under it and basks. Behind it
-   a soft blue shine trails and fades. The wings are painted at runtime on a canvas (deep navy root, morpho blue, ice
-   edge, dark margin with pale spots and an eyespot on each tail), so there are still no image files. */
+/* A blue butterfly that sits still on a letter of a heading, slowly opening and closing its wings. It only flies while the
+   reader scrolls: it lifts off, roams the viewport on slow curving paths with a soft blue shine behind it, and when the
+   scrolling stops it lands on a letter of another heading. It never wanders on its own. The wings are painted at runtime
+   on a canvas (deep navy root, morpho blue, ice edge, dark margin with pale spots and an eyespot on each tail), so there
+   are still no image files. */
 
 // Text-bearing elements the butterfly must never sit on.
 const TEXT = "h1, h2, h3, p, li, a, button, summary, label, input, textarea, select, .action, .pill, .practice-card, .engagement-card, .faq-item, .service-block, .marquee";
@@ -290,11 +291,11 @@ export default function Butterfly({ path }: { path: string }) {
     }
 
     // Flight state, in screen pixels. Heading 0 points up the screen; the butterfly always flies along its heading.
-    const pos = new THREE.Vector2(innerWidth + 80, innerHeight * .3), aim = new THREE.Vector2(innerWidth * .7, innerHeight * .35), pointer = new THREE.Vector2(-999, -999);
-    let mode: "fly" | "land" | "rest" = "fly", heading = -Math.PI / 2, look = heading, bank = 0, speed = 0, legs = 2;
+    const pos = new THREE.Vector2(innerWidth * .7, innerHeight * .3), aim = new THREE.Vector2(innerWidth * .7, innerHeight * .3);
+    let mode: "fly" | "land" | "rest" = "rest", heading = -Math.PI / 2, look = heading, bank = 0, speed = 0;
     let flyMix = 1, phase = 0, beats = 4, gliding = false, glideMix = 0, glideFrom = 0, glideUntil = 0, bob = 0;
     let width = 0, height = 0, frame = 0, last = performance.now(), disposed = false;
-    let size = 40, restUntil = 0, scrolling = false, scrollTimer: ReturnType<typeof setTimeout> | undefined, routeTimer: ReturnType<typeof setTimeout> | undefined;
+    let lookedAt = 0, size = 40, scrolling = false, scrollTimer: ReturnType<typeof setTimeout> | undefined, routeTimer: ReturnType<typeof setTimeout> | undefined;
 
     /** Is the point, and the span of the wings around it, clear of text and inside the usable area? */
     function clear(x: number, y: number) {
@@ -317,7 +318,7 @@ export default function Butterfly({ path }: { path: string }) {
       }
       return new THREE.Vector2(width * .86, height * .3);
     }
-    /** A waypoint somewhere well across the viewport, so it roams the whole page rather than circling one spot. */
+    /** A waypoint somewhere well across the viewport, so it roams the whole page while the reader scrolls. */
     function wander() {
       const m = size * 3, p = new THREE.Vector2();
       for (let i = 0; i < 12; i++) {
@@ -326,10 +327,40 @@ export default function Butterfly({ path }: { path: string }) {
       }
       return p;
     }
-    function takeOff(trips = 5 + Math.floor(Math.random() * 4)) { mode = "fly"; legs = trips; aim.copy(wander()); }
+    function takeOff() { mode = "fly"; perch = null; aim.copy(wander()); }
+
+    // Where it sits: on top of one letter of a heading that is fully on screen, tracked as the page moves.
+    let perch: Range | null = null, perchHeading: Element | null = null;
+    const readable = (el: HTMLElement) => {
+      const r = el.getBoundingClientRect();
+      return r.width > 40 && r.top > 96 && r.bottom < height - 40 && !el.closest("[aria-hidden=true]") && el.checkVisibility?.({ visibilityProperty: true }) !== false;
+    };
+    /** Picks a heading near the upper middle of the screen, then a letter in it. Returns false if the page has none. */
+    function pickPerch() {
+      const heads = [...document.querySelectorAll<HTMLElement>("main h1, main h2, main h3")].filter(readable)
+        .sort((a, b) => Math.abs(a.getBoundingClientRect().top - height * .34) - Math.abs(b.getBoundingClientRect().top - height * .34));
+      const head = heads.find(h => h !== perchHeading) ?? heads[0];
+      if (!head) return false;
+      const letters: [Text, number][] = [];
+      const walker = document.createTreeWalker(head, NodeFilter.SHOW_TEXT);
+      for (let node = walker.nextNode() as Text | null; node; node = walker.nextNode() as Text | null) {
+        [...node.data].forEach((c, i) => { if (/\p{L}/u.test(c)) letters.push([node!, i]); });
+      }
+      for (let tries = 0; letters.length && tries < 12; tries++) {
+        const [node, i] = letters.splice(Math.floor(Math.random() * letters.length), 1)[0];
+        const range = document.createRange(); range.setStart(node, i); range.setEnd(node, i + 1);
+        const r = range.getBoundingClientRect();
+        if (r.width < 6 || r.left < 40 || r.right > width - 40 || r.top < 96 || r.bottom > height - 40) continue;
+        perch = range; perchHeading = head; aim.set(r.left + r.width / 2, r.top + r.height * .2);
+        return true;
+      }
+      return false;
+    }
+    /** Heads for a letter, or, on a page with no readable heading, the nearest clear spot. */
+    function settle() { if (!pickPerch()) { perch = null; aim.copy(landing(width * .8, height * .3)); } mode = "land"; }
     // The first call is the mount itself, not a route change.
     let mounted = false;
-    onRoute.current = () => { if (!mounted) { mounted = true; return; } clearTimeout(routeTimer); routeTimer = setTimeout(() => takeOff(), 900); if (mode === "rest") takeOff(); };
+    onRoute.current = () => { if (!mounted) { mounted = true; return; } clearTimeout(routeTimer); routeTimer = setTimeout(settle, 1100); };
 
     // The butterfly is decoration: if it cannot hold the frame budget even at 1x, it leaves the page.
     const budget = frameBudget(renderer, { resize: () => resize(), onTooSlow: () => { disposed = true; cancelAnimationFrame(frame); renderer.domElement.style.display = "none"; } });
@@ -342,9 +373,16 @@ export default function Butterfly({ path }: { path: string }) {
       const to = aim.clone().sub(pos), dist = to.length();
       let turnRate = 0;
 
+      // With no letter yet (the headings may still be animating in), keep looking once a second.
+      if (mode === "rest" && !perch && t - lookedAt > 1) { lookedAt = t; if (pickPerch()) mode = "land"; }
+      // Resting or landing, it stays on its letter as the page moves; if the letter has gone, it picks another.
+      if (perch && mode !== "fly") {
+        const r = perch.getBoundingClientRect();
+        if (r.width < 1 || r.bottom < 96 || r.top > height - 40) { if (!pickPerch()) perch = null; }
+        else aim.set(r.left + r.width / 2, r.top + r.height * .2);
+      }
       if (mode === "rest") {
-        speed = 0; pos.lerp(aim, Math.min(1, dt * 3));
-        if (t > restUntil || pos.distanceTo(pointer) < size * 2.2) takeOff();
+        speed = 0; pos.lerp(aim, Math.min(1, dt * 6));
       } else {
         // Steering: turn toward the waypoint at a limited rate, plus a slow meander, so the path is a chain of soft arcs.
         const near = THREE.MathUtils.clamp(1 - dist / (size * 5), 0, 1);
@@ -358,14 +396,12 @@ export default function Butterfly({ path }: { path: string }) {
         speed += (want - speed) * Math.min(1, dt * 1.5);
         pos.x += Math.sin(heading) * speed * dt; pos.y -= Math.cos(heading) * speed * dt;
 
-        if (mode === "fly" && dist < size * 2) {
-          if (--legs > 0 || scrolling) aim.copy(wander());
-          else { mode = "land"; aim.copy(landing(pos.x, pos.y)); }
-        }
+        // Flying: while the reader is still scrolling it keeps roaming; once they stop it heads for a letter.
+        if (mode === "fly" && dist < size * 2) { if (scrolling) aim.copy(wander()); else settle(); }
         if (mode === "land") {
-          // On the final approach it settles straight onto the spot.
+          // On the final approach it settles straight onto the letter.
           if (dist < size * .6) pos.lerp(aim, Math.min(1, dt * 3));
-          if (dist < 2) { mode = "rest"; restUntil = t + 3 + Math.random() * 2; weave(pos); }
+          if (dist < 2) { mode = "rest"; weave(pos); }
         }
       }
       pos.set(THREE.MathUtils.clamp(pos.x, -120, width + 120), THREE.MathUtils.clamp(pos.y, -120, height + 120));
@@ -434,27 +470,35 @@ export default function Butterfly({ path }: { path: string }) {
       camera.position.set(0, 0, height / 2 / Math.tan(THREE.MathUtils.degToRad(15)));
       camera.far = camera.position.z * 3; camera.updateProjectionMatrix();
     }
-    // Scrolling lifts it off any perch and it keeps roaming, drifting slightly with the page, until the reader stops.
+    // Scrolling lifts it off its letter and it roams, drifting slightly with the page, until the reader stops.
     let lastY = scrollY;
     const scroll = () => {
       const dy = THREE.MathUtils.clamp(scrollY - lastY, -60, 60); lastY = scrollY;
       if (mode !== "fly") takeOff();
       pos.y -= dy * .15; scrolling = true;
       clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => { scrolling = false; }, 600);
+      scrollTimer = setTimeout(() => { scrolling = false; if (mode === "fly") settle(); }, 450);
     };
-    const move = (event: PointerEvent) => pointer.set(event.clientX, event.clientY);
     const visibility = () => { cancelAnimationFrame(frame); if (!document.hidden && !disposed) { last = performance.now(); budget.reset(); frame = requestAnimationFrame(step); } };
-    addEventListener("resize", resize); addEventListener("scroll", scroll, { passive: true }); addEventListener("pointermove", move, { passive: true });
+    addEventListener("resize", resize); addEventListener("scroll", scroll, { passive: true });
     document.addEventListener("visibilitychange", visibility);
     resize();
-    // Drift in from the right once the page has settled.
-    const enter = setTimeout(() => { if (!disposed) takeOff(); }, 900);
+    // Once the page has settled it appears already sitting on a letter, rather than flying in.
+    // It waits for a heading that has finished animating in; after a few tries it takes any clear spot instead.
+    let tries = 0, enter: ReturnType<typeof setTimeout>;
+    const arrive = () => {
+      if (disposed) return;
+      if (!pickPerch() && ++tries <= 6) { enter = setTimeout(arrive, 500); return; }
+      if (!perch) aim.copy(landing(width * .8, height * .3));
+      pos.copy(aim); mode = "rest"; weave(pos);
+      target.classList.add("is-here");
+    };
+    enter = setTimeout(arrive, 1000);
     frame = requestAnimationFrame(step);
 
     return () => {
       disposed = true; cancelAnimationFrame(frame); clearTimeout(scrollTimer); clearTimeout(routeTimer); clearTimeout(enter);
-      removeEventListener("resize", resize); removeEventListener("scroll", scroll); removeEventListener("pointermove", move);
+      removeEventListener("resize", resize); removeEventListener("scroll", scroll);
       document.removeEventListener("visibilitychange", visibility);
       onRoute.current = () => {};
       disposables.forEach(d => d.dispose()); renderer.dispose(); renderer.domElement.remove();

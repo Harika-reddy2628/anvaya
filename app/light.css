@@ -56,12 +56,13 @@ h2{font-size:clamp(40px,5.2vw,84px);line-height:1;max-width:16ch}
 .motion .site-header.is-solid{background:rgba(242,246,251,.8);border-bottom:1px solid var(--hair)}
 
 /* Home hero: an airy glass fan that unfolds beside the headline */
-/* Layers: the hero scene (0) sits under the butterfly (1), and every piece of text and section content (2) sits above
-   it. The hero must not form its own stacking context, or the butterfly would cover its copy. */
-.butterfly-layer{position:fixed;inset:0;z-index:1;pointer-events:none;transition:opacity .7s var(--ease-out)}
+/* Layers: the hero scene (0), then page text (2), then the butterfly (6), so it can sit on top of a letter. It is
+   hidden until it has found its first letter (Butterfly.tsx adds is-here). */
+.butterfly-layer{position:fixed;inset:0;z-index:6;pointer-events:none;opacity:0;transition:opacity .9s var(--ease-out)}
+.butterfly-layer.is-here{opacity:1}
 /* On phones there is little empty space, so the butterfly keeps to the opening screen and fades once the reader
    scrolls into the content (Butterfly.tsx toggles is-away). */
-.butterfly-layer.is-away{opacity:0}
+.butterfly-layer.is-here.is-away{opacity:0}
 .butterfly-layer canvas{display:block}
 main>section:not(.hero),main>.marquee,main.policy-page,.site-footer{position:relative;z-index:2}
 .hero{position:relative;display:flex;flex-direction:column;justify-content:center;min-height:max(760px,100svh);padding:120px var(--pad) 150px;overflow:hidden}
@@ -424,15 +425,14 @@ html{scrollbar-width:thin;scrollbar-color:rgba(11,24,56,.28) transparent}
 .intro-screen .pill{color:#f2f6fb}
 .intro-mid{position:relative;z-index:1;align-self:center;justify-self:center;display:grid;place-items:center;text-align:center}
 .intro-mid>*{grid-area:1/1}
-.intro-line-1{display:flex;align-items:baseline;gap:.32em;max-width:none;font-family:var(--sans);font-size:clamp(28px,3.6vw,52px);font-weight:500;letter-spacing:-.03em}
-.intro-line-1 em,.intro-line-2 em{font-family:var(--serif);font-style:italic;font-weight:380;letter-spacing:-.02em}
-.intro-point{display:inline-block;width:.18em;height:.18em;border-radius:50%;align-self:center;background:#4fb8ff;box-shadow:0 0 14px #4fb8ff}
+.intro-line-1{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:.05em .3em;max-width:none;font-family:var(--sans);font-size:clamp(40px,7.2vw,112px);font-weight:500;letter-spacing:-.04em;line-height:1.05}
+.intro-line-1 em{font-family:var(--serif);font-style:italic;font-weight:380;letter-spacing:-.025em}
 .intro-b-wrap{position:relative;display:inline-block}
 .intro-b{display:inline-block}
+.intro-letter{display:inline-block}
 .intro-caret{position:absolute;left:0;top:.1em;bottom:.05em;width:2px;background:#4fb8ff;opacity:0}
-.intro-line-2{max-width:none;font-family:var(--sans);font-size:clamp(40px,6vw,92px);font-weight:500;letter-spacing:-.02em;opacity:0;text-shadow:0 0 40px rgba(6,15,38,.6)}
-.intro-mark{width:clamp(56px,6vw,84px);height:auto;color:#f2f6fb;opacity:0}
-.intro-mark .logo-thread,.intro-mark .logo-bindu{stroke:#4fb8ff;fill:none}.intro-mark .logo-bindu{fill:#4fb8ff}
+.intro-butterfly{position:absolute;left:0;top:0;width:clamp(56px,6.4vw,96px);opacity:0;pointer-events:none;filter:drop-shadow(0 6px 18px rgba(79,184,255,.45))}
+.intro-butterfly .butterfly-glyph{display:block;width:100%;height:auto;overflow:visible}
 .intro-glow{position:absolute;left:-20%;right:-20%;bottom:-55%;height:110%;border-radius:50%;pointer-events:none;opacity:0;background:radial-gradient(closest-side,rgba(150,205,245,.9),rgba(70,120,235,.65) 40%,rgba(40,60,190,.3) 68%,rgba(40,60,190,.08) 85%,transparent);will-change:transform,opacity}
 .intro-row{position:relative;z-index:2}
 
